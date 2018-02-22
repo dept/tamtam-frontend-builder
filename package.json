@@ -72,7 +72,6 @@
 		"pretty-hrtime": "~1.0.3",
 		"run-sequence": "^2.2.0",
 		"sw-precache": "^5.2.0",
-		"tamtam-frontend-builder": "file:../tamtam-frontend-builder",
 		"through2": "^2.0.3",
 		"vinyl-buffer": "^1.0.0",
 		"vinyl-source-stream": "~1.1.0",
