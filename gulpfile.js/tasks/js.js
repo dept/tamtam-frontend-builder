@@ -30,7 +30,7 @@ const configureBabelLoader = (browserlist) => {
         test: /\.js$/,
         exclude: /(node_modules)/,
         use: {
-            loader: 'babel-loader',
+            loader: require.resolve('babel-loader'),
             options: {
                 presets: [
                     ['env', {
@@ -49,7 +49,7 @@ const configureBabelLoader = (browserlist) => {
 const esLintConfig = {
     enforce: 'pre',
     test: /\.js?$/,
-    loader: 'eslint-loader',
+    loader: require.resolve('eslint-loader'),
     exclude: /node_modules/
 }
 
