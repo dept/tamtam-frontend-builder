@@ -5,7 +5,7 @@ const merge					= require('deepmerge');
 const PathConfig            = require('./src/data/path-config');
 const processArguments      = require( './src/node/process-arguments' );
 const packageJSON           = require(`${projectDirectory}/package.json`);
-let   projectConfig           = {};
+let   projectConfig;
 
 try {
 	projectConfig         = require(`${projectDirectory}/build-config/index.js`);
@@ -113,6 +113,6 @@ dest.manifest                       = { path: '<%= root %>' };
 dest.sw                             = { path: '<%= root %>' };
 
 // Overwrite config with project specific settings.
-config = merge.all([{}, config, config.projectConfig.config]);
+config = merge.all([{}, config, config.projectConfig.config || {}]);
 
 module.exports                      = config;
