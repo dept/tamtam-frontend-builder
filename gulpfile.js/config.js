@@ -15,7 +15,7 @@ let config                = {};
 config.name               = packageJSON.name;
 config.version            = packageJSON.version;
 config.projectDirectory   = projectDirectory;
-config.projectConfig	  = projectConfig;
+config.projectConfig	  = projectConfig || {};
 
 config.cleanBuild         = false;
 config.debug              = true;
