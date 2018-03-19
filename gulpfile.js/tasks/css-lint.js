@@ -9,11 +9,14 @@ var gulp                        = requireCached('gulp');
 var sassLint                    = requireCached('gulp-sass-lint');
 
 var hasLintfile                 = fs.existsSync(`${config.projectDirectory}/.sass-lint.yml`);
+var shownMissingLintWarning     = 0;
+var warningLimit                = 2;
 
 gulp.task('css-lint', function () {
 
     if ( !hasLintfile ) {
-        error('You don\'t use CSS Linting yet. Please upgrade ASAP.', true);
+        if ( shownMissingLintWarning < warningLimit ) error('You don\'t use CSS Linting yet. Please upgrade ASAP.', true);
+        shownMissingLintWarning++;
         return;
     }
 
