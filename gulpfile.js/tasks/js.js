@@ -3,10 +3,17 @@ var config = require('../config');
 var log = require('../src/debug/log');
 var path = require('path');
 var _ = require('lodash');
+var fs = require('fs');
+var errorMsg = require('../../utils/error');
 
 var gulp = requireCached('gulp');
 var webpack = requireCached('webpack');
 var BabelMinifyWebpackPlugin = requireCached('babel-minify-webpack-plugin');
+
+var hasLintfile                 = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`);
+var hasESFile                   = fs.existsSync(`${config.source.javascript}/main-es.js`);
+var shownMissingLintWarning     = 0;
+var warningLimit                = 4;
 
 const compilerConfigs = {};
 
@@ -69,18 +76,20 @@ const baseConfig = {
     }
 };
 
-compilerConfigs.modernConfig = Object.assign({}, baseConfig, {
-    entry: {
-        'main-es': './source/javascript/main-es.js'
-    },
-    plugins: configurePlugins(),
-    module: {
-        rules: [
-            esLintConfig,
-            configureBabelLoader(config.browsers.modern),
-        ],
-    },
-});
+if ( hasESFile ) {
+    compilerConfigs.modernConfig = Object.assign({}, baseConfig, {
+        entry: {
+            'main-es': './source/javascript/main-es.js'
+        },
+        plugins: configurePlugins(),
+        module: {
+            rules: [
+                configureBabelLoader(config.browsers.modern),
+                hasLintfile ? esLintConfig : {}
+            ]
+        },
+    });
+}
 
 compilerConfigs.legacyConfig = Object.assign({}, baseConfig, {
     entry: {
@@ -89,8 +98,8 @@ compilerConfigs.legacyConfig = Object.assign({}, baseConfig, {
     plugins: configurePlugins(),
     module: {
         rules: [
-            esLintConfig,
             configureBabelLoader(config.browsers.legacy),
+            hasLintfile ? esLintConfig : {}
         ],
     },
 });
@@ -130,6 +139,10 @@ const onWebpackCallback = (error, stats, opt_prevStats) => {
         message: 'compiling...'
     });
 
+    if ( !hasLintfile ) {
+        if ( shownMissingLintWarning < warningLimit ) errorMsg('You don\'t use Javascript Linting yet. Please upgrade ASAP.', true);
+        shownMissingLintWarning++;
+    }
 
 }
 
