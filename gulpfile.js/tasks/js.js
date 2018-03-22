@@ -10,7 +10,7 @@ var gulp = requireCached('gulp');
 var webpack = requireCached('webpack');
 var BabelMinifyWebpackPlugin = requireCached('babel-minify-webpack-plugin');
 
-var hasLintfile                 = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`);
+var hasLintfile                 = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
 var hasESFile                   = fs.existsSync(`${config.source.javascript}/main-es.js`);
 var shownMissingLintWarning     = 0;
 var warningLimit                = 4;
