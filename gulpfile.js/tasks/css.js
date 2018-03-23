@@ -1,19 +1,19 @@
 //@formatter:off
 
-var requireCached     			= require('../src/gulp/require-cached');
-var config                      = require('../config');
-var log                         = require('../src/debug/log');
-var path                        = require('path');
+const requireCached     			= require('../src/gulp/require-cached');
+const config                      = require('../config');
+const log                         = require('../src/debug/log');
+const path                        = require('path');
 
-var gulp                        = requireCached('gulp');
-var browserSync                 = requireCached('browser-sync');
-var sass                        = requireCached('gulp-sass');
-var sourcemaps                  = requireCached('gulp-sourcemaps');
-var autoprefixer                = requireCached('gulp-autoprefixer');
-var gulpIf                      = requireCached('gulp-if');
-var gulpCleanCss                = requireCached('gulp-clean-css');
-var gulpSize                    = requireCached('gulp-size');
-var uncss                       = requireCached('gulp-uncss');
+const gulp                        = requireCached('gulp');
+const browserSync                 = requireCached('browser-sync');
+const sass                        = requireCached('gulp-sass');
+const sourcemaps                  = requireCached('gulp-sourcemaps');
+const autoprefixer                = requireCached('gulp-autoprefixer');
+const gulpIf                      = requireCached('gulp-if');
+const gulpCleanCss                = requireCached('gulp-clean-css');
+const gulpSize                    = requireCached('gulp-size');
+const uncss                       = requireCached('gulp-uncss');
 
 /**
  * Task for compiled SASS files back to CSS, uses lib-sass instead of ruby for faster compiling.
@@ -25,7 +25,7 @@ var uncss                       = requireCached('gulp-uncss');
  */
 gulp.task('css', function () {
 
-    var options = {
+    const options = {
 
         sass: {
             // indentedSyntax: true,     // Enable .sass syntax!
@@ -70,8 +70,8 @@ gulp.task('css', function () {
     //@formatter:on
 
     // Keep track of the file size changes
-    var sizeBefore = gulpSize( { showFiles: true } );
-    var sizeAfter = gulpSize( { showFiles: true } );
+    const sizeBefore = gulpSize( { showFiles: true } );
+    const sizeAfter = gulpSize( { showFiles: true } );
 
 
     return gulp.src( config.source.getFileGlobs('css') )

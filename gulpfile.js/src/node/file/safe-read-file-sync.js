@@ -20,7 +20,7 @@ module.exports = function safeWriteFileSync ( path, opt_encoding ) {
 
 		log.error( {
 				sender: 'safe-read-file-sync',
-				message: 'error writing file to: ' + path,
+				message: 'error reading file to: ' + path,
 				data: [ error ]
 			}
 		)

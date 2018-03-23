@@ -1,35 +1,33 @@
 // @formatter:off
 
-var requireCached           = require('../src/gulp/require-cached');
-var config                  = require('../config');
-var log                     = require('../src/debug/log');
-var mergeJSONData           = require('../src/data/json/merge');
-var getFileList             = require('../src/node/file/get-list');
-var packageJSON             = require('../../package.json');
-var SvgExtension            = require('../src/template/nunjucks/tags/svg');
-var DebugExtension          = require('../src/template/nunjucks/tags/debug');
+const requireCached           = require('../src/gulp/require-cached');
+const config                  = require('../config');
+const log                     = require('../src/debug/log');
+const mergeJSONData           = require('../src/data/json/merge');
+const getFileList             = require('../src/node/file/get-list');
+const walkFileListSync        = require('../src/node/file/walk-file-list-sync');
+const packageJSON             = require('../../package.json');
+const SvgExtension            = require('../src/template/nunjucks/tags/svg');
+const DebugExtension          = require('../src/template/nunjucks/tags/debug');
 
-var assignFilter          	= require('../src/template/nunjucks/filters/assign');
-var mergeFilter          	= require('../src/template/nunjucks/filters/merge');
-var defaultsFilter         	= require('../src/template/nunjucks/filters/defaults');
-
-
-var path                    = require('path');
-var mkdirp                  = requireCached('mkdirp');
-var gulp                    = requireCached('gulp');
-var gulpData                = requireCached('gulp-data');
-var gulpNunjucks            = requireCached('gulp-nunjucks-render');
-var htmlmin                 = requireCached('gulp-htmlmin');
-var gulpif                  = requireCached('gulp-if');
-var prettify                = requireCached('gulp-jsbeautifier');
-var glob                    = requireCached('glob');
+const assignFilter            = require('../src/template/nunjucks/filters/assign');
+const mergeFilter          	  = require('../src/template/nunjucks/filters/merge');
+const defaultsFilter          = require('../src/template/nunjucks/filters/defaults');
 
 
-var RESERVED_DATA_KEYWORDS  = [ 'project', 'ext' ];
+const path                    = require('path');
+const mkdirp                  = requireCached('mkdirp');
+const gulp                    = requireCached('gulp');
+const gulpData                = requireCached('gulp-data');
+const gulpNunjucks            = requireCached('gulp-nunjucks-render');
+const htmlmin                 = requireCached('gulp-htmlmin');
+const gulpif                  = requireCached('gulp-if');
+const prettify                = requireCached('gulp-jsbeautifier');
+const glob                    = requireCached('glob');
 
 
+const RESERVED_DATA_KEYWORDS  = [ 'project', 'ext' ];
 
-//@formatter:on
 
 /**
  *  Gulp task responsible for compiling the templates into normal HTML using Mozilla nunjucks templates
@@ -38,11 +36,10 @@ var RESERVED_DATA_KEYWORDS  = [ 'project', 'ext' ];
  */
 gulp.task( 'html', function () {
 
-    var options = {};
+    const options = {};
 
     options.minify = config.minifyHTML;
 
-    // @formatter:off
     options.htmlmin = {
 
         collapseWhitespace: true,
@@ -52,7 +49,6 @@ gulp.task( 'html', function () {
         keepClosingSlash:   true // can break SVG if not set to true!
 
     };
-    // @formatter:on
 
 
     // @see: https://www.npmjs.com/package/gulp-jsbeautifier
@@ -74,11 +70,11 @@ gulp.task( 'html', function () {
     };
 
 
-    var contextData = {};
-    var jsonData = mergeJSONData( config.source.getPath( 'data' ), config.source.getFileGlobs( 'data' ) );
+    const contextData = {};
+    const jsonData = mergeJSONData( config.source.getPath( 'data' ), config.source.getFileGlobs( 'data' ) );
 
     // merge retrieved data into the context object
-    for ( var key in jsonData ) {
+    for ( const key in jsonData ) {
 
         if( RESERVED_DATA_KEYWORDS.indexOf( key ) >= 0 ) {
 
@@ -95,8 +91,8 @@ gulp.task( 'html', function () {
 
     }
 
-    var pagesList = getFileList( config.source.getFileGlobs( 'html' ), config.source.getPath( 'html' ) );
-    var svgList = getFileList( config.source.getFileGlobs( 'svg' ), config.source.getPath( 'svg' ), true );
+    const pagesList = getFileList( config.source.getFileGlobs( 'html' ), config.source.getPath( 'html' ) );
+    const svgList = getFileList( config.source.getFileGlobs( 'svg' ), config.source.getPath( 'svg' ), true );
 
 	contextData.project = {
 		name: packageJSON.name,
@@ -117,9 +113,9 @@ gulp.task( 'html', function () {
     }
 
 
-    // var environment = gulpNunjucks.nunjucks.configure( [ config.source.getPath( 'html' ) ], options.nunjuck );
+    // const environment = gulpNunjucks.nunjucks.configure( [ config.source.getPath( 'html' ) ], options.nunjuck );
 
-    var environment = function(environment) {
+    const environment = function(environment) {
 
         // add custom tags
         environment.addExtension( 'SVGExtension', new SvgExtension( gulpNunjucks.nunjucks ) );
@@ -139,7 +135,16 @@ gulp.task( 'html', function () {
         .pipe( gulpNunjucks( {
             envOptions: options.nunjuck,
             manageEnv: environment,
-            path: [config.source.getPath('nunjucks')]
+            path: [
+                // Add HTML root
+                config.source.getPath('nunjucks'),
+                // Add root to include components
+                config.source.getPath('root')
+            ]
+                .concat(
+                    // Make aliases for all available components
+                    walkFileListSync(config.source.getPath('components'), 'template')
+                )
         } ) )
 
         .pipe( gulpif( options.pretty, prettify( options.prettyConfig ) ) )

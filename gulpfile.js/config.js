@@ -82,7 +82,7 @@ var source      = config.source     = new PathConfig();
 var dest        = config.dest       = new PathConfig();
 
 
-source.root                         = { path: `${projectDirectory}/source` };
+source.root                         = { path: './source' };
 
 source.assets                       = { path: '<%= root %>/assets' };
 source.css                          = { path: '<%= root %>/sass',           files: [ '*.scss', '_dev/*.scss'] }; // entry point files
@@ -97,9 +97,11 @@ source.npm                          = { path: './node_modules' };
 source.svg                          = { path: '<%= assets %>/svg',          files: [ '*.svg', '**/*.svg' ] };
 source.webp                         = { path: '<%= assets %>/images',       files: [ '*.{jpg,jpeg,png,gif}', '**/*.{jpg,jpeg,png,gif}' ] };
 source.manifest                     = { path: '<%= assets %>/favicons',     files: [ 'manifest.json' ] };
+source.components                   = { path: '<%= root %>/components',     files: [ '**/*.html', '**/*.scss', '**/*.js' ] };               // entry point files
+source.utilities                    = { path: '<%= root %>/utilities',      files: [ '**/*.js' ] };               // entry point files
 source.sw                           = { path: '<%= assets %>',              files: '**/*.{js,html,css,jpg,jpeg,png,gif,svg,xml,ico,eot,ttf,woff,json}', strip: source.root.path.replace('./','') };  // entry point files
 
-dest.root                           = { path:  `${projectDirectory}/build` };
+dest.root                           = { path:  './build' };
 
 dest.assets                         = { path: '<%= root %>/assets' };
 dest.css                            = { path: '<%= assets %>/css' };
