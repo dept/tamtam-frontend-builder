@@ -1,19 +1,19 @@
-var requireCached = require('../src/gulp/require-cached');
-var config = require('../config');
-var log = require('../src/debug/log');
-var path = require('path');
-var _ = require('lodash');
-var fs = require('fs');
-var errorMsg = require('../../utils/error');
+const requireCached = require('../src/gulp/require-cached');
+const config = require('../config');
+const log = require('../src/debug/log');
+const path = require('path');
+const _ = require('lodash');
+const fs = require('fs');
+const errorMsg = require('../../utils/error');
 
-var gulp = requireCached('gulp');
-var webpack = requireCached('webpack');
-var BabelMinifyWebpackPlugin = requireCached('babel-minify-webpack-plugin');
+const gulp = requireCached('gulp');
+const webpack = requireCached('webpack');
+const UglifyJsPlugin = requireCached('uglifyjs-webpack-plugin');
 
-var hasLintfile                 = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
-var hasESFile                   = fs.existsSync(`${config.source.javascript}/main-es.js`);
-var shownMissingLintWarning     = 0;
-var warningLimit                = 4;
+const hasLintfile                 = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
+const hasESFile                   = fs.existsSync(`${config.source.javascript}/main-es.js`);
+const shownMissingLintWarning     = 0;
+const warningLimit                = 4;
 
 const compilerConfigs = {};
 
@@ -25,7 +25,12 @@ const configurePlugins = () => {
 
         plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
         plugins.push(new webpack.NoEmitOnErrorsPlugin());
-        plugins.push(new BabelMinifyWebpackPlugin());
+        plugins.push(new UglifyJsPlugin({
+            uglifyOptions: {
+                keep_classnames: true,
+                keep_fnames: true
+            }
+        }));
 
     }
 
