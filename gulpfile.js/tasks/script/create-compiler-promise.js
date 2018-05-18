@@ -1,6 +1,6 @@
 const webpack     = require('webpack');
 const fs          = require('fs');
-const config                  = require('../../config');
+const config      = require('../../config');
 const error       = require('../../../utils/error');
 const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
 
@@ -56,6 +56,6 @@ const createCompilerPromise = (compilerConfigs) => {
 }
 
 module.exports = {
-	createCompilerPromise,
-	onWebpackCallback
+	create: createCompilerPromise,
+	onWebpackCallback: onWebpackCallback
 }

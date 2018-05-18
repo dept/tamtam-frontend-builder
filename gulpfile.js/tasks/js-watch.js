@@ -3,6 +3,7 @@ const log               = require('../src/debug/log');
 const requireCached     = require('../src/gulp/require-cached');
 
 const compilerPromise   = require('./script/create-compiler-promise');
+const webpackConfigs    = require('./script/webpack-config');
 const browserSync       = requireCached('browser-sync');
 const gulp              = requireCached('gulp');
 const webpack           = requireCached('webpack');
@@ -11,7 +12,7 @@ gulp.task('js-watch', function jsWatch(callback) {
 
     let initialCompile = true;
 
-    webpack(js.compilerConfigs.legacyConfig).watch(200, (error, stats) => {
+    webpack(webpackConfigs.legacyConfig).watch(200, (error, stats) => {
 
         compilerPromise.onWebpackCallback(error, stats);
 

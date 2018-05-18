@@ -5,7 +5,7 @@ const fs                        = require('fs');
 const gulp                      = requireCached('gulp');
 const webpack                   = requireCached('webpack');
 
-const createCompilerPromise		= require ('./script/create-compiler-promise');
+const compoilerPromise  		= require ('./script/create-compiler-promise');
 const webpackConfigs            = require('./script/webpack-config');
 const hasESFile                 = fs.existsSync(`${config.source.javascript}/main-es.js`);
 const shownMissingLintWarning   = 0;
@@ -18,7 +18,7 @@ if ( hasESFile ) compilerConfigs.modernConfig = webpackConfigs.modernConfig;
 
 gulp.task('js', function (callback) {
 
-    Promise.all(createCompilerPromise(compilerConfigs))
+    Promise.all(compoilerPromise.create(compilerConfigs))
         .then(() => callback())
         .catch(e => console.warn('Error whilst compiling JS', e));
 

@@ -12,7 +12,7 @@ const baseConfig = {
     context: config.projectDirectory,
     bail: config.throwError,
     output: {
-        path: config.dest.getPath('javascript'),
+        path: config.projectDirectory + config.dest.getPath('javascript'),
         filename: '[name].js',
     },
     cache: {},
