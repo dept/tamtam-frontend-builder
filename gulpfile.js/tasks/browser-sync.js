@@ -25,7 +25,7 @@ gulp.task('browser-sync', function () {
 
         server: {
             // Serve up our build folder
-            baseDir: config.projectDirectory + '/' + config.dest.getPath('root'),
+            baseDir: config.dest.getPath('root'),
 
             // Enables CORS to solve cross domain issues
             // @see https://hondo.wtf/2015/02/15/enable-cors-in-browsersync
