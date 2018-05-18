@@ -1,8 +1,12 @@
 const config                    = require('../../config');
 const createAliasObject         = require('./create-alias-object');
-const webpackPlugins            = require('./get-webpack-plugins');
+const webpackPlugins            = require('./webpack-plugins');
 const createBabelLoaderConfig   = require('./create-babel-loader-config');
 const esLintConfig              = require('./eslint-config');
+
+const fs                        = require('fs');
+
+const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
 
 const baseConfig = {
     context: config.projectDirectory,

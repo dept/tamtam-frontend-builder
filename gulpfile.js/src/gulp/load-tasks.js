@@ -16,7 +16,7 @@ function loadTasks () {
     log.debug( { sender: 'loadTasks', message: '\tLoading tasks...' } );
 
     var relative = path.relative( __dirname, process.cwd() );
-    var taskFiles = glob.sync( path.normalize('gulpfile.js/tasks/*.js') );
+    var taskFiles = glob.sync( path.normalize('gulpfile.js/tasks/*.(js|js/index.js)') );
 
     for ( var i = 0, leni = taskFiles.length; i < leni; i++ ) {
 

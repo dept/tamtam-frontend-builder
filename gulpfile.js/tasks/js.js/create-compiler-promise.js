@@ -1,6 +1,7 @@
 const webpack     = require('webpack');
 const fs          = require('fs');
-const error       = require('../../utils/error');
+const config                  = require('../../config');
+const error       = require('../../../utils/error');
 const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
 
 const logStats = stats => console.log(`\n ${stats.toString({ colors: true })} \n`);
@@ -42,7 +43,7 @@ const onWebpackCallback = (error, stats, opt_prevStats) => {
 
 }
 
-module.exports = createCompilerPromise = (compilerConfigs) => {
+const createCompilerPromise = (compilerConfigs) => {
 
     const promises = [];
 
@@ -52,4 +53,9 @@ module.exports = createCompilerPromise = (compilerConfigs) => {
 
     return promises;
 
+}
+
+module.exports = {
+	createCompilerPromise,
+	onWebpackCallback
 }

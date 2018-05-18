@@ -1,6 +1,6 @@
-const requireCached             = require('../src/gulp/require-cached');
-const config                    = require('../config');
-const log                       = require('../src/debug/log');
+const requireCached             = require('../../src/gulp/require-cached');
+const config                    = require('../../config');
+const log                       = require('../../src/debug/log');
 const fs                        = require('fs');
 const gulp                      = requireCached('gulp');
 const webpack                   = requireCached('webpack');
@@ -25,6 +25,5 @@ gulp.task('js', function (callback) {
 });
 
 module.exports = {
-    compilerConfigs,
-    onWebpackCallback
+    compilerConfigs
 }

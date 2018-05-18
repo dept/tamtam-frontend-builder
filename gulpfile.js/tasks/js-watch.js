@@ -1,4 +1,4 @@
-const js = require('./js');
+const compilerPromise = require('./js.js/create-compiler-promise');
 
 const config = require('../config');
 const log = require('../src/debug/log');
@@ -14,7 +14,7 @@ gulp.task('js-watch', function jsWatch(callback) {
 
     webpack(js.compilerConfigs.legacyConfig).watch(200, (error, stats) => {
 
-        js.onWebpackCallback(error, stats);
+        compilerPromise.onWebpackCallback(error, stats);
 
         if (initialCompile) {
             initialCompile = false;

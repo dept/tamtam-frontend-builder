@@ -4,12 +4,12 @@ const path                    = require('path');
 
 const getReferences = (folder) => {
 
-    const components = walkFileListSync(config.source.getPath(folder), 'javascript');
+    const components = walkFileListSync(`${config.projectDirectory}/${config.source.getPath(folder)}`, 'javascript');
     const stripPath = path.join(config.source.getPath(folder), '/');
     return [].reduce.call(components, (data, component) => {
 
         const moduleName = component.replace(stripPath, '').split('/')[0];
-        data[`${folder}/${moduleName}`] = path.resolve(__dirname, '../../', component, moduleName);
+        data[`${folder}/${moduleName}`] = path.resolve(config.projectDirectory, component, moduleName);
 
         return data;
 
@@ -23,7 +23,7 @@ module.exports = createAliasObject = () => {
     const components = getReferences('components');
     const utilities = getReferences('utilities');
 
-    utilities['utilities'] = path.resolve(__dirname, '../../', path.join(config.source.getPath('utilities'), '/'));
+    utilities['utilities'] = path.resolve(config.projectDirectory, path.join(config.source.getPath('utilities'), '/'));
 
     return { ...components, ...utilities };
 
