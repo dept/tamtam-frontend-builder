@@ -56,7 +56,9 @@ function addSvgClass(cb) {
 
         var newSvg = file.clone();
 
-        var contents = file.contents.toString();
+		var contents = file.contents.toString();
+
+		if ( !contents ) return;
 
         // Look for existing classes
         if (contents.match(/class="(.*?)"/)) {
