@@ -4,7 +4,11 @@ const fs = requireCached('fs');
 
 const walkFileListSync = function (dir, folderToFind, filelist = []) {
 
-    const files = fs.readdirSync(dir);
+    let files = [];
+
+    try {
+        files = fs.readdirSync(dir);
+    } catch(e) {}
     filelist = filelist || [];
 
     files.forEach(file => {

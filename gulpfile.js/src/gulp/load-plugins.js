@@ -40,7 +40,6 @@ function loadPlugins ( callback, lazy, opt_global ) {
 
     if( options.verbose ) {
 
-
         var pluginsLoaded = '';
         for ( var plugin in plugins ) {
 

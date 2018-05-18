@@ -32,9 +32,9 @@ config.minifyHTML         = false;              // requires 'gulp-htmlmin' insta
 config.showGrid           = true;              // Shows the grid overlay
 
 config.gulp               = {
-                              debug: false,       // if true, gulp will output a lot of extra information for debugging purposes.
+                              debug: true,       // if true, gulp will output a lot of extra information for debugging purposes.
                               lazy: true,         // will only load the tasks in the 'gulp/tasks' folder, just before they are used.
-                              verbose: false      // Output extra information during the process.
+                              verbose: true      // Output extra information during the process.
                           };
 
 config.browsers           = {};

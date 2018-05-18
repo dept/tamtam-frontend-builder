@@ -1,12 +1,11 @@
-const compilerPromise = require('./js.js/create-compiler-promise');
+const config            = require('../config');
+const log               = require('../src/debug/log');
+const requireCached     = require('../src/gulp/require-cached');
 
-const config = require('../config');
-const log = require('../src/debug/log');
-const requireCached = require('../src/gulp/require-cached');
-
-const browserSync = requireCached('browser-sync');
-const gulp = requireCached('gulp');
-const webpack = requireCached('webpack');
+const compilerPromise   = require('./script/create-compiler-promise');
+const browserSync       = requireCached('browser-sync');
+const gulp              = requireCached('gulp');
+const webpack           = requireCached('webpack');
 
 gulp.task('js-watch', function jsWatch(callback) {
 

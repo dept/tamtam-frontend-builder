@@ -1,11 +1,12 @@
-const requireCached             = require('../../src/gulp/require-cached');
-const config                    = require('../../config');
-const log                       = require('../../src/debug/log');
+const config                    = require('../config');
+const requireCached             = require('../src/gulp/require-cached');
+const log                       = require('../src/debug/log');
 const fs                        = require('fs');
 const gulp                      = requireCached('gulp');
 const webpack                   = requireCached('webpack');
 
-const webpackConfigs            = require('./webpack-config');
+const createCompilerPromise		= require ('./script/create-compiler-promise');
+const webpackConfigs            = require('./script/webpack-config');
 const hasESFile                 = fs.existsSync(`${config.source.javascript}/main-es.js`);
 const shownMissingLintWarning   = 0;
 const warningLimit              = 4;
