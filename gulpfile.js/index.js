@@ -145,6 +145,21 @@ function registerMainTasks( gulp ){
 
     } );
 
+    /**
+     * @task build:bamboo
+     * DEPRECATED TASK NAME
+     */
+    gulp.task('bamboo', function (callback) {
+
+        runSequence(
+            'deploy',
+            callback
+        );
+
+    });
+
+    
+
 }
 
 
