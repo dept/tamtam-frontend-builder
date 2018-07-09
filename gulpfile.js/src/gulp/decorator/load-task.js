@@ -1,50 +1,48 @@
-//@formatter:off
+const config = require('../../../config');
+const log = require('../../debug/log');
+const path = require('path');
 
-var config                  = require('../../../config');
-var log                     = require('../../debug/log');
-var path           			= require('path');
-//@formatter:on
+const overrideTaskExists = require('../override-task-exists');
 
-
-var _loadedTasks = {};
+const _loadedTasks = {};
 
 /**
  * Check if the task has been loaded, if not try to load it.
  * @param taskName
  */
-function loadTask ( taskName ) {
+function loadTask(taskName) {
 
-    if( !config.gulp.lazy ) return log.error( {
+    if (!config.gulp.lazy) return log.error({
         message: 'Trying to lazy load a task, but gulp is not set in lazy mode?!',
         sender: 'gulpDecorator'
-    } );
+    });
 
-    if( _loadedTasks[ taskName ] === undefined ) {
+    if (_loadedTasks[taskName] === undefined) {
 
-		var taskPath = path.normalize( '../../../tasks/' + taskName );
+        const taskPath = overrideTaskExists(taskName) ? path.normalize(`${config.projectDirectory}/build-config/task-overrides/${taskName}`) : path.normalize(`../../../tasks/${taskName}`);
 
         try {
 
-            if( config.gulp.debug )log.debug( {
+            if (config.gulp.debug) log.debug({
                 sender: 'gulpDecorator',
-                message: 'lazy loading:\t\'' + log.colors.cyan( taskName ) + '\' ( ' + taskPath + ' )'
-            } );
+                message: 'lazy loading:\t\'' + log.colors.cyan(taskName) + '\' ( ' + taskPath + ' )'
+            });
 
-            _loadedTasks[ taskName ] = require( taskPath );
+            _loadedTasks[taskName] = require(taskPath);
 
 
-        } catch ( error ) {
+        } catch (error) {
 
-            _loadedTasks[ taskName ] = false;
-            
+            _loadedTasks[taskName] = false;
+
             // Some tasks won't be able to load if they are not in a separate file.
             // So if it fails it is not necessarily an error.
-            if( config.gulp.debug )
-            log.warn( {
-                sender: 'gulpDecorator',
-                message: 'warning: Failed to lazy load task: ' + taskPath + '.js',
-                data: error
-            } );
+            if (config.gulp.debug)
+                log.warn({
+                    sender: 'gulpDecorator',
+                    message: 'warning: Failed to lazy load task: ' + taskPath + '.js',
+                    data: error
+                });
 
         }
 
