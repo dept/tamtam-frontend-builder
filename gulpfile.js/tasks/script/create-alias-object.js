@@ -8,7 +8,7 @@ const getReferences = (folder) => {
     const stripPath = path.join(config.source.getPath(folder), '/');
     return [].reduce.call(components, (data, component) => {
 
-        const moduleName = component.replace(stripPath, '').split('/')[0];
+        const moduleName = component.replace(stripPath, '').replace('\\', '/').split('/')[0];
         data[`${folder}/${moduleName}`] = path.resolve(config.projectDirectory, component, moduleName);
 
         return data;

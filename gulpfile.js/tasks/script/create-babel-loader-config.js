@@ -13,6 +13,7 @@ module.exports = createBabelLoaderConfig = (browserlist) => {
         use: {
             loader: require.resolve('babel-loader'),
             options: {
+                plugins: ['syntax-dynamic-import', 'transform-es2015-arrow-functions'],
                 presets: [
                     ['env', {
                         modules: false,

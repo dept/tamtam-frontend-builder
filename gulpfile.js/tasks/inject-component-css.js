@@ -1,12 +1,15 @@
-const requireCached         = require('../src/gulp/require-cached');
-const config                = require('../config');
-const runSequence           = require('run-sequence');
-const path                  = require('path');
-const walkFileListSync      = require('../src/node/file/walk-file-list-sync');
+// @formatter:off
 
-const gulp                  = requireCached('gulp');
-const inject                = requireCached('gulp-inject');
+const requireCached = require('../src/gulp/require-cached');
+const config = require('../config');
+const runSequence = require('run-sequence');
+const path = require('path');
+const walkFileListSync = require('../src/node/file/walk-file-list-sync');
 
+const gulp = requireCached('gulp');
+const inject = requireCached('gulp-inject');
+
+// @formatter:on
 
 const createComponentsArray = (folder) => {
 

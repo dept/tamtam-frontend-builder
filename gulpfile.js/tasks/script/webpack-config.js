@@ -1,10 +1,10 @@
-const config                    = require('../../config');
-const createAliasObject         = require('./create-alias-object');
-const webpackPlugins            = require('./webpack-plugins');
-const createBabelLoaderConfig   = require('./create-babel-loader-config');
-const esLintConfig              = require('./eslint-config');
+const config = require('../../config');
+const createAliasObject = require('./create-alias-object');
+const webpackPlugins = require('./webpack-plugins');
+const createBabelLoaderConfig = require('./create-babel-loader-config');
+const esLintConfig = require('./eslint-config');
 
-const fs                        = require('fs');
+const fs = require('fs');
 
 const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
 
@@ -14,6 +14,7 @@ const baseConfig = {
     output: {
         path: config.dest.getPath('javascript'),
         filename: '[name].js',
+        publicPath: `${config.dest.getPath('javascript').replace(config.dest.getPath('root'), '')}/`
     },
     cache: {},
     devtool: config.sourcemaps ? 'source-map' : undefined,
@@ -27,34 +28,52 @@ const baseConfig = {
     }
 };
 
-const modernConfig = Object.assign({}, baseConfig, {
-	entry: {
-		'main-es': './source/javascript/main-es.js'
-	},
-	plugins: webpackPlugins,
-	module: {
-		rules: [
-			createBabelLoaderConfig(config.browsers.modern),
-			hasLintfile ? esLintConfig : {}
-		]
-	},
-});
+const modernConfig = {
+    ...baseConfig,
+    ...{
+        entry: {
+            'main-es': './source/javascript/main-es.js'
+        },
+        output: {
+            ...baseConfig.output,
+            ...{
+                chunkFilename: '[name].chunk-es.js',
+            },
+        },
+        plugins: webpackPlugins,
+        module: {
+            rules: [
+                createBabelLoaderConfig(config.browsers.modern),
+                hasLintfile ? esLintConfig : {},
+            ],
+        },
+    },
+};
 
-const legacyConfig = Object.assign({}, baseConfig, {
-    entry: {
-        'main': ['babel-polyfill', './source/javascript/main.js']
+const legacyConfig = {
+    ...baseConfig,
+    ...{
+        entry: {
+            'main': ['babel-polyfill', './source/javascript/main.js']
+        },
+        output: {
+            ...baseConfig.output,
+            ...{
+                chunkFilename: '[name].chunk.js',
+            },
+        },
+        plugins: webpackPlugins,
+        module: {
+            rules: [
+                createBabelLoaderConfig(config.browsers.legacy),
+                hasLintfile ? esLintConfig : {},
+            ],
+        },
     },
-    plugins: webpackPlugins,
-    module: {
-        rules: [
-            createBabelLoaderConfig(config.browsers.legacy),
-            hasLintfile ? esLintConfig : {}
-        ],
-    },
-});
+};
 
 
 module.exports = {
-	modernConfig,
-	legacyConfig
+    modernConfig,
+    legacyConfig
 };

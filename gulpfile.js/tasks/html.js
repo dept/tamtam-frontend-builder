@@ -1,32 +1,31 @@
-// @formatter:off
+const requireCached = require('../src/gulp/require-cached');
+const config = require('../config');
+const log = require('../src/debug/log');
+const mergeJSONData = require('../src/data/json/merge');
+const getFileList = require('../src/node/file/get-list');
+const walkFileListSync = require('../src/node/file/walk-file-list-sync');
+const packageJSON = require('../../package.json');
+const SvgExtension = require('../src/template/nunjucks/tags/svg');
+const DebugExtension = require('../src/template/nunjucks/tags/debug');
 
-const requireCached           = require('../src/gulp/require-cached');
-const config                  = require('../config');
-const log                     = require('../src/debug/log');
-const mergeJSONData           = require('../src/data/json/merge');
-const getFileList             = require('../src/node/file/get-list');
-const walkFileListSync        = require('../src/node/file/walk-file-list-sync');
-const packageJSON             = require('../../package.json');
-const SvgExtension            = require('../src/template/nunjucks/tags/svg');
-const DebugExtension          = require('../src/template/nunjucks/tags/debug');
-
-const assignFilter            = require('../src/template/nunjucks/filters/assign');
-const mergeFilter          	  = require('../src/template/nunjucks/filters/merge');
-const defaultsFilter          = require('../src/template/nunjucks/filters/defaults');
+const assignFilter = require('../src/template/nunjucks/filters/assign');
+const mergeFilter = require('../src/template/nunjucks/filters/merge');
+const defaultsFilter = require('../src/template/nunjucks/filters/defaults');
 
 
-const path                    = require('path');
-const mkdirp                  = requireCached('mkdirp');
-const gulp                    = requireCached('gulp');
-const gulpData                = requireCached('gulp-data');
-const gulpNunjucks            = requireCached('gulp-nunjucks-render');
-const htmlmin                 = requireCached('gulp-htmlmin');
-const gulpif                  = requireCached('gulp-if');
-const prettify                = requireCached('gulp-jsbeautifier');
-const glob                    = requireCached('glob');
+const path = requireCached('path');
+const fs = requireCached('fs');
+const mkdirp = requireCached('mkdirp');
+const gulp = requireCached('gulp');
+const gulpData = requireCached('gulp-data');
+const gulpNunjucks = requireCached('gulp-nunjucks-render');
+const htmlmin = requireCached('gulp-htmlmin');
+const gulpif = requireCached('gulp-if');
+const prettify = requireCached('gulp-jsbeautifier');
+const glob = requireCached('glob');
 
 
-const RESERVED_DATA_KEYWORDS  = [ 'project', 'ext' ];
+const RESERVED_DATA_KEYWORDS = ['project', 'ext'];
 
 
 /**
@@ -34,21 +33,23 @@ const RESERVED_DATA_KEYWORDS  = [ 'project', 'ext' ];
  *  @see: http://mozilla.github.io/nunjucks/api.html
  *  @see: https://www.npmjs.com/package/gulp-nunjucks-render
  */
-gulp.task( 'html', function () {
+gulp.task('html', function () {
 
     const options = {};
 
     options.minify = config.minifyHTML;
 
+    // @formatter:off
     options.htmlmin = {
 
         collapseWhitespace: true,
-        removeComments:     true,
-        minifyJS:           true,
-        minifyCSS:          true,
-        keepClosingSlash:   true // can break SVG if not set to true!
+        removeComments: true,
+        minifyJS: true,
+        minifyCSS: true,
+        keepClosingSlash: true // can break SVG if not set to true!
 
     };
+    // @formatter:on
 
 
     // @see: https://www.npmjs.com/package/gulp-jsbeautifier
@@ -56,83 +57,72 @@ gulp.task( 'html', function () {
     options.prettyConfig = {
 
         html: {
-            unformatted: [ "sub", "sup", "b", "i", "u", "svg", "pre" ],
+            unformatted: ["sub", "sup", "b", "i", "u", "svg", "pre"],
             wrapAttributes: 'auto'
         }
 
     };
 
-
     options.nunjuck = {
-
         watch: false
-
     };
 
 
     const contextData = {};
-    const jsonData = mergeJSONData( config.source.getPath( 'data' ), config.source.getFileGlobs( 'data' ) );
+    const jsonData = mergeJSONData(config.source.getPath('data'), config.source.getFileGlobs('data'));
 
     // merge retrieved data into the context object
-    for ( const key in jsonData ) {
+    for (let key in jsonData) {
 
-        if( RESERVED_DATA_KEYWORDS.indexOf( key ) >= 0 ) {
+        if (RESERVED_DATA_KEYWORDS.indexOf(key) >= 0) {
 
-            log.error( {
+            log.error({
                 sender: 'html',
                 message: 'A data object has been given a reserved keyword as a name, please update the file name : ' + key + '.\nReserved keywords: ' + RESERVED_DATA_KEYWORDS
-            } );
+            });
 
         } else {
 
-            contextData[ key ] = jsonData[ key ];
+            contextData[key] = jsonData[key];
 
         }
 
     }
 
-    const pagesList = getFileList( config.source.getFileGlobs( 'html' ), config.source.getPath( 'html' ) );
-    const svgList = getFileList( config.source.getFileGlobs( 'svg' ), config.source.getPath( 'svg' ), true );
+    const pagesList = getFileList(config.source.getFileGlobs('html'), config.source.getPath('html'));
+    const svgList = getFileList(config.source.getFileGlobs('svg'), config.source.getPath('svg'), true);
 
-	contextData.project = {
-		name: packageJSON.name,
-		description: packageJSON.description,
-		author: packageJSON.author,
-		version: packageJSON.version,
+    contextData.project = {
+        name: packageJSON.name,
+        description: packageJSON.description,
+        author: packageJSON.author,
+        version: packageJSON.version,
         debug: config.debug,
-		showGrid: config.showGrid,
-		pages: pagesList,
-		svgs: svgList
-	}
-
-
-    function getDataForFile ( file ) {
-
-        return contextData;
-
+        showGrid: config.showGrid,
+        pages: pagesList,
+        svgs: svgList
     }
 
 
-    // const environment = gulpNunjucks.nunjucks.configure( [ config.source.getPath( 'html' ) ], options.nunjuck );
+    const getDataForFile = file => contextData;
 
-    const environment = function(environment) {
+    const environment = environment => {
 
         // add custom tags
-        environment.addExtension( 'SVGExtension', new SvgExtension( gulpNunjucks.nunjucks ) );
-        environment.addExtension( 'DebugExtension', new DebugExtension( gulpNunjucks.nunjucks ) );
+        environment.addExtension('SVGExtension', new SvgExtension(gulpNunjucks.nunjucks));
+        environment.addExtension('DebugExtension', new DebugExtension(gulpNunjucks.nunjucks));
 
         // add custom filters
-        environment.addFilter( assignFilter.name, assignFilter.func );
-        environment.addFilter( mergeFilter.name, mergeFilter.func );
-        environment.addFilter( defaultsFilter.name, defaultsFilter.func );
+        environment.addFilter(assignFilter.name, assignFilter.func);
+        environment.addFilter(mergeFilter.name, mergeFilter.func);
+        environment.addFilter(defaultsFilter.name, defaultsFilter.func);
 
-        // environment.opts = options.nunjuck;
     }
 
-    return gulp.src( config.source.getFileGlobs( 'html' ), { base: config.source.getPath( 'html' ) } )
+    return gulp.src(config.source.getFileGlobs('html'))
 
-        .pipe( gulpData( getDataForFile ) )
-        .pipe( gulpNunjucks( {
+        .pipe(gulpData(getDataForFile))
+        .pipe(gulpNunjucks({
             envOptions: options.nunjuck,
             manageEnv: environment,
             path: [
@@ -145,14 +135,14 @@ gulp.task( 'html', function () {
                     // Make aliases for all available components
                     walkFileListSync(config.source.getPath('components'), 'template')
                 )
-        } ) )
+        }))
 
-        .pipe( gulpif( options.pretty, prettify( options.prettyConfig ) ) )
-        .pipe( gulpif( options.minify, htmlmin( options.htmlmin ) ) )
+        .pipe(gulpif(options.pretty, prettify(options.prettyConfig)))
+        .pipe(gulpif(options.minify, htmlmin(options.htmlmin)))
 
-        .pipe( gulp.dest( config.dest.getPath( 'html' ) ) );
+        .pipe(gulp.dest(config.dest.getPath('html')));
 
-        // Browser Sync is reloaded from the watch task for HTML files to bypass a chrome bug.
-        // See the watch task for more info.
+    // Browser Sync is reloaded from the watch task for HTML files to bypass a chrome bug.
+    // See the watch task for more info.
 
-} );
+});

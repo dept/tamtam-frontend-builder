@@ -1,5 +1,3 @@
-//@formatter:off
-
 const requireCached     			= require('../src/gulp/require-cached');
 const config                      = require('../config');
 const log                         = require('../src/debug/log');
@@ -103,6 +101,3 @@ gulp.task('css', function () {
         .pipe(browserSync.stream({match: '**/*.css'}) );
 
 } );
-
-
-
