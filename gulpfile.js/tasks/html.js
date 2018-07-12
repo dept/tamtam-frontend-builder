@@ -4,7 +4,7 @@ const log = require('../src/debug/log');
 const mergeJSONData = require('../src/data/json/merge');
 const getFileList = require('../src/node/file/get-list');
 const walkFileListSync = require('../src/node/file/walk-file-list-sync');
-const packageJSON = require('../../package.json');
+const packageJSON = require(`${config.projectDirectory}/package.json`);
 const SvgExtension = require('../src/template/nunjucks/tags/svg');
 const DebugExtension = require('../src/template/nunjucks/tags/debug');
 
@@ -36,7 +36,7 @@ gulp.task('html', function () {
 
     options.minify = config.minifyHTML;
 
-    
+
     options.htmlmin = {
 
         collapseWhitespace: true,
@@ -46,7 +46,7 @@ gulp.task('html', function () {
         keepClosingSlash: true // can break SVG if not set to true!
 
     };
-    
+
 
 
     // @see: https://www.npmjs.com/package/gulp-jsbeautifier
