@@ -1,28 +1,24 @@
-//@formatter:off
-
-var _            		= require('lodash');
-var pathUtil            = require('path');
-var gulpUtil            = require('gulp-util');
-var log                 = require('../debug/log');
-var getFileList           = require('../node/file/get-list');
-
-//@formatter:on
+const _ = require('lodash');
+const pathUtil = require('path');
+const gulpUtil = require('gulp-util');
+const log = require('../debug/log');
+const getFileList = require('../node/file/get-list');
 
 
 // A RegExp to test whether a string contains a lodash template.
 // @see https://lodash.com/docs#template
-var _loDashTemplateRegExp = /<%=\s*\w+\s*%>/
+const _loDashTemplateRegExp = /<%=\s*\w+\s*%>/
 
 
 /**
- * Simple object containing a function to parse lodash path variables on itself.
+ * Simple object containing a function to parse lodash path constiables on itself.
  * @param root {string} automatically sets the root property for the config.
  * @constructor
  */
-function PathConfig ( root ) {
+function PathConfig(root) {
 
-    var _this = this;
-    var _context;
+    const _this = this;
+    let _context;
 
     _this.root = { path: root };
 
@@ -38,28 +34,30 @@ function PathConfig ( root ) {
      * @param opt_pathExtension {=string}       optional path extension to be appended to the path.
      * @return {string}                         fully rendered (file) path.
      */
-    _this.getPath = function ( name, opt_pathExtension ) {
+    _this.getPath = function (name, opt_pathExtension) {
 
-        if( !_context ) createContext();
+        if (!_context) createContext();
 
-        if( !_this.hasOwnProperty( name ) ) {
-            gulpUtil.log( gulpUtil.colors.red( 'Error: Path config with name: \'' + name + '\' was not found!' ) );
+        if (!_this.hasOwnProperty(name)) {
+            gulpUtil.log(gulpUtil.colors.red('Error: Path config with name: \'' + name + '\' was not found!'));
             return '';
         }
 
-        var path = _this[ name ][ 'path' ];
+        let path = _this[name]['path'];
 
-        var loopNum = 0, maxRecursion = 10;
-        while ( _loDashTemplateRegExp.test( path ) && loopNum <= maxRecursion ) {
-            path = _.template( path );
-            path = path( _context );
+        let loopNum = 0;
+        const maxRecursion = 10;
+        while (_loDashTemplateRegExp.test(path) && loopNum <= maxRecursion) {
+            path = _.template(path);
+            path = path(_context);
 
-            if( loopNum++ > maxRecursion ) gulpUtil.log( gulpUtil.colors.red( 'Error: Maximum recursion (' + maxRecursion + ') reached or failed to compile path template for name: \'' + name + '\'. Compiled path: \'' + path + '\'' ) );
+            if (loopNum++ > maxRecursion) gulpUtil.log(gulpUtil.colors.red('Error: Maximum recursion (' + maxRecursion + ') reached or failed to compile path template for name: \'' + name + '\'. Compiled path: \'' + path + '\''));
         }
 
-        var path = opt_pathExtension ? path + '/' + opt_pathExtension : path;
+        path = opt_pathExtension ? path + '/' + opt_pathExtension : path;
 
-        return pathUtil.normalize( path );
+        return pathUtil.normalize(path);
+
     }
 
     /**
@@ -67,38 +65,38 @@ function PathConfig ( root ) {
      * @param name
      * @returns {string|Array}
      */
-    _this.getFileGlobs = function ( name ) {
+    _this.getFileGlobs = function (name) {
 
-        if( !_context ) createContext();
+        if (!_context) createContext();
 
-        if( !_this.hasOwnProperty( name ) ) {
-            gulpUtil.log( gulpUtil.colors.red( 'Error: Path config with name: \'' + name + '\' was not found!' ) );
+        if (!_this.hasOwnProperty(name)) {
+            gulpUtil.log(gulpUtil.colors.red('Error: Path config with name: \'' + name + '\' was not found!'));
             return '';
         }
 
-        var pathData = _this[ name ];
-        var filesGlob = pathData[ 'files' ];
-        var filePathsGlob;
+        const pathData = _this[name];
+        let filesGlob = pathData['files'];
+        let filePathsGlob;
 
-        if( filesGlob === undefined ) return log.error( {
+        if (filesGlob === undefined) return log.error({
             sender: 'PathConfig',
             message: 'attempting getFilesGlob on a config that does not contain a files configuration: \'' + name + '\''
-        } );
+        });
 
 
-        if( Array.isArray( filesGlob ) ) {
+        if (Array.isArray(filesGlob)) {
 
             filePathsGlob = [];
 
-            for ( var i = 0, leni = filesGlob.length; i < leni; i++ ) {
+            for (let i = 0, leni = filesGlob.length; i < leni; i++) {
 
-                filePathsGlob.push( _this.getPath( name, filesGlob[ i ] ) );
+                filePathsGlob.push(_this.getPath(name, filesGlob[i]));
 
             }
 
         } else {
 
-            filePathsGlob = _this.getPath( name, filesGlob );
+            filePathsGlob = _this.getPath(name, filesGlob);
 
         }
 
@@ -110,55 +108,55 @@ function PathConfig ( root ) {
 	 * Returns the file paths found in the fileGlobs
  	 * @param name
 	 */
-	_this.getFilePaths = function  ( name, resolve ) {
+    _this.getFilePaths = function (name, resolve) {
 
-		var globs = _this.getFileGlobs( name );
-		var files = getFileList( globs );
+        const globs = _this.getFileGlobs(name);
+        const files = getFileList(globs);
 
-		if( resolve ) {
+        if (resolve) {
 
-			var root = _this.getPath( 'root' );
+            const root = _this.getPath('root');
 
-			for ( var i = 0, leni = files.length; i < leni; i++ ) {
-				var filePath = files[ i ];
-				files[ i ] = pathUtil.resolve( root, '../', filePath);
-			}
+            for (let i = 0, leni = files.length; i < leni; i++) {
+                const filePath = files[i];
+                files[i] = pathUtil.resolve(root, '../', filePath);
+            }
 
-		}
+        }
 
-		return files;
+        return files;
 
-	}
+    }
 
     /**
      * Generates the context in which paths are parsed.
      */
-    function createContext () {
+    function createContext() {
 
         _context = {};
 
-        for ( var pathName in _this ) {
+        for (const pathName in _this) {
 
-            if( !_this.hasOwnProperty( pathName ) ) continue;
+            if (!_this.hasOwnProperty(pathName)) continue;
 
-            var pathData = _this[ pathName ];
-            _context[ pathName ] = pathData.path;
+            const pathData = _this[pathName];
+            _context[pathName] = pathData.path;
 
         }
 
     }
 
     /**
-     * A function to log all the path variables.
+     * A function to log all the path constiables.
      * Useful for checking if they're all set correctly
      * @public
      * @function dump
      */
     _this.dump = function () {
-        console.info( 'Path config dump:' );
-        for ( var property in _this ) {
-            if( !_this.hasOwnProperty( property ) || typeof _this[ property ] !== 'object' ) continue;
-            console.info( '\t' + property + ( property.length >= 7 ? ':\t\'' : ':\t\t\'') + _this.getPath( property ) + '\'' );
+        console.info('Path config dump:');
+        for (const property in _this) {
+            if (!_this.hasOwnProperty(property) || typeof _this[property] !== 'object') continue;
+            console.info('\t' + property + (property.length >= 7 ? ':\t\'' : ':\t\t\'') + _this.getPath(property) + '\'');
         }
     }
 }

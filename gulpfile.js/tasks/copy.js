@@ -1,4 +1,4 @@
-// @formatter:off
+
 
 const requireCached = require('../src/gulp/require-cached');
 const log = require('../src/debug/log');
@@ -9,7 +9,7 @@ const gulp = requireCached('gulp');
 const changed = requireCached('gulp-changed');
 const mergeStream = requireCached('merge-stream');
 
-// @formatter:on
+
 
 /**
  *  Gulp task for copying Bower assets to the destination folder.

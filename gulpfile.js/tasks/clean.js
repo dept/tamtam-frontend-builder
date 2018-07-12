@@ -1,4 +1,4 @@
-// @formatter:off
+
 
 const requireCached = require('../src/gulp/require-cached');
 const log = require('../src/debug/log');
@@ -9,7 +9,7 @@ const gulp = requireCached('gulp');
 const gulpUtil = requireCached('gulp-util');
 const del = requireCached('del');
 
-// @formatter:on
+
 
 /**
  *  Gulp task for cleaning up the destination folder.

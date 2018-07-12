@@ -8,6 +8,8 @@ const webpack                   = requireCached('webpack');
 const compoilerPromise  		= require ('./script/create-compiler-promise');
 const webpackConfigs            = require('./script/webpack-config');
 const hasESFile                 = fs.existsSync(`${config.source.getPath('javascript')}/main-es.js`);
+const shownMissingLintWarning   = 0;
+const warningLimit              = 4;
 
 const compilerConfigs = {};
 

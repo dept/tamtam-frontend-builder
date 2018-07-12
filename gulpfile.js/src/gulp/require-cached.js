@@ -1,4 +1,4 @@
-//@formatter:off
+
 
 var log                     = require('../debug/log');
 var config                  = require('../../config');
@@ -6,7 +6,7 @@ var config                  = require('../../config');
 var specialCharacterRegExp  = /[^\w-]/g;
 var cameCaseRexp            = /-(\w)/g;
 
-// @formatter:on
+
 
 /**
  * Checks if the required module can be loaded from the cached object,

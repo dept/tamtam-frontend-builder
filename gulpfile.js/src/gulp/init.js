@@ -1,4 +1,4 @@
-// @formatter:off
+
 
 var loadPlugins 				= require( './load-plugins' );
 var log 						= require( '../debug/log' );
@@ -9,7 +9,7 @@ var gulp						= require('gulp');;
 var gulpDecorate				= require('./decorator/decorate');
 
 
-// @formatter:on
+
 
 
 function init ( callback ) {

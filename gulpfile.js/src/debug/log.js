@@ -11,7 +11,7 @@
  *
  */
 
-// @formatter:off
+
 
 var config                      = require('../../config');
 
@@ -22,7 +22,7 @@ var gulpUtil                    = require('gulp-util');
 var prettyHrtime                = require('pretty-hrtime');
 var notifier                    = require("node-notifier");
 
-// @formatter:on
+
 
 
 /**
@@ -185,14 +185,14 @@ function logError ( error, opt_stack, opt_exit ) {
 
     if( !error ) return;
 
-    // @formatter:off
+    
 
     error.name      = error.name        || 'Error';
     error.message   = error.message     || 'No message...';
     error.stack     = error.stack       || 'No stack found...';
     error.fileName  = error.fileName    || 'No filename found...';
 
-    //@formatter:on
+    
 
     var title = error.name;
 

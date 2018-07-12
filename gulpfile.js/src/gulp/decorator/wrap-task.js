@@ -1,11 +1,11 @@
-//@formatter:off
+
 
 var config                  = require('../../../config');
 var log                     = require('../../debug/log');
 
 var parameterNames			= require('../../function/parameter-names');
 
-//@formatter:on
+
 
 
 module.exports =  function wrapTask( gulp, taskFunction ) {

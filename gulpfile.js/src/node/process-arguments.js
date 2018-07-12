@@ -1,8 +1,8 @@
-//@formatter:off
+
 
 var log                     = require('../debug/log');
 
-//@formatter:on
+
 
 var argumentKeyRegExp = /^--/i;
 var processArguments = getArguments();

@@ -1,4 +1,4 @@
-// @formatter:off
+
 
 const projectDirectory      = process.env.OLDPWD;
 const PathConfig            = require('./src/data/path-config');

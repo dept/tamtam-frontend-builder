@@ -1,9 +1,9 @@
-// @formatter:off
+
 
 var debug           = require( '../../utils/debug' );
 var NO_ARGUMENT     = '__no-argument-supplied__';
 
-// @formatter:on
+
 
 function DebugExtension ( nunjucks ) {
 

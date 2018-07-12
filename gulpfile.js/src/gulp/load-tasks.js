@@ -1,4 +1,4 @@
-//@formatter:off
+
 
 var log                     = require('../debug/log');
 var config                  = require('../../config');
@@ -7,7 +7,7 @@ var requireCached     		= require('./require-cached');
 var path                    = require('path');
 var glob                    = requireCached('glob');
 
-// @formatter:on
+
 
 function loadTasks () {
 

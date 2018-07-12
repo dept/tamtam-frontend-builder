@@ -1,4 +1,4 @@
-// @formatter:off
+
 
 const requireCached           = require('../src/gulp/require-cached');
 const config                  = require('../config');
@@ -7,7 +7,7 @@ const path                    = require('path');
 const browserSync             = requireCached('browser-sync');
 const gulp                    = requireCached('gulp');
 
-//@formatter:on
+
 
 
 /**

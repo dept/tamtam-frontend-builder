@@ -1,11 +1,11 @@
-//@formatter:off
+
 
 var nodeFs                  = require('fs');
 var nodePath                = require('path');
 
 var log                     = require('../../debug/log');
 
-// @formatter:on
+
 
 
 module.exports = function safeWriteFileSync ( path, opt_encoding ) {

@@ -1,4 +1,4 @@
-//@formatter:off
+
 
 var config                  = require('../../../config');
 var log                     = require('../../debug/log');
@@ -11,7 +11,7 @@ var gulpPlumber             = requireCached('gulp-plumber');
 var gulpIf                  = requireCached('gulp-if');
 
 
-//@formatter:on
+
 
 
 

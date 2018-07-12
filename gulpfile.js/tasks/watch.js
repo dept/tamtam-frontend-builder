@@ -1,4 +1,4 @@
-// @formatter:off
+
 
 const requireCached   = require('../src/gulp/require-cached');
 const config          = require('../config');
@@ -11,7 +11,7 @@ const browserSync     = requireCached('browser-sync');
 let reloadTimeout;
 const RELOAD_TIMEOUT_DELAY = 200; // in milliseconds
 
-// @formatter:on
+
 
 
 /**
@@ -53,7 +53,7 @@ gulp.task('watch', ['js-watch'], function () {
 
 });
 
-// @formatter:on
+
 
 /**
  *  A separate function to refresh the browser. This is to bypass a known bug in chrome.

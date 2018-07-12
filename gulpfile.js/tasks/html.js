@@ -1,7 +1,6 @@
 const requireCached = require('../src/gulp/require-cached');
 const config = require('../config');
 const log = require('../src/debug/log');
-const path = require('path');
 const mergeJSONData = require('../src/data/json/merge');
 const getFileList = require('../src/node/file/get-list');
 const walkFileListSync = require('../src/node/file/walk-file-list-sync');
@@ -14,6 +13,7 @@ const mergeFilter = require('../src/template/nunjucks/filters/merge');
 const defaultsFilter = require('../src/template/nunjucks/filters/defaults');
 
 
+const path = requireCached('path');
 const gulp = requireCached('gulp');
 const gulpData = requireCached('gulp-data');
 const gulpNunjucks = requireCached('gulp-nunjucks-render');
@@ -36,7 +36,7 @@ gulp.task('html', function () {
 
     options.minify = config.minifyHTML;
 
-    // @formatter:off
+    
     options.htmlmin = {
 
         collapseWhitespace: true,
@@ -46,7 +46,7 @@ gulp.task('html', function () {
         keepClosingSlash: true // can break SVG if not set to true!
 
     };
-    // @formatter:on
+    
 
 
     // @see: https://www.npmjs.com/package/gulp-jsbeautifier

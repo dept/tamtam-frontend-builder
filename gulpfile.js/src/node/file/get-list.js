@@ -1,4 +1,4 @@
-//@formatter:off
+
 
 var glob                    = require('glob');
 var path                    = require('path');
@@ -6,7 +6,7 @@ var _                    	= require('lodash');
 
 var log                     = require('../../debug/log');
 
-// @formatter:on
+
 
 
 module.exports = function getList ( sourceGlob, opt_stripRoot, opt_stripExtension ) {

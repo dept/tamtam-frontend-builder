@@ -1,4 +1,4 @@
-// @formatter:off
+
 
 let config                        = require('./config');
 const runSequence                 = require( 'run-sequence' );

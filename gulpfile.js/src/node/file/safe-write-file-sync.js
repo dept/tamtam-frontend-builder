@@ -1,4 +1,4 @@
-//@formatter:off
+
 
 var nodeFs                  = require('fs');
 var nodePath                = require('path');
@@ -7,7 +7,7 @@ var _                    	= require('lodash');
 
 var log                     = require('../../debug/log');
 
-// @formatter:on
+
 
 
 module.exports = function safeWriteFileSync ( path, file ) {

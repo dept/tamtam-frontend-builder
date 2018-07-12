@@ -1,18 +1,15 @@
-//@formatter:off
-
 var path                    = require('path');
 var fs                    	= require('fs');
 
 var log                     = require('../../debug/log');
 var config                  = require('../../../config');
-var requireCached     		= require('../../gulp/require-cached');
+var requireCached           = require('../../gulp/require-cached');
 var getFileList             = require('../../node/file/get-list');
 var glob                    = requireCached('glob');
-var pathUtil            = require('path');
+var pathUtil                = require('path');
 
 var jsonFileRegExp          = /.json$/i;
 
-// @formatter:on
 
 /**
  * Loads and merges JSON data into one object

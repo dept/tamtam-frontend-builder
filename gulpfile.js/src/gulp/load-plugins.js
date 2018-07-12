@@ -1,11 +1,11 @@
-//@formatter:off
+
 
 var log                     = require('../debug/log');
 var config                  = require('../../config');
 
 var gulpLoadPlugins         = require('gulp-load-plugins');
 
-// @formatter:on
+
 
 function loadPlugins ( callback, lazy, opt_global ) {
 

@@ -2,14 +2,9 @@ const webpack     = require('webpack');
 const fs          = require('fs');
 const config      = require('../../config');
 const error       = require('../../../utils/error');
-
 const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
-let shownMissingLintWarning = 0;
-const warningLimit = 2;
 
 const logStats = stats => console.log(`\n ${stats.toString({ colors: true })} \n`);
-
-
 
 const createCompiler = (config) => {
     const compiler = webpack(config);

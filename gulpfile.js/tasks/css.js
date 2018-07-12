@@ -65,7 +65,7 @@ gulp.task('css', function () {
     };
 
 
-    //@formatter:on
+
 
     // Keep track of the file size changes
     const sizeBefore = gulpSize({ showFiles: true });

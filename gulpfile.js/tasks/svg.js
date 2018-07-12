@@ -1,5 +1,3 @@
-// @formatter:off
-
 const requireCached = require('../src/gulp/require-cached');
 const config = require('../config');
 const fileEmptyCheck = require('../src/function/file-empty-check');
@@ -11,9 +9,6 @@ const through = requireCached('through2');
 const path = requireCached('path');
 
 const SVG_CLASS_PREFIX = 'svg-';
-
-// @formatter:on
-
 
 /**
  * Task for optimizing svg images and making them available in the markup.
@@ -37,10 +32,9 @@ gulp.task('svg', function () {
 
     };
 
-
     return gulp.src(config.source.getFileGlobs('svg'))
 
-        .pipe(changed(config.dest.getPath('svg')))        // Ignore unchanged files
+        .pipe(changed(path.resolve(config.projectDirectory, config.dest.getPath('svg'))))        // Ignore unchanged files
         .pipe(fileEmptyCheck())
         .pipe(addSvgClass())
         .pipe(svgmin(options.svgmin))                       // Optimize

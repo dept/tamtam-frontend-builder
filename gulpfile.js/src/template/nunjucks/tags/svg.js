@@ -1,8 +1,8 @@
-// @formatter:off
+
 
 var svg           = require( '../../utils/svg' );
 
-// @formatter:on
+
 
 function SVGExtension ( nunjucks ) {
 

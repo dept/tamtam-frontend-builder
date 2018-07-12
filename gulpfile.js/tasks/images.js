@@ -1,4 +1,4 @@
-// @formatter:off
+
 
 const requireCached = require('../src/gulp/require-cached');
 const config = require('../config');
@@ -9,7 +9,7 @@ const gulp = requireCached('gulp');
 const gulpIf = requireCached('gulp-if');
 const imagemin = requireCached('gulp-imagemin');
 
-// @formatter:on
+
 
 /**
  * Task for optimizing images (size).
