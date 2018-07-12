@@ -18,8 +18,8 @@ function loadTask(taskName) {
     });
 
     if (_loadedTasks[taskName] === undefined) {
-
-        const taskPath = overrideTaskExists(taskName) ? path.normalize(`${config.projectDirectory}/build-config/task-overrides/${taskName}`) : path.normalize(`../../../tasks/${taskName}`);
+        
+        const taskPath = overrideTaskExists(taskName) ? path.normalize(`${config.projectDirectory}/build-config/task-overrides/${taskName}`) : path.resolve(process.env.PWD, `gulpfile.js/tasks/${taskName}`);
 
         try {
 

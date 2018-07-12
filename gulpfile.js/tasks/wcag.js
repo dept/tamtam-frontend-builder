@@ -1,5 +1,3 @@
-
-
 const requireCached = require('../src/gulp/require-cached');
 const config = require('../config');
 const path = require('path');
@@ -12,7 +10,6 @@ const gulpAccessibility = requireCached('gulp-accessibility');
  * Task for checking WCAG2 requirements
  * @see: https://github.com/yargalot/gulp-accessibility
  */
-
 gulp.task('wcag', function () {
 
     var options = {
@@ -26,9 +23,9 @@ gulp.task('wcag', function () {
     };
 
     return gulp.src([
-        path.resolve(config.projectDirectory, config.dest.getPath('root')) + "/*.html",
-        '!' + path.resolve(config.projectDirectory, config.dest.getPath('root')) + "/README.html",
-        '!' + path.resolve(config.projectDirectory, config.dest.getPath('root')) + "/styleguide.html"
+        path.resolve(config.projectDirectory, config.dest.getPath('root', '/*.html')),
+        '!' + path.resolve(config.projectDirectory, config.dest.getPath('root', '/README.html')),
+        '!' + path.resolve(config.projectDirectory, config.dest.getPath('root', '/styleguide.html'))
     ])
         .pipe(gulpAccessibility(options));
 
