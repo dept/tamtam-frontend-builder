@@ -1,16 +1,16 @@
 // @formatter:off
 
-var requireCached       = require('../src/gulp/require-cached');
-var config              = require('../config');
-var fileEmptyCheck      = require('../src/function/file-empty-check');
+const requireCached = require('../src/gulp/require-cached');
+const config = require('../config');
+const fileEmptyCheck = require('../src/function/file-empty-check');
 
-var changed             = requireCached('gulp-changed');
-var gulp                = requireCached('gulp');
-var svgmin              = requireCached('gulp-svgmin');
-var through             = requireCached('through2');
-var path                = requireCached('path');
+const changed = requireCached('gulp-changed');
+const gulp = requireCached('gulp');
+const svgmin = requireCached('gulp-svgmin');
+const through = requireCached('through2');
+const path = requireCached('path');
 
-var SVG_CLASS_PREFIX    = 'svg-';
+const SVG_CLASS_PREFIX = 'svg-';
 
 // @formatter:on
 
@@ -21,7 +21,7 @@ var SVG_CLASS_PREFIX    = 'svg-';
  */
 gulp.task('svg', function () {
 
-    var options = {
+    const options = {
 
         svgmin: {
             js2svg: {
@@ -44,21 +44,19 @@ gulp.task('svg', function () {
         .pipe(fileEmptyCheck())
         .pipe(addSvgClass())
         .pipe(svgmin(options.svgmin))                       // Optimize
-        .pipe(gulp.dest(config.dest.getPath('svg')))      // Export
+        .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('svg'))))      // Export
 
 });
 
 function addSvgClass(cb) {
     return through.obj(function (file, enc, cb) {
 
-        var name = file.path.replace(file.base, '').replace(/\\|\//g, '-').replace(/\.svg$/, '');
-        var className = SVG_CLASS_PREFIX + name;
+        const name = file.path.replace(file.base, '').replace(/\\|\//g, '-').replace(/\.svg$/, '');
+        const className = SVG_CLASS_PREFIX + name;
 
-        var newSvg = file.clone();
+        let contents = file.contents.toString();
 
-		var contents = file.contents.toString();
-
-		if ( !contents ) return;
+        if (!contents) return;
 
         // Look for existing classes
         if (contents.match(/class="(.*?)"/)) {

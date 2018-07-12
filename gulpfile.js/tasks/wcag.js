@@ -1,12 +1,11 @@
 //@formatter:off
 
-var requireCached     			= require('../src/gulp/require-cached');
-var config                      = require('../config');
+const requireCached = require('../src/gulp/require-cached');
+const config = require('../config');
+const path = require('path');
 
-var gulp                        = requireCached('gulp');
-var gulpAccessibility           = requireCached('gulp-accessibility');
-var rename                      = requireCached('gulp-rename');
-
+const gulp = requireCached('gulp');
+const gulpAccessibility = requireCached('gulp-accessibility');
 // @formatter:on
 
 /**
@@ -14,7 +13,7 @@ var rename                      = requireCached('gulp-rename');
  * @see: https://github.com/yargalot/gulp-accessibility
  */
 
-gulp.task('wcag', function() {
+gulp.task('wcag', function () {
 
     var options = {
         accessibilityLevel: 'WCAG2A',
@@ -26,11 +25,11 @@ gulp.task('wcag', function() {
         }
     };
 
-    return gulp.src( [
-        config.dest.getPath('root')+"/*.html",
-        '!'+config.dest.getPath('root')+"/README.html",
-        '!'+config.dest.getPath('root')+"/styleguide.html"
-    ] )
-    .pipe( gulpAccessibility(options) );
+    return gulp.src([
+        path.resolve(config.projectDirectory, config.dest.getPath('root')) + "/*.html",
+        '!' + path.resolve(config.projectDirectory, config.dest.getPath('root')) + "/README.html",
+        '!' + path.resolve(config.projectDirectory, config.dest.getPath('root')) + "/styleguide.html"
+    ])
+        .pipe(gulpAccessibility(options));
 
 });

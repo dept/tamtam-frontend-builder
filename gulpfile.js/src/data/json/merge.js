@@ -20,9 +20,9 @@ var jsonFileRegExp          = /.json$/i;
  * @param source {string} glob string for JSON
  */
 function mergeJSONData ( root, source ) {
-	
+
 	if( root.slice( -1 ) !== path.sep ) root += path.sep; // force path separator as last character
-	
+
 	var data = {};
 	var files = getFileList( source );
 
@@ -30,7 +30,7 @@ function mergeJSONData ( root, source ) {
 	for ( var i = 0, leni = files.length; i < leni; i++ ) {
 
 		var filePath = files[ i ];
-	
+
 		if( !jsonFileRegExp.test( filePath ) ) {
 			log.warn( {
 				sender: 'mergeJSONData',
@@ -56,16 +56,16 @@ function mergeJSONData ( root, source ) {
 			continue;
 
 		}
-		
+
 		if(path.sep === "\\"){
 			root = root.replace('\\', '/');
 		}
-		
+
 		var dataPath = filePath.replace( root, '' );
-				
+
 		dataPath = dataPath.replace( jsonFileRegExp, '' );
 		dataPath = dataPath.split( '/' );
-	
+
 
 		var currentNode = data;
 		for ( var j = 0, lenj = dataPath.length; j < lenj; j++ ) {
@@ -85,7 +85,7 @@ function mergeJSONData ( root, source ) {
 				currentNode = currentNode[ key ];
 
 			}
-			
+
 		}
 
 	}

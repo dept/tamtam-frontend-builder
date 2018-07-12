@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 const gulp 	= require('gulp');
 const error = require('../utils/error');
+const loadTask = require('../gulpfile.js/src/gulp/decorator/load-task');
 const task 	= process.argv[2];
 
 require('../gulpfile.js');
@@ -11,7 +12,7 @@ if ( !task ) {
 }
 
 try {
-	gulp.start(task);
+    loadTask(task);
 } catch (e) {
     error(`Task name '${task}' not recognized.`);
 }

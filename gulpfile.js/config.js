@@ -1,7 +1,6 @@
 // @formatter:off
 
 const projectDirectory      = process.env.OLDPWD;
-const merge					= require('deepmerge');
 const PathConfig            = require('./src/data/path-config');
 const processArguments      = require( './src/node/process-arguments' );
 const packageJSON           = require(`${projectDirectory}/package.json`);
@@ -101,7 +100,7 @@ source.components                   = { path: '<%= root %>/components',     file
 source.utilities                    = { path: '<%= root %>/utilities',      files: [ '**/*.js' ] };               // entry point files
 source.sw                           = { path: '<%= assets %>',              files: '**/*.{js,html,css,jpg,jpeg,png,gif,svg,xml,ico,eot,ttf,woff,json}', strip: source.root.path.replace('./','') };  // entry point files
 
-dest.root                           = { path:  config.projectDirectory + '/build' };
+dest.root                           = { path: './build' };
 
 dest.assets                         = { path: '<%= root %>/assets' };
 dest.css                            = { path: '<%= assets %>/css' };
@@ -115,6 +114,6 @@ dest.manifest                       = { path: '<%= root %>' };
 dest.sw                             = { path: '<%= root %>' };
 
 // Overwrite config with project specific settings.
-config = merge.all([{}, config, config.projectConfig.config || {}]);
+config = Object.assign({}, config.projectConfig.config || {}, config);
 
-module.exports                      = config;
+module.exports = config;

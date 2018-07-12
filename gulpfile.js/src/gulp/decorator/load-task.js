@@ -30,7 +30,6 @@ function loadTask(taskName) {
 
             _loadedTasks[taskName] = require(taskPath);
 
-
         } catch (error) {
 
             _loadedTasks[taskName] = false;

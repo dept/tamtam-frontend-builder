@@ -1,12 +1,13 @@
 // @formatter:off
 
-var requireCached     		= require('../src/gulp/require-cached');
-var config                  = require('../config');
+const requireCached = require('../src/gulp/require-cached');
+const config = require('../config');
+const path = require('path');
 
-var changed                 = requireCached('gulp-changed');
-var gulp                    = requireCached('gulp');
-var gulpIf                  = requireCached('gulp-if');
-var imagemin                = requireCached('gulp-imagemin');
+const changed = requireCached('gulp-changed');
+const gulp = requireCached('gulp');
+const gulpIf = requireCached('gulp-if');
+const imagemin = requireCached('gulp-imagemin');
 
 // @formatter:on
 
@@ -16,7 +17,7 @@ var imagemin                = requireCached('gulp-imagemin');
  */
 gulp.task('images', function () {
 
-    var options = {
+    const options = {
 
         config: {
             optimizationLevel: 3,  // default 3
@@ -27,10 +28,10 @@ gulp.task('images', function () {
 
     };
 
-    return gulp.src( config.source.getFileGlobs( 'images' ) )
+    return gulp.src(config.source.getFileGlobs('images'))
 
-        .pipe( changed( config.dest.getPath( 'images' ) ) )                    // Ignore unchanged files
-        .pipe( gulpIf( config.optimizeImages, imagemin( options.config ) ) )   // Optimize
-        .pipe( gulp.dest( config.dest.getPath( 'images' ) ) );                 // Export
+        .pipe(changed(path.resolve(config.projectDirectory, config.dest.getPath('images'))))                    // Ignore unchanged files
+        .pipe(gulpIf(config.optimizeImages, imagemin(options.config)))   // Optimize
+        .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('images'))));                 // Export
 
-} );
+});

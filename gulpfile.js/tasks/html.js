@@ -1,6 +1,7 @@
 const requireCached = require('../src/gulp/require-cached');
 const config = require('../config');
 const log = require('../src/debug/log');
+const path = require('path');
 const mergeJSONData = require('../src/data/json/merge');
 const getFileList = require('../src/node/file/get-list');
 const walkFileListSync = require('../src/node/file/walk-file-list-sync');
@@ -13,16 +14,12 @@ const mergeFilter = require('../src/template/nunjucks/filters/merge');
 const defaultsFilter = require('../src/template/nunjucks/filters/defaults');
 
 
-const path = requireCached('path');
-const fs = requireCached('fs');
-const mkdirp = requireCached('mkdirp');
 const gulp = requireCached('gulp');
 const gulpData = requireCached('gulp-data');
 const gulpNunjucks = requireCached('gulp-nunjucks-render');
 const htmlmin = requireCached('gulp-htmlmin');
 const gulpif = requireCached('gulp-if');
 const prettify = requireCached('gulp-jsbeautifier');
-const glob = requireCached('glob');
 
 
 const RESERVED_DATA_KEYWORDS = ['project', 'ext'];
@@ -140,7 +137,7 @@ gulp.task('html', function () {
         .pipe(gulpif(options.pretty, prettify(options.prettyConfig)))
         .pipe(gulpif(options.minify, htmlmin(options.htmlmin)))
 
-        .pipe(gulp.dest(config.dest.getPath('html')));
+        .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('html'))));
 
     // Browser Sync is reloaded from the watch task for HTML files to bypass a chrome bug.
     // See the watch task for more info.

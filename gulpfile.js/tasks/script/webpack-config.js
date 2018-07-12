@@ -5,6 +5,7 @@ const createBabelLoaderConfig = require('./create-babel-loader-config');
 const esLintConfig = require('./eslint-config');
 
 const fs = require('fs');
+const path = require('path');
 
 const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
 
@@ -12,7 +13,7 @@ const baseConfig = {
     context: config.projectDirectory,
     bail: config.throwError,
     output: {
-        path: config.dest.getPath('javascript'),
+        path: path.resolve(config.projectDirectory, config.dest.getPath('javascript')),
         filename: '[name].js',
         publicPath: `${config.dest.getPath('javascript').replace(config.dest.getPath('root'), '')}/`
     },

@@ -1,12 +1,13 @@
 // @formatter:off
 
-var requireCached     		= require('../src/gulp/require-cached');
-var log                     = require('../src/debug/log');
-var config                  = require('../config');
+const requireCached = require('../src/gulp/require-cached');
+const log = require('../src/debug/log');
+const config = require('../config');
+const path = require('path');
 
-var gulp                    = requireCached('gulp');
-var gulpUtil                = requireCached('gulp-util');
-var del                     = requireCached('del');
+const gulp = requireCached('gulp');
+const gulpUtil = requireCached('gulp-util');
+const del = requireCached('del');
 
 // @formatter:on
 
@@ -15,21 +16,21 @@ var del                     = requireCached('del');
  *  Deletes all files that match the patterns in the option.source
  *  @see: https://www.npmjs.com/package/del
  */
-gulp.task( 'clean', function ( callback ) {
+gulp.task('clean', function (callback) {
 
-    if( !config.cleanBuild ) {
+    if (!config.cleanBuild) {
 
-        if( typeof callback === 'function' ) callback.call( this );
+        if (typeof callback === 'function') callback.call(this);
 
         return;
 
     }
 
 
-    var options = {
+    const options = {
 
         // define file patterns to delete here
-        source: config.dest.getPath( 'root', '**' ),
+        source: path.resolve(config.projectDirectory, config.dest.getPath('javascript'), '**'),
 
         // log deleted files
         verbose: config.gulp.verbose
@@ -37,37 +38,37 @@ gulp.task( 'clean', function ( callback ) {
     };
 
 
-    var deletedFiles;
+    let deletedFiles;
 
     try {
 
-        deletedFiles = del.sync( options.source );
+        deletedFiles = del.sync(options.source);
 
-    } catch ( error ) {
+    } catch (error) {
 
-        log.error( error );
+        log.error(error);
 
     }
 
 
-    if( options.verbose && deletedFiles ) {
+    if (options.verbose && deletedFiles) {
 
-        var filesDeletedString = '';
-        var currentWorkingDirectory = process.cwd();
-        for ( var i = 0, leni = deletedFiles.length; i < leni; i++ ) filesDeletedString += '\n\t\t' + deletedFiles[ i ];
+        let filesDeletedString = '';
+        const currentWorkingDirectory = process.cwd();
+        for (let i = 0, leni = deletedFiles.length; i < leni; i++) filesDeletedString += '\n\t\t' + deletedFiles[i];
 
         // remove CWD path of the file names.
-    filesDeletedString = filesDeletedString.replace( new RegExp( currentWorkingDirectory, 'g' ), '' );
+        filesDeletedString = filesDeletedString.replace(new RegExp(currentWorkingDirectory, 'g'), '');
 
-    log.info( {
-        sender: 'clean task',
-        message: 'Files deleted during cleanup:',
-        data: [ gulpUtil.colors.yellow( filesDeletedString ) ]
-    } );
+        log.info({
+            sender: 'clean task',
+            message: 'Files deleted during cleanup:',
+            data: [gulpUtil.colors.yellow(filesDeletedString)]
+        });
 
-}
+    }
 
-if( callback ) callback.call( this );
+    if (callback) callback.call(this);
 
 
-} );
+});

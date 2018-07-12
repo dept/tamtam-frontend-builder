@@ -34,7 +34,6 @@
 		"babel-preset-env": "1.7.0",
 		"browser-sync": "2.24.5",
 		"chalk": "2.4.1",
-		"deepmerge": "2.1.1",
 		"del": "3.0.0",
 		"eslint": "5.1.0",
 		"eslint-loader": "2.0.0",

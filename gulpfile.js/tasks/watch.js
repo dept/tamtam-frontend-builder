@@ -1,14 +1,15 @@
 // @formatter:off
 
-var requireCached   = require('../src/gulp/require-cached');
-var config          = require('../config');
+const requireCached   = require('../src/gulp/require-cached');
+const config          = require('../config');
+const path            = require('path');
 
-var gulp            = requireCached('gulp');
-var watch           = requireCached('gulp-watch');
-var browserSync     = requireCached('browser-sync');
+const gulp            = requireCached('gulp');
+const watch           = requireCached('gulp-watch');
+const browserSync     = requireCached('browser-sync');
 
-var reloadTimeout;
-var RELOAD_TIMEOUT_DELAY = 200; // in milliseconds
+let reloadTimeout;
+const RELOAD_TIMEOUT_DELAY = 200; // in milliseconds
 
 // @formatter:on
 
@@ -18,37 +19,37 @@ var RELOAD_TIMEOUT_DELAY = 200; // in milliseconds
  * JavaScript is done via watchify instead for this task for optimized configuration.
  * @see https://www.npmjs.com/package/gulp-watch
  */
-gulp.task('watch', ['js-watch'], function (callback) {
+gulp.task('watch', ['js-watch'], function () {
 
     watch(config.source.getFileGlobs('images'),
-        function (events, done) { gulp.start('images'); });
+        function () { gulp.start('images'); });
 
     watch(config.source.getFileGlobs('svg'),
-        function (events, done) { gulp.start('svg'); });
+        function () { gulp.start('svg'); });
 
     watch(config.source.getPath('components', '**/*.scss'),
-        function (events, done) {
+        function () {
             gulp.start('css');
             gulp.start('css-lint');
             gulp.start('inject-component-css');
         });
 
     watch(config.source.getPath('css', '**/*.scss'),
-        function (events, done) {
+        function () {
             gulp.start('css');
             gulp.start('css-lint');
         });
 
     watch(config.source.getPath('components', '**/*.html'),
-        function (events, done) { gulp.start('html'); });
+        function () { gulp.start('html'); });
 
     watch(config.source.getPath('html', '**'),
-        function (events, done) { gulp.start('html'); });
+        function () { gulp.start('html'); });
 
     watch(config.source.getFileGlobs('data'),
-        function (events, done) { gulp.start('html'); });
+        function () { gulp.start('html'); });
 
-    watch(config.dest.getPath('html', '**/*.html'), onHTMLChange);
+    watch(path.resolve(config.projectDirectory, config.dest.getPath('html', '**/*.html')), onHTMLChange);
 
 });
 
@@ -58,7 +59,7 @@ gulp.task('watch', ['js-watch'], function (callback) {
  *  A separate function to refresh the browser. This is to bypass a known bug in chrome.
  *  see: https://github.com/BrowserSync/browser-sync/issues/155
  */
-function onHTMLChange(events, done) {
+function onHTMLChange() {
 
     if (reloadTimeout) clearTimeout(reloadTimeout);
     reloadTimeout = setTimeout(browserSync.reload, RELOAD_TIMEOUT_DELAY);

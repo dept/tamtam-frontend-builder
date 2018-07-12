@@ -1,10 +1,11 @@
 // @formatter:off
 
-var requireCached     		= require('../src/gulp/require-cached');
-var config                  = require('../config');
+const requireCached           = require('../src/gulp/require-cached');
+const config                  = require('../config');
+const path                    = require('path');
 
-var browserSync             = requireCached('browser-sync');
-var gulp                    = requireCached('gulp');
+const browserSync             = requireCached('browser-sync');
+const gulp                    = requireCached('gulp');
 
 //@formatter:on
 
@@ -25,7 +26,7 @@ gulp.task('browser-sync', function () {
 
         server: {
             // Serve up our build folder
-            baseDir: config.dest.getPath('root'),
+            baseDir: path.resolve(config.projectDirectory, config.dest.getPath('root')),
 
             // Enables CORS to solve cross domain issues
             // @see https://hondo.wtf/2015/02/15/enable-cors-in-browsersync

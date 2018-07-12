@@ -1,12 +1,13 @@
 // @formatter:off
 
-var requireCached         = require('../src/gulp/require-cached');
-var config                = require('../config');
+const requireCached = require('../src/gulp/require-cached');
+const config = require('../config');
+const path = require('path');
 
-var changed               = requireCached('gulp-changed');
-var gulp                  = requireCached('gulp');
-var gulpIf                = requireCached('gulp-if');
-var webp                  = requireCached('gulp-webp');
+const changed = requireCached('gulp-changed');
+const gulp = requireCached('gulp');
+const gulpIf = requireCached('gulp-if');
+const webp = requireCached('gulp-webp');
 
 // @formatter:on
 
@@ -16,9 +17,9 @@ var webp                  = requireCached('gulp-webp');
  */
 gulp.task('webp', function () {
 
-    return gulp.src( config.source.getFileGlobs( 'webp' ) )
-        .pipe( changed( config.dest.getPath( 'webp' ) ) )     // Ignore unchanged files
-        .pipe( gulpIf( config.convertWebp, webp()))           // Convert
-        .pipe( gulp.dest( config.dest.getPath( 'webp' ) ) );  // Export
+    return gulp.src(config.source.getFileGlobs('webp'))
+        .pipe(changed(config.dest.getPath('webp')))     // Ignore unchanged files
+        .pipe(gulpIf(config.convertWebp, webp()))           // Convert
+        .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('webp'))));  // Export
 
-} );
+});

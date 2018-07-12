@@ -1,14 +1,14 @@
 // @formatter:off
 
-var requireCached     		= require('../src/gulp/require-cached');
-var config                  = require('../config');
-var path                    = require('path');
+const requireCached = require('../src/gulp/require-cached');
+const config = require('../config');
+const path = require('path');
 
-var gulp                    = requireCached('gulp');
-var gulpIf                  = requireCached('gulp-if');
-var gulpConcat              = requireCached('gulp-concat');
-var uglify                  = requireCached('gulp-uglify');
-var sourcemaps              = requireCached('gulp-sourcemaps');
+const gulp = requireCached('gulp');
+const gulpIf = requireCached('gulp-if');
+const gulpConcat = requireCached('gulp-concat');
+const uglify = requireCached('gulp-uglify');
+const sourcemaps = requireCached('gulp-sourcemaps');
 
 // @formatter:on
 
@@ -18,7 +18,7 @@ var sourcemaps              = requireCached('gulp-sourcemaps');
  */
 gulp.task('libs', function () {
 
-    var options = {
+    const options = {
 
         uglifyOptions: {
             mangle: true,               // Pass false to skip mangling names.
@@ -27,16 +27,16 @@ gulp.task('libs', function () {
 
     };
 
-    var libs = (typeof config.libs === 'function') ? config.libs() : null;
+    const libs = (typeof config.libs === 'function') ? config.libs() : null;
 
-    if(!libs || !libs.length) return null;
+    if (!libs || !libs.length) return null;
 
-    return gulp.src( libs )
+    return gulp.src(libs)
 
-        .pipe( gulpIf( config.sourcemaps, sourcemaps.init( ) ) )
-        .pipe( gulpConcat('libs.js') )
-        .pipe( gulpIf( config.minify, uglify( options.uglifyOptions ) ) )
-        .pipe( gulpIf( config.sourcemaps, sourcemaps.write( '.' ) ) )
-        .pipe( gulp.dest( config.dest.getPath( 'javascript' ) ) );                  // Export
+        .pipe(gulpIf(config.sourcemaps, sourcemaps.init()))
+        .pipe(gulpConcat('libs.js'))
+        .pipe(gulpIf(config.minify, uglify(options.uglifyOptions)))
+        .pipe(gulpIf(config.sourcemaps, sourcemaps.write('.')))
+        .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('javascript'))));                  // Export
 
-} );
+});

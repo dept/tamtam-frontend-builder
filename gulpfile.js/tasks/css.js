@@ -1,17 +1,17 @@
-const requireCached     			= require('../src/gulp/require-cached');
-const config                      = require('../config');
-const log                         = require('../src/debug/log');
-const path                        = require('path');
+const requireCached = require('../src/gulp/require-cached');
+const config = require('../config');
+const log = require('../src/debug/log');
+const path = require('path');
 
-const gulp                        = requireCached('gulp');
-const browserSync                 = requireCached('browser-sync');
-const sass                        = requireCached('gulp-sass');
-const sourcemaps                  = requireCached('gulp-sourcemaps');
-const autoprefixer                = requireCached('gulp-autoprefixer');
-const gulpIf                      = requireCached('gulp-if');
-const gulpCleanCss                = requireCached('gulp-clean-css');
-const gulpSize                    = requireCached('gulp-size');
-const uncss                       = requireCached('gulp-uncss');
+const gulp = requireCached('gulp');
+const browserSync = requireCached('browser-sync');
+const sass = requireCached('gulp-sass');
+const sourcemaps = requireCached('gulp-sourcemaps');
+const autoprefixer = requireCached('gulp-autoprefixer');
+const gulpIf = requireCached('gulp-if');
+const gulpCleanCss = requireCached('gulp-clean-css');
+const gulpSize = requireCached('gulp-size');
+const uncss = requireCached('gulp-uncss');
 
 /**
  * Task for compiled SASS files back to CSS, uses lib-sass instead of ruby for faster compiling.
@@ -58,7 +58,7 @@ gulp.task('css', function () {
             html: [config.dest.getPath('html', '*.html')],
             // Provide a list of selectors that should not be removed by UnCSS. For example, styles added by user interaction with the page (hover, click),
             // Both literal names and regex patterns are recognized.
-            ignore: [ /\.modal.*/, /\.panel.*/, /\.popup.*/, /.*\.is-.*/, /.*\.has-.*/ ]
+            ignore: [/\.modal.*/, /\.panel.*/, /\.popup.*/, /.*\.is-.*/, /.*\.has-.*/]
             //timeout: 0 //  Specify how long to wait for the JS to be loaded.
         }
 
@@ -68,36 +68,36 @@ gulp.task('css', function () {
     //@formatter:on
 
     // Keep track of the file size changes
-    const sizeBefore = gulpSize( { showFiles: true } );
-    const sizeAfter = gulpSize( { showFiles: true } );
+    const sizeBefore = gulpSize({ showFiles: true });
+    const sizeAfter = gulpSize({ showFiles: true });
 
 
-    return gulp.src( config.source.getFileGlobs('css') )
+    return gulp.src(config.source.getFileGlobs('css'))
 
-        .pipe( gulpIf( config.sourcemaps, sourcemaps.init() ) )
+        .pipe(gulpIf(config.sourcemaps, sourcemaps.init()))
         // sass
-        .pipe( sass( options.sass ) )
+        .pipe(sass(options.sass))
         // start optimizing...
-        .pipe( gulpIf( options.minify, sizeBefore ) )
-        .pipe( gulpIf( options.removeUnused, uncss( options.uncss ) ) )
-        .pipe( gulpIf( options.minify, gulpCleanCss( options.cleanCSS ) ) )
+        .pipe(gulpIf(options.minify, sizeBefore))
+        .pipe(gulpIf(options.removeUnused, uncss(options.uncss)))
+        .pipe(gulpIf(options.minify, gulpCleanCss(options.cleanCSS)))
 
-        .pipe( autoprefixer( options.autoprefixer ) )
+        .pipe(autoprefixer(options.autoprefixer))
 
         // sourcemaps need a relative path from the output folder
-        .pipe( gulpIf( config.sourcemaps, sourcemaps.write( '.' ) ) )
+        .pipe(gulpIf(config.sourcemaps, sourcemaps.write('.')))
 
-        .pipe( gulp.dest( config.dest.getPath('css') ) )
+        .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('css'))))
 
-        .pipe( gulpIf( options.minify, sizeAfter ) )
-        .on( 'end', log.size( {
+        .pipe(gulpIf(options.minify, sizeAfter))
+        .on('end', log.size({
             sender: 'sass',
             message: 'css - ',
             size: sizeBefore,
             sizeAfter: sizeAfter,
             wrap: true,
             check: options.minify
-        } ) )
-        .pipe(browserSync.stream({match: '**/*.css'}) );
+        }))
+        .pipe(browserSync.stream({ match: '**/*.css' }));
 
-} );
+});
