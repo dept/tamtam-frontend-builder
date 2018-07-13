@@ -25,6 +25,7 @@
 	},
 	"scripts": {},
 	"dependencies": {
+		"assign-deep": "^0.4.7",
 		"babel-core": "6.26.3",
 		"babel-eslint": "8.2.5",
 		"babel-loader": "7.1.5",
