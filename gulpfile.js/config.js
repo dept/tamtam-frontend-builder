@@ -1,6 +1,6 @@
 
 
-const assigndeep            = require('assigndeep');
+const assigndeep            = require('assign-deep');
 const projectDirectory      = process.env.OLDPWD;
 const PathConfig            = require('./src/data/path-config');
 const processArguments      = require( './src/node/process-arguments' );

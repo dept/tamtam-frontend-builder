@@ -3,7 +3,7 @@
 let config                  = require('./config');
 const runSequence           = require( 'run-sequence' );
 const init                  = require('./src/gulp/init');
-const assigndeep            = require('assigndeep');
+const assigndeep            = require('assign-deep');
 
 
 config.applyProcessArgs();
