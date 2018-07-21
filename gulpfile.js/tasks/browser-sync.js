@@ -1,11 +1,12 @@
 
 
-const requireCached           = require('../src/gulp/require-cached');
-const config                  = require('../config');
-const path                    = require('path');
+const requireCached = require('../src/gulp/require-cached');
+const config = require('../config');
+const path = require('path');
 
-const browserSync             = requireCached('browser-sync');
-const gulp                    = requireCached('gulp');
+const browserSync = requireCached('browser-sync');
+const gulp = requireCached('gulp');
+const compression = requireCached('compression');
 
 
 
@@ -30,10 +31,13 @@ gulp.task('browser-sync', function () {
 
             // Enables CORS to solve cross domain issues
             // @see https://hondo.wtf/2015/02/15/enable-cors-in-browsersync
-            middleware: function (req, res, next) {
-                res.setHeader('Access-Control-Allow-Origin', '*');
-                next();
-            }
+            middleware: [
+                compression(),
+                function (req, res, next) {
+                    res.setHeader('Access-Control-Allow-Origin', '*');
+                    next();
+                }
+            ]
         }
 
     }
