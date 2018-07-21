@@ -96,8 +96,8 @@ function registerMainTasks( gulp ){
         config.sourcemaps         = false;
         config.prettyHTML         = true;
 
-        config.dest.root.path       = '../backend';
-        config.dest.html.path     	= config.dest.root.path + '/html';
+        config.dest.root.path       = './build';
+        config.dest.html.path     	= config.dest.root.path;
         config.source.sw.path       = config.dest.root.path + '/assets/';
         config.source.sw.strip      = config.dest.root.path;
         config.dest.manifest.path   = config.dest.root.path;
