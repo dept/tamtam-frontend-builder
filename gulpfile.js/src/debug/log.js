@@ -1,7 +1,7 @@
 /**
  *  This file contains a collection of log functions to keep track of what is happening during the build process
  *
- *  gulpUtil.colors:
+ *  colors:
  *      - bold, dim, underline, inverse
  *      - red, green, yellow, blue, magenta, cyan, white, gray, black
  *      - bgRed, bgGreen, bgYellow, bgBlue, bgMagenta, bgCyan, bgWhite, bgBlack
@@ -13,14 +13,15 @@
 
 
 
-var config                      = require('../../config');
+const config                      = require('../../config');
 
 // Note: we don't use requireCachedModule here because it causes a circular reference which causes problems.
-var humanSize                   = require('human-size');
-var path                        = require('path');
-var gulpUtil                    = require('gulp-util');
-var prettyHrtime                = require('pretty-hrtime');
-var notifier                    = require("node-notifier");
+const humanSize                   = require('human-size');
+const path                        = require('path');
+const beeper                      = require('beeper');
+const colors                      = require('ansi-colors');
+const prettyHrtime                = require('pretty-hrtime');
+const notifier                    = require("node-notifier");
 
 
 
@@ -47,16 +48,16 @@ function logSize ( options ) {
 
     } else {
 
-        var sizeLog = humanSize( options.size.size, true );
+        let sizeLog = humanSize( options.size.size, true );
 
         if( options.sizeAfter ) {
-            var difference = options.size.size - options.sizeAfter.size;
+            let difference = options.size.size - options.sizeAfter.size;
             if( difference > 0 ) sizeLog = 'saved ' + humanSize( difference, true );
             else sizeLog = 'gained ' + humanSize( difference );
         }
 
         if( typeof options.check !== 'undefined' && !options.check ) return;
-        console.log( gulpUtil.colors.blue( '[' + options.sender + '] size: ' + options.message ) + gulpUtil.colors.cyan( sizeLog ) );
+        console.log( colors.blue( '[' + options.sender + '] size: ' + options.message ) + colors.cyan( sizeLog ) );
 
     }
 
@@ -82,7 +83,7 @@ function logTime ( options ) {
     } else {
 
         if( typeof options.check !== 'undefined' && !options.check ) return;
-        console.log( gulpUtil.colors.blue( '[' + options.sender + '] time: ' + options.message ) + gulpUtil.colors.cyan( prettyHrtime( options.time ) ) );
+        console.log( colors.blue( '[' + options.sender + '] time: ' + options.message ) + colors.cyan( prettyHrtime( options.time ) ) );
     }
 
 }
@@ -108,7 +109,7 @@ function logDebug ( options ) {
     } else {
 
         if( typeof options.check !== 'undefined' && !options.check ) return;
-        console.log.apply( this, [ gulpUtil.colors.blue( '[' + options.sender + '] debug: ' + options.message ) ].concat( options.data ? options.data : [] ) );
+        console.log.apply( this, [ colors.blue( '[' + options.sender + '] debug: ' + options.message ) ].concat( options.data ? options.data : [] ) );
 
     }
 
@@ -135,7 +136,7 @@ function logWarn ( options ) {
     } else {
 
         if( typeof options.check !== 'undefined' && !options.check ) return;
-        console.log.apply( this, [ gulpUtil.colors.yellow( '[' + options.sender + '] warn: ' + options.message ) ].concat( options.data ? options.data : [] ) );
+        console.log.apply( this, [ colors.yellow( '[' + options.sender + '] warn: ' + options.message ) ].concat( options.data ? options.data : [] ) );
 
     }
 
@@ -162,7 +163,7 @@ function logInfo ( options ) {
     } else {
 
         if( typeof options.check !== 'undefined' && !options.check ) return;
-        console.log.apply( this, [ gulpUtil.colors.blue( '[' + options.sender + '] info: ' ) + gulpUtil.colors.cyan( options.message ) ].concat( options.data ? options.data : [] ) );
+        console.log.apply( this, [ colors.blue( '[' + options.sender + '] info: ' ) + colors.cyan( options.message ) ].concat( options.data ? options.data : [] ) );
     }
 
 }
@@ -194,7 +195,7 @@ function logError ( error, opt_stack, opt_exit ) {
 
     
 
-    var title = error.name;
+    let title = error.name;
 
     if( error.plugin ) title += ' [' + (error.plugin) + ']';
     else if( error.sender ) title += ' [' + error.sender + ']';
@@ -220,8 +221,8 @@ function logError ( error, opt_stack, opt_exit ) {
     }
 
 
-    var message;
-    var stackTrace;
+    let message;
+    let stackTrace;
 
     if( opt_stack && error.stack ) {
 
@@ -232,11 +233,11 @@ function logError ( error, opt_stack, opt_exit ) {
 
     message = error.message;
     message = message.replace( new RegExp( '^' + error.name + '' ), '' );
-    message = gulpUtil.colors.red( title, message );
+    message = colors.red( title, message );
 
     console.log( message + (stackTrace ? stackTrace : '') );
     if(error.data) console.log(error.data);
-    gulpUtil.beep();
+    beeper();
 
     if( config.throwError ) {
 
@@ -257,9 +258,9 @@ function logError ( error, opt_stack, opt_exit ) {
  * @name log
  * @type {{time: logTime, size: logSize, debug: logDebug, info: logInfo, warn: logWarn, error: logError}}
  */
-var log = {
+const log = {
 
-    colors: gulpUtil.colors,
+    colors: colors,
 
     time: logTime,
     size: logSize,
