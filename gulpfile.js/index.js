@@ -1,8 +1,9 @@
 
 
-let config                        = require('./config');
-const runSequence                 = require( 'run-sequence' );
-const init                        = require('./src/gulp/init');
+let config                  = require('./config');
+const runSequence           = require( 'run-sequence' );
+const init                  = require('./src/gulp/init');
+const assigndeep            = require('assign-deep');
 
 
 config.applyProcessArgs();
@@ -94,15 +95,15 @@ function registerMainTasks( gulp ){
         config.sourcemaps         = false;
         config.prettyHTML         = true;
 
-        config.dest.root.path       = '../backend';
-        config.dest.html.path     	= config.dest.root.path + '/html';
+        config.dest.root.path       = './build';
+        config.dest.html.path     	= config.dest.root.path;
         config.source.sw.path       = config.dest.root.path + '/assets/';
         config.source.sw.strip      = config.dest.root.path;
         config.dest.manifest.path   = config.dest.root.path;
 		config.dest.sw.path         = config.dest.root.path;
 
 		// Overwrite config with project specific settings.
-        config = Object.assign({}, config.projectConfig.dist || {}, config);
+        assigndeep(config, config.projectConfig.dist || {});
 
         runSequence(
             'build',
@@ -132,7 +133,7 @@ function registerMainTasks( gulp ){
 		config.dest.sw.path         = config.dest.root.path;
 
 		// Overwrite config with project specific settings.
-        config = Object.assign({}, config.projectConfig.deploy || {}, config);
+        assigndeep(config, config.projectConfig.deploy || {});
 
         runSequence(
             'clean',
