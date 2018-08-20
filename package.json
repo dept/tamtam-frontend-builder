@@ -1,6 +1,6 @@
 {
 	"name": "tamtam-frontend-builder",
-	"version": "1.0.1",
+	"version": "1.0.0",
 	"license": "MIT",
 	"description": "TamTam Frontend build tools",
 	"author": "Tam Tam",
