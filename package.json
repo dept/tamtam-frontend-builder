@@ -37,7 +37,7 @@
 		"chalk": "2.4.1",
 		"del": "3.0.0",
 		"eslint": "5.1.0",
-		"eslint-loader": "2.0.0",
+		"eslint-loader": "2.1.0",
 		"glob": "7.1.2",
 		"gulp": "3.9.1",
 		"gulp-accessibility": "3.1.1",
