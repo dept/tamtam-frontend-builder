@@ -1,5 +1,6 @@
 
 
+const assigndeep            = require('assign-deep');
 const projectDirectory      = process.env.OLDPWD;
 const PathConfig            = require('./src/data/path-config');
 const processArguments      = require( './src/node/process-arguments' );
@@ -114,6 +115,6 @@ dest.manifest                       = { path: '<%= root %>' };
 dest.sw                             = { path: '<%= root %>' };
 
 // Overwrite config with project specific settings.
-config = Object.assign({}, config.projectConfig.config || {}, config);
+assigndeep(config, config.projectConfig.config || {});
 
 module.exports = config;

@@ -1,8 +1,9 @@
 
 
-let config                        = require('./config');
-const runSequence                 = require( 'run-sequence' );
-const init                        = require('./src/gulp/init');
+let config                  = require('./config');
+const runSequence           = require( 'run-sequence' );
+const init                  = require('./src/gulp/init');
+const assigndeep            = require('assign-deep');
 
 
 config.applyProcessArgs();
@@ -12,10 +13,13 @@ config.applyProcessArgs();
 // SVG and image files will be optimized and pushed to the build folder automatically, do not define those here.
 config.copy = function () {
 
-    return [
-        {   source: config.source.getPath('assets', '*.*'),             dest: config.dest.getPath('assets')  },
-        {   source: config.source.getPath('assets', 'fonts/**'),        dest: config.dest.getPath('fonts')  }
+    const overrideCopy = require(`${config.projectDirectory}/build-config/override-copy.js`) || [];
+    const copyConfig = [
+        { source: config.source.getPath('assets', '*.*'), dest: config.dest.getPath('assets') },
+        { source: config.source.getPath('assets', 'fonts/**'), dest: config.dest.getPath('fonts') }
     ];
+
+    return overrideCopy.length ? overrideCopy : copyConfig;
 
 };
 
@@ -24,16 +28,13 @@ config.copy = function () {
 // @example: config.source.getPath('npm', 'jquery/dist/jquery.js' )
 // @note: You need to include /js/libs.js in order to use these libs in your project.
 //
-
 config.libs = function () {
 
-    return [
-        //config.source.getPath('npm', 'jquery/dist/jquery.js' ),
-        //config.source.getPath('bower', 'jquery.cookie/jquery.cookie.js' )
-    ];
+    const overrideLibs = require(`${config.projectDirectory}/build-config/override-libs.js`) || [];
+
+    return overrideLibs;
 
 };
-
 
 
 
@@ -94,15 +95,15 @@ function registerMainTasks( gulp ){
         config.sourcemaps         = false;
         config.prettyHTML         = true;
 
-        config.dest.root.path       = '../backend';
-        config.dest.html.path     	= config.dest.root.path + '/html';
+        config.dest.root.path       = './build';
+        config.dest.html.path     	= config.dest.root.path;
         config.source.sw.path       = config.dest.root.path + '/assets/';
         config.source.sw.strip      = config.dest.root.path;
         config.dest.manifest.path   = config.dest.root.path;
 		config.dest.sw.path         = config.dest.root.path;
 
 		// Overwrite config with project specific settings.
-        config = Object.assign({}, config.projectConfig.dist || {}, config);
+        assigndeep(config, config.projectConfig.dist || {});
 
         runSequence(
             'build',
@@ -132,7 +133,7 @@ function registerMainTasks( gulp ){
 		config.dest.sw.path         = config.dest.root.path;
 
 		// Overwrite config with project specific settings.
-        config = Object.assign({}, config.projectConfig.deploy || {}, config);
+        assigndeep(config, config.projectConfig.deploy || {});
 
         runSequence(
             'clean',
