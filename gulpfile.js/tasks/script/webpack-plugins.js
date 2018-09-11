@@ -5,6 +5,13 @@ const UglifyJsPlugin    = requireCached('uglifyjs-webpack-plugin');
 
 const plugins = [];
 
+plugins.push( new webpack.optimize.CommonsChunkPlugin({
+    names: ['main', 'main-es'], // Names have to be equal to entry files of Webpack
+    minChunks: 2,
+    children: true,
+    deepChildren: true
+}) );
+
 if (config.minify) {
 
     plugins.push(new webpack.LoaderOptionsPlugin({ minimize: true }));
