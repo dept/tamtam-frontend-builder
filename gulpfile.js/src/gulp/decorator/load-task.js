@@ -19,7 +19,7 @@ function loadTask(taskName) {
 
     if (_loadedTasks[taskName] === undefined) {
 
-        const taskPath = overrideTaskExists(taskName) ? path.normalize(`${config.projectDirectory}/build-config/task-overrides/${taskName}`) : path.resolve((process.env.OLDPWD || process.env.PWD), `node_modules/tamtam-frontend-builder/gulpfile.js/tasks/${taskName}`);
+        const taskPath = overrideTaskExists(taskName) ? path.normalize(`${config.projectDirectory}/build-config/task-overrides/${taskName}`) : path.resolve((process.env.OLDPWD || process.env.INIT_CWD), `node_modules/tamtam-frontend-builder/gulpfile.js/tasks/${taskName}`);
 
         try {
 
