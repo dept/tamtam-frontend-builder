@@ -44,7 +44,7 @@ const modernConfig = {
         plugins: webpackPlugins,
         module: {
             rules: [
-                createBabelLoaderConfig(config.browsers.modern, ['syntax-dynamic-import']),
+                createBabelLoaderConfig(config.browsers.modern, ['syntax-dynamic-import', 'transform-object-rest-spread']),
                 hasLintfile ? esLintConfig : {},
             ],
         },
