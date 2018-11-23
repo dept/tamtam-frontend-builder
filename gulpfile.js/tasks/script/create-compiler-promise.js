@@ -1,7 +1,6 @@
-const webpack     = require('webpack');
-const fs          = require('fs');
-const config      = require('../../config');
-const error       = require('../../../utils/error');
+const webpack = require('webpack');
+const fs = require('fs');
+const config = require('../../config');
 const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
 let shownMissingLintWarning = 0;
 const warningLimit = 2;
@@ -10,16 +9,29 @@ const logStats = stats => console.log(`\n ${stats.toString({ colors: true })} \n
 
 const createCompiler = (config) => {
     const compiler = webpack(config);
-    return () => {
-        return new Promise((resolve, reject) => {
-            compiler.run((error, stats) => {
+    return new Promise((resolve, reject) => {
+        compiler.run((error, stats) => {
 
-                onWebpackCallback(error, stats);
-                resolve();
+            onWebpackCallback(error, stats);
+            resolve();
 
-            });
         });
-    };
+    });
+};
+
+const createCompilerPromise = (compilerConfigs) => {
+
+    const promises = [];
+    const configArray = [];
+
+    Object.keys(compilerConfigs).forEach(configName => {
+        configArray.push(compilerConfigs[configName])
+    });
+
+    promises.push(createCompiler(configArray));
+
+    return promises;
+
 };
 
 const onWebpackCallback = (error, stats, opt_prevStats) => {
@@ -38,26 +50,14 @@ const onWebpackCallback = (error, stats, opt_prevStats) => {
         data: [error]
     });
 
-    if ( !hasLintfile ) {
-        if ( shownMissingLintWarning < warningLimit ) errorMsg('You don\'t use Javascript Linting yet. Please upgrade ASAP.', true);
+    if (!hasLintfile) {
+        if (shownMissingLintWarning < warningLimit) errorMsg('You don\'t use Javascript Linting yet. Please upgrade ASAP.', true);
         shownMissingLintWarning++;
     }
 
 }
 
-const createCompilerPromise = (compilerConfigs) => {
-
-    const promises = [];
-
-    Object.keys(compilerConfigs).forEach(configName => {
-        promises.push(createCompiler(compilerConfigs[configName])());
-    });
-
-    return promises;
-
-}
-
 module.exports = {
-	create: createCompilerPromise,
-	onWebpackCallback: onWebpackCallback
+    create: createCompilerPromise,
+    onWebpackCallback: onWebpackCallback
 }

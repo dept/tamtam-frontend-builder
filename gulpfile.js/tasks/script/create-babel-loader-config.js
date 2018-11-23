@@ -16,13 +16,16 @@ module.exports = createBabelLoaderConfig = (browserlist, plugins) => {
             options: {
                 plugins,
                 presets: [
-                    ['env', {
-                        modules: false,
-                        useBuiltIns: true,
-                        targets: {
-                            browsers: browserlist,
-                        },
-                    }],
+                    [
+                        '@babel/preset-env', {
+                            useBuiltIns: 'usage',
+                            modules: false,
+                            // debug: true,
+                            targets: {
+                                browsers: browserlist
+                            },
+                        }
+                    ],
                 ],
             },
         },
