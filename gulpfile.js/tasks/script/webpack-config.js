@@ -26,9 +26,7 @@ const baseConfig = {
                 uglifyOptions: {
                     keep_classnames: true,
                     keep_fnames: true,
-                    mangle: {
-                        safari10: true
-                    }
+                    mangle: true
                 }
             })
         ],
