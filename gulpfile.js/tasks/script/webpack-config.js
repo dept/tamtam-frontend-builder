@@ -44,7 +44,7 @@ const modernConfig = {
         plugins: webpackPlugins,
         module: {
             rules: [
-                createBabelLoaderConfig(config.browsers.modern, ['syntax-dynamic-import']),
+                createBabelLoaderConfig(config.browsers.modern, ['syntax-dynamic-import', 'transform-object-rest-spread']),
                 hasLintfile ? esLintConfig : {},
             ],
         },
@@ -66,7 +66,7 @@ const legacyConfig = {
         plugins: webpackPlugins,
         module: {
             rules: [
-                createBabelLoaderConfig(config.browsers.legacy, ['syntax-dynamic-import', 'transform-es2015-arrow-functions']),
+                createBabelLoaderConfig(config.browsers.legacy, ['syntax-dynamic-import', 'transform-object-rest-spread', 'transform-es2015-arrow-functions']),
                 hasLintfile ? esLintConfig : {},
             ],
         },

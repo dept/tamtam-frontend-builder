@@ -13,10 +13,13 @@ config.applyProcessArgs();
 // SVG and image files will be optimized and pushed to the build folder automatically, do not define those here.
 config.copy = function () {
 
-    return [
-        {   source: config.source.getPath('assets', '*.*'),             dest: config.dest.getPath('assets')  },
-        {   source: config.source.getPath('assets', 'fonts/**'),        dest: config.dest.getPath('fonts')  }
+    const overrideCopy = require(`${config.projectDirectory}/build-config/override-copy.js`) || [];
+    const copyConfig = [
+        { source: config.source.getPath('assets', '*.*'), dest: config.dest.getPath('assets') },
+        { source: config.source.getPath('assets', 'fonts/**'), dest: config.dest.getPath('fonts') }
     ];
+
+    return overrideCopy.length ? overrideCopy : copyConfig;
 
 };
 
@@ -25,16 +28,13 @@ config.copy = function () {
 // @example: config.source.getPath('npm', 'jquery/dist/jquery.js' )
 // @note: You need to include /js/libs.js in order to use these libs in your project.
 //
-
 config.libs = function () {
 
-    return [
-        //config.source.getPath('npm', 'jquery/dist/jquery.js' ),
-        //config.source.getPath('bower', 'jquery.cookie/jquery.cookie.js' )
-    ];
+    const overrideLibs = require(`${config.projectDirectory}/build-config/override-libs.js`) || [];
+
+    return overrideLibs;
 
 };
-
 
 
 
