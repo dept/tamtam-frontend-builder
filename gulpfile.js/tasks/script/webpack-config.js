@@ -3,7 +3,7 @@ const createAliasObject = require('./create-alias-object');
 const webpackPlugins = require('./webpack-plugins');
 const createBabelLoaderConfig = require('./create-babel-loader-config');
 const esLintConfig = require('./eslint-config');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 
 const fs = require('fs');
@@ -20,13 +20,14 @@ const baseConfig = {
             automaticNameDelimiter: '.'
         },
         minimizer: [
-            new UglifyJsPlugin({
+            new TerserPlugin({
                 cache: true,
                 parallel: true,
-                uglifyOptions: {
+                terserOptions: {
                     keep_classnames: true,
                     keep_fnames: true,
-                    mangle: true
+                    mangle: true,
+                    safari10: true
                 }
             })
         ],
