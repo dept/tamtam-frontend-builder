@@ -12,6 +12,20 @@ const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.
 const baseConfig = {
     context: config.projectDirectory,
     bail: config.throwError,
+    mode: config.minify ? 'production' : 'development',
+    optimizations: {
+        minify: {
+            cache: true,
+            parallel: true,
+            uglifyOptions: {
+                keep_classnames: true,
+                keep_fnames: true,
+                mangle: {
+                    safari10: true
+                }
+            }
+        }
+    }
     output: {
         path: path.resolve(config.projectDirectory, config.dest.getPath('javascript')),
         filename: '[name].js',
