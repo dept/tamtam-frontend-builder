@@ -16,7 +16,7 @@ const baseConfig = {
     mode: config.minify ? 'production' : 'development',
     optimization: {
         splitChunks: {
-            chunks: 'all',
+            chunks: 'async',
             automaticNameDelimiter: '.'
         },
         minimizer: [
