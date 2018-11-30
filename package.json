@@ -30,6 +30,7 @@
 		"@babel/plugin-proposal-object-rest-spread": "7.0.0",
 		"@babel/plugin-syntax-dynamic-import": "7.0.0",
 		"@babel/plugin-transform-arrow-functions": "7.0.0",
+		"@babel/preset-typescript": "^7.1.0",
 		"@babel/polyfill": "7.0.0",
 		"@babel/preset-env": "7.1.6",
 		"assign-deep": "1.0.0",
@@ -82,8 +83,5 @@
 		"vinyl-buffer": "1.0.1",
 		"vinyl-source-stream": "2.0.0",
 		"webpack": "4.26.0"
-	},
-	"devDependencies": {
-		"@babel/preset-typescript": "^7.1.0"
 	}
 }
