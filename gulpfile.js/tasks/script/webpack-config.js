@@ -6,7 +6,6 @@ const esLintConfig = require('./eslint-config');
 const TerserPlugin = require('terser-webpack-plugin');
 const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
-
 const fs = require('fs');
 const path = require('path');
 
@@ -43,6 +42,7 @@ const baseConfig = {
     devtool: config.sourcemaps ? 'source-map' : undefined,
     resolve: {
         alias: createAliasObject(),
+        plugins: [new TsconfigPathsPlugin( { configFile: tsConfig } )],
         extensions: ['.ts', '.tsx', '.js', '.jsx']
     },
     resolveLoader: {
@@ -67,9 +67,7 @@ const modernConfig = {
         rules: [
             createBabelLoaderConfig(config.browsers.modern, [
                 '@babel/syntax-dynamic-import',
-                '@babel/plugin-proposal-object-rest-spread',
-                new TsconfigPathsPlugin( { configFile: tsConfig } )
-
+                '@babel/plugin-proposal-object-rest-spread'
             ]),
             hasLintfile ? esLintConfig : {},
         ],
@@ -92,8 +90,7 @@ const legacyConfig = {
             createBabelLoaderConfig(config.browsers.legacy, [
                 '@babel/syntax-dynamic-import',
                 '@babel/plugin-proposal-class-properties',
-                '@babel/plugin-proposal-object-rest-spread',
-                new TsconfigPathsPlugin( { configFile: tsConfig } )
+                '@babel/plugin-proposal-object-rest-spread'
             ]),
             hasLintfile ? esLintConfig : {},
         ],
