@@ -4,7 +4,6 @@ const webpackPlugins = require('./webpack-plugins');
 const createBabelLoaderConfig = require('./create-babel-loader-config');
 const esLintConfig = require('./eslint-config');
 const TerserPlugin = require('terser-webpack-plugin');
-const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 const fs = require('fs');
 const path = require('path');
