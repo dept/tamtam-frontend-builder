@@ -10,9 +10,6 @@ const fs = require('fs');
 const path = require('path');
 
 const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
-const tsConfig = fs.existsSync(`${config.projectDirectory}/.tsconfig.json`);
-
-console.log( 'CONFIG: ', tsConfig );
 
 const baseConfig = {
     context: config.projectDirectory,
@@ -44,7 +41,6 @@ const baseConfig = {
     devtool: config.sourcemaps ? 'source-map' : undefined,
     resolve: {
         alias: createAliasObject(),
-        plugins: [new TsconfigPathsPlugin( { configFile: tsConfig } )],
         extensions: ['.ts', '.tsx', '.js', '.jsx']
     },
     resolveLoader: {
