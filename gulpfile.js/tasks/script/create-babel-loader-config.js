@@ -9,13 +9,14 @@ module.exports = createBabelLoaderConfig = (browserlist, plugins) => {
     }
 
     return {
-        test: /\.js$/,
+        test:  /\.(js|ts)x?$/,
         exclude: /(node_modules)/,
         use: {
             loader: require.resolve('babel-loader'),
             options: {
                 plugins,
                 presets: [
+                    '@babel/preset-typescript',
                     [
                         '@babel/preset-env', {
                             useBuiltIns: 'usage',
