@@ -12,6 +12,8 @@ const path = require('path');
 const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
 const tsConfig = fs.existsSync(`${config.projectDirectory}/.tsconfig.json`);
 
+console.log( 'CONFIG: ', tsConfig );
+
 const baseConfig = {
     context: config.projectDirectory,
     mode: config.minify ? 'production' : 'development',
@@ -65,7 +67,7 @@ const modernConfig = {
     plugins: webpackPlugins,
     module: {
         rules: [
-            createBabelLoaderConfig(config.browsers.modern, [
+            ...createBabelLoaderConfig(config.browsers.modern, [
                 '@babel/syntax-dynamic-import',
                 '@babel/plugin-proposal-object-rest-spread'
             ]),
@@ -87,7 +89,7 @@ const legacyConfig = {
     plugins: webpackPlugins,
     module: {
         rules: [
-            createBabelLoaderConfig(config.browsers.legacy, [
+            ...createBabelLoaderConfig(config.browsers.legacy, [
                 '@babel/syntax-dynamic-import',
                 '@babel/plugin-proposal-class-properties',
                 '@babel/plugin-proposal-object-rest-spread'
