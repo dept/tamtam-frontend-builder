@@ -53,7 +53,7 @@ const modernConfig = {
     ...baseConfig,
     name: 'modern',
     entry: {
-        'main-es': './source/javascript/main-es.js'
+        'main-es': './source/javascript/main-es'
     },
     output: {
         ...baseConfig.output,
@@ -75,7 +75,7 @@ const legacyConfig = {
     ...baseConfig,
     name: 'legacy',
     entry: {
-        'main': ['@babel/polyfill', './source/javascript/main.js']
+        'main': ['@babel/polyfill', './source/javascript/main']
     },
     output: {
         ...baseConfig.output,
