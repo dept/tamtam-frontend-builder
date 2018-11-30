@@ -83,5 +83,7 @@
 		"vinyl-source-stream": "2.0.0",
 		"webpack": "4.26.0"
 	},
-	"devDependencies": {}
+	"devDependencies": {
+		"@babel/preset-typescript": "^7.1.0"
+	}
 }
