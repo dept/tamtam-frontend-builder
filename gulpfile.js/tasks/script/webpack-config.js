@@ -4,12 +4,14 @@ const webpackPlugins = require('./webpack-plugins');
 const createBabelLoaderConfig = require('./create-babel-loader-config');
 const esLintConfig = require('./eslint-config');
 const TerserPlugin = require('terser-webpack-plugin');
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 
 
 const fs = require('fs');
 const path = require('path');
 
 const hasLintfile = fs.existsSync(`${config.projectDirectory}/.eslintrc`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) || fs.existsSync(`${config.projectDirectory}/.eslintrc.json`);
+const tsConfig = fs.existsSync(`${config.projectDirectory}/.tsconfig.json`);
 
 const baseConfig = {
     context: config.projectDirectory,
@@ -65,7 +67,9 @@ const modernConfig = {
         rules: [
             createBabelLoaderConfig(config.browsers.modern, [
                 '@babel/syntax-dynamic-import',
-                '@babel/plugin-proposal-object-rest-spread'
+                '@babel/plugin-proposal-object-rest-spread',
+                new TsconfigPathsPlugin( { configFile: tsConfig } )
+
             ]),
             hasLintfile ? esLintConfig : {},
         ],
@@ -89,6 +93,7 @@ const legacyConfig = {
                 '@babel/syntax-dynamic-import',
                 '@babel/plugin-proposal-class-properties',
                 '@babel/plugin-proposal-object-rest-spread',
+                new TsconfigPathsPlugin( { configFile: tsConfig } )
             ]),
             hasLintfile ? esLintConfig : {},
         ],
