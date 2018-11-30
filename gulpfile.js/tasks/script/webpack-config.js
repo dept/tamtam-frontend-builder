@@ -40,7 +40,8 @@ const baseConfig = {
     },
     devtool: config.sourcemaps ? 'source-map' : undefined,
     resolve: {
-        alias: createAliasObject()
+        alias: createAliasObject(),
+        extensions: ['.ts', '.tsx', '.js', '.jsx']
     },
     resolveLoader: {
         modules: [
