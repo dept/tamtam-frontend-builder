@@ -8,23 +8,35 @@ module.exports = createBabelLoaderConfig = (browserlist, plugins) => {
         return;
     }
 
-    return {
+    const options = {
+        plugins,
+        presets: [
+            ['@babel/preset-env', {
+                useBuiltIns: 'usage',
+                modules: false,
+                // debug: true,
+                targets: {
+                    browsers: browserlist
+                },
+            }],
+        ],
+    };
+
+    return [{
+        test: /\.tsx?$/,
+        exclude: /(node_modules)/,
+        use: [{
+            loader: require.resolve('babel-loader'),
+            options
+        },{
+            loader: require.resolve('ts-loader'),
+        }],
+    },{
         test: /\.js$/,
         exclude: /(node_modules)/,
         use: {
             loader: require.resolve('babel-loader'),
-            options: {
-                plugins,
-                presets: [
-                    ['env', {
-                        modules: false,
-                        useBuiltIns: true,
-                        targets: {
-                            browsers: browserlist,
-                        },
-                    }],
-                ],
-            },
+            options
         },
-    };
+    }];
 };
