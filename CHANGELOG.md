@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - TBD
+### Added
+- Added critical CSS
+- Added automatic indexing of sub components and utilities from the shelf
+- Added optional TypeScript support
+
+### Changed
+- Upgraded to Webpack 4
+
 ## [1.0.1] - 2018-09-07
 ### Added
 - Added copy and libs override possibility
