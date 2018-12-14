@@ -51,7 +51,7 @@ function logSize ( options ) {
         let sizeLog = humanSize( options.size.size, true );
 
         if( options.sizeAfter ) {
-            let difference = options.size.size - options.sizeAfter.size;
+            const difference = options.size.size - options.sizeAfter.size;
             if( difference > 0 ) sizeLog = 'saved ' + humanSize( difference, true );
             else sizeLog = 'gained ' + humanSize( difference );
         }
