@@ -14,6 +14,7 @@ const defaultsFilter = require('../src/template/nunjucks/filters/defaults');
 
 
 const path = requireCached('path');
+const fs = requireCached('fs');
 const gulp = requireCached('gulp');
 const gulpData = requireCached('gulp-data');
 const gulpNunjucks = requireCached('gulp-nunjucks-render');
@@ -88,6 +89,7 @@ gulp.task('html', function () {
 
     const pagesList = getFileList(config.source.getFileGlobs('html'), config.source.getPath('html'));
     const svgList = getFileList(config.source.getFileGlobs('svg'), config.source.getPath('svg'), true);
+    const hasCriticalCSS = fs.existsSync(path.resolve(config.projectDirectory, config.dest.getPath('css', 'critical.css')));
 
     contextData.project = {
         name: packageJSON.name,
@@ -97,6 +99,7 @@ gulp.task('html', function () {
         debug: config.debug,
         showGrid: config.showGrid,
         pages: pagesList,
+        criticalCSS: hasCriticalCSS ? fs.readFileSync(path.resolve(config.projectDirectory, config.dest.getPath('css', 'critical.css')), 'utf8') : false,
         svgs: svgList
     }
 

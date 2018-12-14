@@ -6,7 +6,6 @@ const config = require('../config');
 const path = require('path');
 
 const gulp = requireCached('gulp');
-const gulpUtil = requireCached('gulp-util');
 const del = requireCached('del');
 
 
@@ -63,7 +62,7 @@ gulp.task('clean', function (callback) {
         log.info({
             sender: 'clean task',
             message: 'Files deleted during cleanup:',
-            data: [gulpUtil.colors.yellow(filesDeletedString)]
+            data: [log.colors.yellow(filesDeletedString)]
         });
 
     }
