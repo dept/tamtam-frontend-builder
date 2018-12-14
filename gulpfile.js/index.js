@@ -76,7 +76,8 @@ function registerMainTasks( gulp ){
         runSequence(
             'clean',
             [ 'copy', 'images', 'webp', 'svg', 'inject-component-css' ],
-            [ 'html', 'libs', 'js', 'css-lint', 'css' ],
+            [ 'css-lint', 'css' ],
+            [ 'html', 'libs', 'js' ],
             'sw',
             callback
         );
@@ -138,7 +139,8 @@ function registerMainTasks( gulp ){
         runSequence(
             'clean',
             [ 'copy', 'images', 'webp', 'svg', 'inject-component-css' ],
-            [ 'html', 'libs', 'js', 'css' ],
+            [ 'css-lint', 'css' ],
+            [ 'html', 'libs', 'js' ],
             'sw',
             callback
         );

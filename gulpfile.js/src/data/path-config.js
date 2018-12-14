@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const pathUtil = require('path');
-const gulpUtil = require('gulp-util');
 const log = require('../debug/log');
 const getFileList = require('../node/file/get-list');
 
@@ -24,10 +23,6 @@ function PathConfig(root) {
 
 
     /**
-     * The path string can be a lodash template, this functions passes
-     * it through gulp-util.template to render the correct output.
-     * @see https://github.com/gulpjs/gulp-util#templatestring-data
-     *
      * @public
      * @function getPath
      * @param name {string}                     name of the path required.
@@ -39,7 +34,10 @@ function PathConfig(root) {
         if (!_context) createContext();
 
         if (!_this.hasOwnProperty(name)) {
-            gulpUtil.log(gulpUtil.colors.red('Error: Path config with name: \'' + name + '\' was not found!'));
+            log.error({
+                sender: 'PathConfig',
+                message: `Path config with name: '${name}' was not found!`
+            });
             return '';
         }
 
@@ -51,7 +49,12 @@ function PathConfig(root) {
             path = _.template(path);
             path = path(_context);
 
-            if (loopNum++ > maxRecursion) gulpUtil.log(gulpUtil.colors.red('Error: Maximum recursion (' + maxRecursion + ') reached or failed to compile path template for name: \'' + name + '\'. Compiled path: \'' + path + '\''));
+            if (loopNum++ > maxRecursion) {
+                log.error({
+                    sender: 'PathConfig',
+                    message: `Maximum recursion (${maxRecursion}) reached or failed to compile path template for name: '${name}'. Compiled path: '${path}'`
+                });
+            }
         }
 
         path = opt_pathExtension ? path + '/' + opt_pathExtension : path;
@@ -70,7 +73,10 @@ function PathConfig(root) {
         if (!_context) createContext();
 
         if (!_this.hasOwnProperty(name)) {
-            gulpUtil.log(gulpUtil.colors.red('Error: Path config with name: \'' + name + '\' was not found!'));
+            log.error({
+                sender: 'PathConfig',
+                message: `Error: Path config with name: '${name}' was not found!`
+            });
             return '';
         }
 
@@ -80,7 +86,7 @@ function PathConfig(root) {
 
         if (filesGlob === undefined) return log.error({
             sender: 'PathConfig',
-            message: 'attempting getFilesGlob on a config that does not contain a files configuration: \'' + name + '\''
+            message: `attempting getFilesGlob on a config that does not contain a files configuration: '${name}'`
         });
 
 
