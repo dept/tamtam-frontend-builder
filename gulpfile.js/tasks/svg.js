@@ -23,6 +23,7 @@ gulp.task('svg', function () {
                 pretty: false // pretty printed svg
             },
             plugins: [
+                { removeViewBox: false },
                 { cleanupIDs: false },               //Set to false for WCAG reasons
                 { removeTitle: false },              //Set to false for WCAG reasons
                 { removeComments: true },
