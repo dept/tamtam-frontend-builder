@@ -64,6 +64,7 @@ const modernConfig = {
         rules: [
             ...createBabelLoaderConfig(config.browsers.modern, [
                 '@babel/syntax-dynamic-import',
+                '@babel/plugin-proposal-class-properties',
                 '@babel/plugin-proposal-object-rest-spread'
             ]),
             hasLintfile ? esLintConfig : {},
