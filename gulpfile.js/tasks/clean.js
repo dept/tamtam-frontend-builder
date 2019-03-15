@@ -25,14 +25,12 @@ gulp.task('clean', function (callback) {
 
     }
 
-
     const options = {
 
-        // define file patterns to delete here
-        source: path.resolve(config.projectDirectory, config.dest.getPath('javascript'), '**'),
-
         // log deleted files
-        verbose: config.gulp.verbose
+        verbose: config.gulp.verbose,
+
+        force: true
 
     };
 
@@ -41,7 +39,7 @@ gulp.task('clean', function (callback) {
 
     try {
 
-        deletedFiles = del.sync(options.source);
+        deletedFiles = del.sync(path.resolve(config.projectDirectory, config.dest.getPath('root'), '**'), options);
 
     } catch (error) {
 
