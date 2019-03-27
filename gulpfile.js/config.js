@@ -96,7 +96,7 @@ source.svg                          = { path: '<%= assets %>/svg',          file
 source.manifest                     = { path: '<%= assets %>/favicons',     files: [ 'manifest.json' ] };
 source.components                   = { path: '<%= root %>/components',     files: [ '**/*.html', '**/*.scss', '**/*.js' ] };               // entry point files
 source.utilities                    = { path: '<%= root %>/utilities',      files: [ '**/*.js' ] };               // entry point files
-source.sw                           = { path: '<%= assets %>',              files: '**/*.{js,html,css,jpg,jpeg,png,gif,svg,xml,ico,eot,ttf,woff,json}', strip: source.root.path.replace('./','') };  // entry point files
+source.sw                           = { path: '<%= assets %>',              files: '**/*.{js,html,css,eot,ttf,woff,json}', strip: source.root.path.replace('./',''), runtimeCaching: [{ urlPattern: /\/assets\/images\//, handler: 'cacheFirst' }] };  // entry point files
 
 dest.root                           = { path: './build' };
 

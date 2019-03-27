@@ -1,9 +1,9 @@
 {
 	"name": "tamtam-frontend-builder",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"license": "MIT",
-	"description": "TamTam Frontend build tools",
-	"author": "Tam Tam",
+	"description": "Dept Frontend build tools",
+	"author": "Dept",
 	"contributors": [
 		{
 			"name": "Adrian Klingen",

@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2019-03-27
+### Added
+- Added runtimeCaching option
+
+### Removed
+- Removed webp task
+- Removed default indexing of all static assets in Service Worker
+
 ## [1.1.0] - 2019-03-04
 ### Added
 - Added critical CSS

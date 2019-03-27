@@ -14,6 +14,7 @@ gulp.task('sw', function (callback) {
         directoryIndex: false,
         staticFileGlobs: [config.source.getFileGlobs('sw')],
         stripPrefix: config.source.sw.strip,
+        runtimeCaching: config.source.sw.runtimeCaching,
         navigateFallback: '/?utm_source=homescreen'
     }, callback);
 
