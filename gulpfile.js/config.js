@@ -23,7 +23,6 @@ config.throwError         = false;              // Actually throws an (native) e
 
 config.minify             = false;
 config.optimizeImages     = true;
-config.convertWebp        = true;
 config.sourcemaps         = true;
 config.cleanCSS           = false;              // removes unused CSS, requires 'gulp-uncss' installation.
 config.prettyHTML         = false;
@@ -94,7 +93,6 @@ source.images                       = { path: '<%= assets %>/images',       file
 source.javascript                   = { path: '<%= root %>/javascript',     files: '*.js' };                     // entry point files
 source.npm                          = { path: './node_modules' };
 source.svg                          = { path: '<%= assets %>/svg',          files: [ '*.svg', '**/*.svg' ] };
-source.webp                         = { path: '<%= assets %>/images',       files: [ '*.{jpg,jpeg,png,gif}', '**/*.{jpg,jpeg,png,gif}' ] };
 source.manifest                     = { path: '<%= assets %>/favicons',     files: [ 'manifest.json' ] };
 source.components                   = { path: '<%= root %>/components',     files: [ '**/*.html', '**/*.scss', '**/*.js' ] };               // entry point files
 source.utilities                    = { path: '<%= root %>/utilities',      files: [ '**/*.js' ] };               // entry point files
@@ -109,7 +107,6 @@ dest.html                           = { path: '<%= root %>' };
 dest.images                         = { path: '<%= assets %>/images' };
 dest.javascript                     = { path: '<%= assets %>/js' };
 dest.svg                            = { path: '<%= assets %>/svg' };
-dest.webp                           = dest.images;
 dest.manifest                       = { path: '<%= root %>' };
 dest.sw                             = { path: '<%= root %>' };
 

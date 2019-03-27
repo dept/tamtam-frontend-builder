@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - Removed webp task
 - Removed default indexing of all static assets in Service Worker
 
-## [1.1.0] - 2019-03-15
+## [1.1.0] - 2019-03-04
 ### Added
 - Added critical CSS
 - Added automatic indexing of sub components and utilities from the shelf
