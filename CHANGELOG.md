@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [1.1.0] - TBD
+## [1.1.0] - 2019-03-04
 ### Added
 - Added critical CSS
 - Added automatic indexing of sub components and utilities from the shelf
