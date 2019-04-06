@@ -95,8 +95,12 @@ const legacyConfig = {
     },
 };
 
+const getAliasObject = () => {
+    return createAliasObject();
+}
 
 module.exports = {
     modernConfig,
-    legacyConfig
+    legacyConfig,
+    getAliasObject
 };
