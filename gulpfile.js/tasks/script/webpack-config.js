@@ -76,7 +76,7 @@ const legacyConfig = {
     ...baseConfig,
     name: 'legacy',
     entry: {
-        'main': ['@babel/polyfill', './source/javascript/main']
+        'main': ['./source/javascript/main']
     },
     output: {
         ...baseConfig.output,
