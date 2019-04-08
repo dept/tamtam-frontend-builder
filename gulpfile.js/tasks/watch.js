@@ -3,15 +3,14 @@
 const requireCached   = require('../src/gulp/require-cached');
 const config          = require('../config');
 const path            = require('path');
+const webpackConfig   = require('./script/webpack-config');
 
+const _               = requireCached('lodash');
 const gulp            = requireCached('gulp');
 const watch           = requireCached('gulp-watch');
 const browserSync     = requireCached('browser-sync');
-
 let reloadTimeout;
 const RELOAD_TIMEOUT_DELAY = 200; // in milliseconds
-
-
 
 
 /**
@@ -40,6 +39,18 @@ gulp.task('watch', ['js-watch'], function () {
             gulp.start('css-lint');
         });
 
+    watch([
+        config.source.getPath('components', '**/*.js'),
+        config.source.getPath('utilities', '**/*.js')
+    ], function (file) {
+
+        const currentAliases = config.webpackWatcher.compiler.options.resolve.alias;
+        const newAliases = webpackConfig.getAliasObject();
+        if (!_.isEqual(newAliases, currentAliases)){
+            gulp.start('js-watch');
+        }
+    });
+
     watch(config.source.getPath('components', '**/*.html'),
         function () { gulp.start('html'); });
 
@@ -65,4 +76,3 @@ function onHTMLChange() {
     reloadTimeout = setTimeout(browserSync.reload, RELOAD_TIMEOUT_DELAY);
 
 }
-
