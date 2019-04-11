@@ -233,7 +233,7 @@ function logError ( error, opt_stack, opt_exit ) {
 
     message = error.message;
     message = message.replace( new RegExp( '^' + error.name + '' ), '' );
-    message = colors.red( title, message );
+    message = colors.red(`${title}${message}`);
 
     console.log( message + (stackTrace ? stackTrace : '') );
     if(error.data) console.log(error.data);
