@@ -29,7 +29,6 @@ gulp.task('css', function () {
             // indentedSyntax: true,     // Enable .sass syntax!
             // imagePath: 'images'       // Used by the image-url helper
             errLogToConsole: false,
-            onError: log.error           // Also pass the error handler to Sass to catch internal errors
         },
 
         // Plugin to parse CSS and add vendor prefixes using values from Can I Use.
