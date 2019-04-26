@@ -51,7 +51,10 @@ const onWebpackCallback = (error, stats, opt_prevStats) => {
     });
 
     if (!hasLintfile) {
-        if (shownMissingLintWarning < warningLimit) errorMsg('You don\'t use Javascript Linting yet. Please upgrade ASAP.', true);
+        if (shownMissingLintWarning < warningLimit) log.error({
+            sender: 'js',
+            message: 'You don\'t use Javascript Linting yet. Please upgrade ASAP.'
+        });
         shownMissingLintWarning++;
     }
 

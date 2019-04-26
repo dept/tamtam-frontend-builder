@@ -76,7 +76,7 @@ const legacyConfig = {
     ...baseConfig,
     name: 'legacy',
     entry: {
-        'main': ['@babel/polyfill', './source/javascript/main']
+        'main': ['./source/javascript/main']
     },
     output: {
         ...baseConfig.output,
@@ -95,8 +95,12 @@ const legacyConfig = {
     },
 };
 
+const getAliasObject = () => {
+    return createAliasObject();
+}
 
 module.exports = {
     modernConfig,
-    legacyConfig
+    legacyConfig,
+    getAliasObject
 };

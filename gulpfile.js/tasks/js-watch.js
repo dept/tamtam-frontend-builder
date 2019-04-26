@@ -1,18 +1,27 @@
-const config            = require('../config');
-const log               = require('../src/debug/log');
-const requireCached     = require('../src/gulp/require-cached');
+const config = require('../config');
+const log = require('../src/debug/log');
+const requireCached = require('../src/gulp/require-cached');
+const compilerPromise = require('./script/create-compiler-promise');
+const webpackConfig = require('./script/webpack-config');
 
-const compilerPromise   = require('./script/create-compiler-promise');
-const webpackConfigs    = require('./script/webpack-config');
-const browserSync       = requireCached('browser-sync');
-const gulp              = requireCached('gulp');
-const webpack           = requireCached('webpack');
+const browserSync = requireCached('browser-sync');
+const gulp = requireCached('gulp');
+const webpack = requireCached('webpack');
 
 gulp.task('js-watch', function jsWatch(callback) {
 
     let initialCompile = true;
+    if (config.webpackWatcher) {
+        config.webpackWatcher.close(() => {
+            webpackConfig.legacyConfig.resolve.alias = webpackConfig.getAliasObject(webpackConfig.legacyConfig);
+            log.info({
+                sender: 'gulp',
+                message: 'Alias change detected. Restarting the webpack watcher.'
+            });
+        });
+    }
 
-    webpack(webpackConfigs.legacyConfig).watch(200, (error, stats) => {
+    config.webpackWatcher = webpack(webpackConfig.legacyConfig).watch(200, (error, stats) => {
 
         compilerPromise.onWebpackCallback(error, stats);
 
