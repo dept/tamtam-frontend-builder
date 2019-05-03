@@ -1,4 +1,5 @@
 const requireCached = require('../src/gulp/require-cached');
+const log = require('../src/debug/log');
 const config = require('../config');
 const path = require('path');
 
@@ -33,9 +34,10 @@ gulp.task('sw', function(callback) {
         })
         .then(({ count, size }) => {
             const sizeInMB = (size / Math.pow(1024, 2)).toFixed(2);
-            console.log(
-                `Generated ${swDest}, which will precache ${count} files, totaling ${sizeInMB} MB.`
-            );
+            log.info({
+                sender: 'ServiceWorker',
+                message: `Generated ${swDest}, which will precache ${count} files, totaling ${sizeInMB} MB.`
+            });
             callback();
         });
 });
