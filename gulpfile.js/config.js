@@ -96,7 +96,15 @@ source.svg                          = { path: '<%= assets %>/svg',          file
 source.manifest                     = { path: '<%= assets %>/favicons',     files: [ 'manifest.json' ] };
 source.components                   = { path: '<%= root %>/components',     files: [ '**/*.html', '**/*.scss', '**/*.js' ] };               // entry point files
 source.utilities                    = { path: '<%= root %>/utilities',      files: [ '**/*.js' ] };               // entry point files
-source.sw                           = { path: '<%= assets %>',              files: '**/!(dev*)*.{js,html,css,eot,ttf,woff,json}', strip: source.root.path.replace('./',''), runtimeCaching: [{ urlPattern: /\/assets\/images\//, handler: 'cacheFirst' }] };  // entry point files
+source.sw = {
+    globDirectory: path.resolve(projectDirectory, 'build', 'assets'),
+    globPatterns: ['**/*.{js,css,eot,ttf,woff,json}'],
+    globIgnores: ['**/dev*', '**/tmp*', '**/critical*', 'dev*.*', 'tmp*.*'],
+    modifyURLPrefix: {
+        '': '/assets/'
+    },
+    runtimeCaching: [{ urlPattern: /\/assets\/images\//, handler: 'StaleWhileRevalidate' }]
+};
 
 dest.root                           = { path: './build' };
 
