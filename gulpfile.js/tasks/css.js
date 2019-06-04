@@ -24,7 +24,6 @@ const uncss = requireCached('gulp-uncss');
 gulp.task('css', function () {
 
     const options = {
-
         sass: {
             // indentedSyntax: true,     // Enable .sass syntax!
             // imagePath: 'images'       // Used by the image-url helper
@@ -35,19 +34,19 @@ gulp.task('css', function () {
         // @see: http://caniuse.com/
         // @see: https://github.com/postcss/autoprefixer-core
         autoprefixer: {
-            browsers: ['last 3 versions', 'iOS 8', 'IE 11'],
+            overrideBrowserslist: ['last 3 versions', 'iOS 8', 'IE 11'],
             grid: true,
-            remove: true // By default, Autoprefixer will not only add new prefixes, but also remove outdated ones.
+            remove: true, // By default, Autoprefixer will not only add new prefixes, but also remove outdated ones.
         },
 
         // Clean CSS is responsible for minifying the CSS
         // @see: https://github.com/jakubpawlowicz/clean-css
         minify: config.minify,
         cleanCSS: {
-            specialComments: 0,         // * for keeping all (default), 1 for keeping first one only, 0 for removing all
-            mediaMerging: true,         // whether to merge @media blocks (default is true)
-            inline: ['all'],            // Inline all @imports, also external urls
-            rebase: false               // set to false to skip URL rebasing
+            specialComments: 0, // * for keeping all (default), 1 for keeping first one only, 0 for removing all
+            mediaMerging: true, // whether to merge @media blocks (default is true)
+            inline: ['all'], // Inline all @imports, also external urls
+            rebase: false, // set to false to skip URL rebasing
         },
 
         // UnCSS crawls the HTML and removes any unused CSS selectors and styling.
@@ -58,10 +57,9 @@ gulp.task('css', function () {
             html: [config.dest.getPath('html', '*.html')],
             // Provide a list of selectors that should not be removed by UnCSS. For example, styles added by user interaction with the page (hover, click),
             // Both literal names and regex patterns are recognized.
-            ignore: [/\.modal.*/, /\.panel.*/, /\.popup.*/, /.*\.is-.*/, /.*\.has-.*/]
+            ignore: [/\.modal.*/, /\.panel.*/, /\.popup.*/, /.*\.is-.*/, /.*\.has-.*/],
             //timeout: 0 //  Specify how long to wait for the JS to be loaded.
-        }
-
+        },
     };
 
 
