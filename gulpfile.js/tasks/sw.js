@@ -28,7 +28,6 @@ gulp.task('sw', function(callback) {
     workboxBuild
         .generateSW({
             swDest,
-            navigateFallback: '/?utm_source=homescreen',
             importScripts: ['/assets/sw-extend.js'],
             ...swConfig
         })
