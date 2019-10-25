@@ -74,7 +74,6 @@
 		"gulp-sourcemaps": "2.6.5",
 		"gulp-svgmin": "2.1.0",
 		"gulp-uglify": "3.0.2",
-		"gulp-util": "3.0.8",
 		"gulp-watch": "5.0.1",
 		"gulp-wrapper": "1.0.0",
 		"human-size": "1.1.0",
