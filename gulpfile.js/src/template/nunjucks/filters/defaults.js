@@ -1,20 +1,12 @@
+var _ = require('lodash')
 
+var filterName = 'defaults'
 
-
-var _ 				= require( 'lodash' );
-
-var filterName      = 'defaults';
-
-
-
-
-function filter ( object, var_args ) {
-
-    return _.defaultsDeep.apply( _, arguments );
-
+function filter(object, var_args) {
+  return _.defaultsDeep.apply(_, arguments)
 }
 
 module.exports = {
-    name: filterName,
-    func: filter
-};
+  name: filterName,
+  func: filter,
+}

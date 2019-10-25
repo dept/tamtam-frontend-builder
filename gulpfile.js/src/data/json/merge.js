@@ -1,95 +1,73 @@
-var path                    = require('path');
-var fs                    	= require('fs');
+var path = require('path')
+var fs = require('fs')
 
-var log                     = require('../../debug/log');
-var config                  = require('../../../config');
-var requireCached           = require('../../gulp/require-cached');
-var getFileList             = require('../../node/file/get-list');
-var glob                    = requireCached('glob');
-var pathUtil                = require('path');
+var log = require('../../debug/log')
+var getFileList = require('../../node/file/get-list')
 
-var jsonFileRegExp          = /.json$/i;
-
+var jsonFileRegExp = /.json$/i
 
 /**
  * Loads and merges JSON data into one object
  * @param root {string} root path to be stripped of the filepath
  * @param source {string} glob string for JSON
  */
-function mergeJSONData ( root, source ) {
+function mergeJSONData(root, source) {
+  if (root.slice(-1) !== path.sep) root += path.sep // force path separator as last character
 
-	if( root.slice( -1 ) !== path.sep ) root += path.sep; // force path separator as last character
+  var data = {}
+  var files = getFileList(source)
 
-	var data = {};
-	var files = getFileList( source );
+  for (var i = 0, leni = files.length; i < leni; i++) {
+    var filePath = files[i]
 
+    if (!jsonFileRegExp.test(filePath)) {
+      log.warn({
+        sender: 'mergeJSONData',
+        message: 'Can only merge JSON Data!',
+      })
+      continue
+    }
 
-	for ( var i = 0, leni = files.length; i < leni; i++ ) {
+    try {
+      var fileData = fs.readFileSync(filePath, 'utf-8')
+      if (fileData) fileData = JSON.parse(fileData)
+    } catch (error) {
+      log.error({
+        sender: 'mergeJSONData',
+        message: 'Failed to load json data for file: ' + filePath,
+      })
 
-		var filePath = files[ i ];
+      log.error(error)
 
-		if( !jsonFileRegExp.test( filePath ) ) {
-			log.warn( {
-				sender: 'mergeJSONData',
-				message: 'Can only merge JSON Data!'
-			} );
-			continue;
-		}
+      continue
+    }
 
-		try {
+    if (path.sep === '\\') {
+      root = root.replace('\\', '/')
+    }
 
-			var fileData = fs.readFileSync( filePath, 'utf-8' );
-			if( fileData ) fileData = JSON.parse( fileData );
+    var dataPath = filePath.replace(root, '')
 
-		} catch ( error ) {
+    dataPath = dataPath.replace(jsonFileRegExp, '')
+    dataPath = dataPath.split('/')
 
-			log.error( {
-				sender: 'mergeJSONData',
-				message: 'Failed to load json data for file: ' + filePath
-			} );
+    var currentNode = data
+    for (var j = 0, lenj = dataPath.length; j < lenj; j++) {
+      var key = dataPath[j]
 
-			log.error( error );
+      if (!key.length) continue
 
-			continue;
+      if (j === lenj - 1) {
+        // assign the data on the last node
+        currentNode[key] = fileData
+      } else {
+        currentNode[key] = currentNode[key] || {}
+        currentNode = currentNode[key]
+      }
+    }
+  }
 
-		}
-
-		if(path.sep === "\\"){
-			root = root.replace('\\', '/');
-		}
-
-		var dataPath = filePath.replace( root, '' );
-
-		dataPath = dataPath.replace( jsonFileRegExp, '' );
-		dataPath = dataPath.split( '/' );
-
-
-		var currentNode = data;
-		for ( var j = 0, lenj = dataPath.length; j < lenj; j++ ) {
-
-			var key = dataPath[ j ];
-
-			if( !key.length ) continue;
-
-			if( j === lenj - 1 ) {
-
-				// assign the data on the last node
-				currentNode[ key ] = fileData;
-
-			} else {
-
-				currentNode[ key ] = currentNode[ key ] || {};
-				currentNode = currentNode[ key ];
-
-			}
-
-		}
-
-	}
-
-	return data;
-
+  return data
 }
 
-
-module.exports = mergeJSONData;
+module.exports = mergeJSONData
