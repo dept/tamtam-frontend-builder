@@ -45,7 +45,15 @@ function registerMainTasks( gulp ){
 
 
     // Specifies the default set of tasks to run when you run `gulp`.
-    gulp.task( 'default', [ 'server' ] );
+
+    //gulp.task( 'default', [ 'server' ] );
+    // gulp.task( 'default', gulp.series(server, (done) => {
+    //     done()
+    // }) );
+
+    gulp.task( 'default', gulp.series(() => {
+        console.log('doesnt get here!')
+    }) );
 
 
     /**
@@ -55,16 +63,18 @@ function registerMainTasks( gulp ){
      *  Starts watching all the used files and rebuilds on file changes.
      *  - This will also automatically refresh your browser after something has been rebuild.
      */
-    gulp.task( 'server', function ( callback ) {
 
-        runSequence(
+    //gulp.task( 'server', function ( callback ) {
+    function server( callback ) {
+        console.log('idwjai')
+       return gulp.series(
             'build',
             'browser-sync',
             'watch',
             callback
         );
 
-    } );
+    };
 
 
      /**

@@ -2,4 +2,4 @@
 const gulp = require('gulp');
 require('../gulpfile.js');
 
-gulp.start('default');
+gulp.task('default');

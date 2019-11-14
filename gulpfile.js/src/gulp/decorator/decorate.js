@@ -159,12 +159,12 @@ function decorateStart ( gulp ) {
 
 	if( config.gulp.debug ) log.debug( { sender: 'gulp/decorator', message: 'Modifying gulp for lazy loading...' } );
 
-	var gulpStartFunction = gulp.start;
+	var gulpStartFunction = gulp.task;
+	
 
+	gulp.task = function () {
 
-	gulp.start = function () {
-
-		if( config.gulp.debug ) log.debug( { sender: 'gulp/decorator', message: 'gulp.start()', data: [ arguments ] } );
+		if( config.gulp.debug ) log.debug( { sender: 'gulp/decorator', message: 'gulp.task()', data: [ arguments ] } );
 
 		for ( var i = 0, leni = arguments.length; i < leni; i++ ) {
 
@@ -179,7 +179,7 @@ function decorateStart ( gulp ) {
 
 		}
 
-
+		
 		gulpStartFunction.apply( gulp, arguments );
 	}
 }

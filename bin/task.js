@@ -12,7 +12,7 @@ if (!task) {
 }
 
 try {
-    gulp.start(task);
+    gulp.task(task);
 } catch (e) {
     error(`Task name '${task}' not recognized.`);
 }
