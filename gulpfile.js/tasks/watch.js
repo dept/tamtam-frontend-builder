@@ -17,55 +17,43 @@ const RELOAD_TIMEOUT_DELAY = 200 // in milliseconds
 gulp.task(
   'watch',
   gulp.parallel(() => {
-    gulp.watch(config.source.getFileGlobs('images'), function() {
-      gulp.start('images')
-    })
+    gulp.watch(config.source.getFileGlobs('images'), gulp.series(gulp.task('images')))
 
-    gulp.watch(config.source.getFileGlobs('svg'), function() {
-      gulp.start('svg')
-    })
+    gulp.watch(config.source.getFileGlobs('svg'), gulp.series(gulp.task('svg')))
 
-    gulp.watch(config.source.getPath('components', '**/*.scss'), function() {
-      gulp.start('css')
-      gulp.start('css-lint')
-      gulp.start('inject-component-css')
-    })
+    gulp.watch(
+      config.source.getPath('components', '**/*.scss'),
+      gulp.series(gulp.task('inject-component-css'), gulp.task('css'), gulp.task('css-lint')),
+    )
 
-    gulp.watch(config.source.getPath('css', '**/*.scss'), function() {
-      gulp.start('css')
-      gulp.start('css-lint')
-    })
+    gulp.watch(
+      config.source.getPath('css', '**/*.scss'),
+      gulp.series(gulp.task('css'), gulp.task('css-lint')),
+    )
 
     gulp.watch(
       [
         config.source.getPath('components', '**/*.js'),
         config.source.getPath('utilities', '**/*.js'),
       ],
-      function() {
+      gulp.series(() => {
         const currentAliases = config.webpackWatcher.compiler.options.resolve.alias
         const newAliases = webpackConfig.getAliasObject()
         if (!_.isEqual(newAliases, currentAliases)) {
-          gulp.start('js-watch')
+          gulp.series(gulp.task('js-watch'))
         }
-      },
+      }),
     )
 
-    gulp.watch(config.source.getPath('components', '**/*.html'), function() {
-      gulp.start('html')
-    })
+    gulp.watch(config.source.getPath('components', '**/*.html'), gulp.series(gulp.task('html')))
 
-    gulp.watch(config.source.getPath('html', '**'), function() {
-      gulp.start('html')
-    })
+    gulp.watch(config.source.getPath('html', '**'), gulp.series(gulp.task('html')))
 
-    gulp.watch(config.source.getFileGlobs('data'), function() {
-      gulp.start('html')
-    })
+    gulp.watch(config.source.getFileGlobs('data'), gulp.series(gulp.task('html')))
 
-    gulp.watch(
-      path.resolve(config.projectDirectory, config.dest.getPath('html', '**/*.html')),
-      onHTMLChange,
-    )
+    gulp
+      .watch(path.resolve(config.projectDirectory, config.dest.getPath('html', '**/*.html')))
+      .on('change', onHTMLChange)
   }, gulp.task('js-watch')),
 )
 
