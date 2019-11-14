@@ -119,10 +119,11 @@ function registerMainTasks(gulp) {
    * @task build:bamboo
    * DEPRECATED TASK NAME
    */
-  // gulp.task('bamboo', function(callback) {
-  //   runSequence('deploy', callback);
-  // });
+  gulp.task('bamboo', gulp.series('deploy'))
 
+  /**
+   * @task default
+   */
   gulp.task('default', gulp.series('server'))
 }
 
