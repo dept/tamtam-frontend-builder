@@ -1,12 +1,6 @@
+var _ = require('lodash')
 
-
-
-var _ 				= require( 'lodash' );
-
-var filterName      = 'assign';
-
-
-
+var filterName = 'assign'
 
 /**
  * Assign filter
@@ -24,20 +18,17 @@ var filterName      = 'assign';
  *
  */
 
-
 /**
  * A function that assigns all properties this the given object.
  * @see: https://lodash.com/docs#assign
  * @param object {object}
  * @param var_args {...object}
  */
-function filter ( object, var_args ) {
-
-    return _.assign.apply( _, arguments );
-
+function filter(object, var_args) {
+  return _.assign.apply(_, arguments)
 }
 
 module.exports = {
-    name: filterName,
-    func: filter
-};
+  name: filterName,
+  func: filter,
+}

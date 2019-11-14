@@ -1,10 +1,10 @@
-const requireCached = require('../src/gulp/require-cached');
-const log = require('../src/debug/log');
-const config = require('../config');
-const path = require('path');
+const requireCached = require('../src/gulp/require-cached')
+const log = require('../src/debug/log')
+const config = require('../config')
+const path = require('path')
 
-const gulp = requireCached('gulp');
-const del = requireCached('del');
+const gulp = requireCached('gulp')
+const del = requireCached('del')
 
 /**
  *  Gulp task for cleaning up the destination folder.
@@ -13,47 +13,44 @@ const del = requireCached('del');
  */
 gulp.task('clean', callback => {
   if (!config.cleanBuild) {
-    if (typeof callback === 'function') callback.call(this);
+    if (typeof callback === 'function') callback.call(this)
 
-    return;
+    return
   }
 
   const options = {
     // log deleted files
     verbose: config.gulp.verbose,
 
-    force: true
-  };
+    force: true,
+  }
 
-  let deletedFiles;
+  let deletedFiles
 
   try {
     deletedFiles = del.sync(
       path.resolve(config.projectDirectory, config.dest.getPath('root'), '**'),
-      options
-    );
+      options,
+    )
   } catch (error) {
-    log.error(error);
+    log.error(error)
   }
 
   if (options.verbose && deletedFiles) {
-    let filesDeletedString = '';
-    const currentWorkingDirectory = process.cwd();
+    let filesDeletedString = ''
+    const currentWorkingDirectory = process.cwd()
     for (let i = 0, leni = deletedFiles.length; i < leni; i++)
-      filesDeletedString += '\n\t\t' + deletedFiles[i];
+      filesDeletedString += '\n\t\t' + deletedFiles[i]
 
     // remove CWD path of the file names.
-    filesDeletedString = filesDeletedString.replace(
-      new RegExp(currentWorkingDirectory, 'g'),
-      ''
-    );
+    filesDeletedString = filesDeletedString.replace(new RegExp(currentWorkingDirectory, 'g'), '')
 
     log.info({
       sender: 'clean task',
       message: 'Files deleted during cleanup:',
-      data: [log.colors.yellow(filesDeletedString)]
-    });
+      data: [log.colors.yellow(filesDeletedString)],
+    })
   }
 
-  if (callback) callback.call(this);
-});
+  if (callback) callback.call(this)
+})

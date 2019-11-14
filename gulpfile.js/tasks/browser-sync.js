@@ -1,15 +1,10 @@
+const requireCached = require('../src/gulp/require-cached')
+const config = require('../config')
+const path = require('path')
 
-
-const requireCached = require('../src/gulp/require-cached');
-const config = require('../config');
-const path = require('path');
-
-const browserSync = requireCached('browser-sync');
-const gulp = requireCached('gulp');
-const compression = requireCached('compression');
-
-
-
+const browserSync = requireCached('browser-sync')
+const gulp = requireCached('gulp')
+const compression = requireCached('compression')
 
 /**
  * Task to run BrowserSync.
@@ -17,31 +12,29 @@ const compression = requireCached('compression');
  * file changes and interactions across multiple devices
  * @see http://www.browsersync.io/
  */
-gulp.task('browser-sync', function () {
+gulp.task('browser-sync', function(callback) {
+  var options = {
+    // ghostMode: false,
 
-    var options = {
+    // port: 3000,
 
-        // ghostMode: false,
+    server: {
+      // Serve up our build folder
+      baseDir: path.resolve(config.projectDirectory, config.dest.getPath('root')),
 
-        // port: 3000,
+      // Enables CORS to solve cross domain issues
+      // @see https://hondo.wtf/2015/02/15/enable-cors-in-browsersync
+      middleware: [
+        compression(),
+        function(req, res, next) {
+          res.setHeader('Access-Control-Allow-Origin', '*')
+          next()
+        },
+      ],
+    },
+  }
 
-        server: {
-            // Serve up our build folder
-            baseDir: path.resolve(config.projectDirectory, config.dest.getPath('root')),
+  browserSync(options)
 
-            // Enables CORS to solve cross domain issues
-            // @see https://hondo.wtf/2015/02/15/enable-cors-in-browsersync
-            middleware: [
-                compression(),
-                function (req, res, next) {
-                    res.setHeader('Access-Control-Allow-Origin', '*');
-                    next();
-                }
-            ]
-        }
-
-    }
-
-    browserSync(options);
-
-});
+  callback()
+})
