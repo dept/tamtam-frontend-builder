@@ -1,7 +1,6 @@
-const config = require('../../config')
 const error = require('../../../utils/error')
 
-module.exports = createBabelLoaderConfig = (browserlist, plugins) => {
+module.exports = (browserlist, plugins) => {
   if (!browserlist) {
     error('No valid browserlist specified for babel loader config.')
     return

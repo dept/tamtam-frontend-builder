@@ -50,6 +50,13 @@ const baseConfig = {
   },
 }
 
+const babelPlugins = [
+  '@babel/syntax-dynamic-import',
+  '@babel/plugin-proposal-class-properties',
+  '@babel/plugin-proposal-object-rest-spread',
+  '@babel/plugin-proposal-optional-chaining',
+]
+
 const modernConfig = {
   ...baseConfig,
   name: 'modern',
@@ -63,11 +70,7 @@ const modernConfig = {
   plugins: webpackPlugins,
   module: {
     rules: [
-      ...createBabelLoaderConfig(config.browsers.modern, [
-        '@babel/syntax-dynamic-import',
-        '@babel/plugin-proposal-class-properties',
-        '@babel/plugin-proposal-object-rest-spread',
-      ]),
+      ...createBabelLoaderConfig(config.browsers.modern, babelPlugins),
       hasLintfile ? esLintConfig : {},
     ],
   },
@@ -86,11 +89,7 @@ const legacyConfig = {
   plugins: webpackPlugins,
   module: {
     rules: [
-      ...createBabelLoaderConfig(config.browsers.legacy, [
-        '@babel/syntax-dynamic-import',
-        '@babel/plugin-proposal-class-properties',
-        '@babel/plugin-proposal-object-rest-spread',
-      ]),
+      ...createBabelLoaderConfig(config.browsers.legacy, babelPlugins),
       hasLintfile ? esLintConfig : {},
     ],
   },
