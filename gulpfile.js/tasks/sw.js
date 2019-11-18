@@ -28,7 +28,6 @@ gulp.task('sw', function(callback) {
   workboxBuild
     .generateSW({
       swDest,
-      importScripts: ['/assets/sw-extend.js'],
       ...swConfig,
     })
     .then(({ count, size }) => {
