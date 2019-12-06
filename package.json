@@ -78,6 +78,7 @@
 		"gulp-watch": "5.0.1",
 		"gulp-wrapper": "1.0.0",
 		"human-size": "1.1.0",
+		"jest": "24.9.0",
 		"lodash": "4.17.15",
 		"merge-stream": "1.0.1",
 		"minimist": "1.2.0",
