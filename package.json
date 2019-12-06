@@ -36,6 +36,7 @@
 		"ansi-colors": "^3.2.4",
 		"assign-deep": "1.0.1",
 		"babel-eslint": "10.0.3",
+		"babel-jest": "24.9.0",
 		"babel-loader": "8.0.6",
 		"beeper": "2.0.0",
 		"browser-sync": "2.26.7",
