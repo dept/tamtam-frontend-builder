@@ -1,6 +1,6 @@
 const error = require('../../../utils/error')
 
-module.exports = (browserlist, plugins) => {
+module.exports = (browserlist, plugins, moduleType = false) => {
   if (!browserlist) {
     error('No valid browserlist specified for babel loader config.')
     return
@@ -13,7 +13,7 @@ module.exports = (browserlist, plugins) => {
         '@babel/preset-env',
         {
           useBuiltIns: 'usage',
-          modules: false,
+          modules: moduleType,
           corejs: 3,
           targets: {
             browsers: browserlist,
