@@ -12,6 +12,7 @@ const gulpIf = requireCached('gulp-if')
 const gulpCleanCss = requireCached('gulp-clean-css')
 const gulpSize = requireCached('gulp-size')
 const uncss = requireCached('gulp-uncss')
+const gulpGroupCSSMediaQUeries = requireCached('gulp-group-css-media-queries')
 
 /**
  * Task for compiled SASS files back to CSS, uses lib-sass instead of ruby for faster compiling.
@@ -59,6 +60,7 @@ gulp.task('css', function() {
       ignore: [/\.modal.*/, /\.panel.*/, /\.popup.*/, /.*\.is-.*/, /.*\.has-.*/],
       //timeout: 0 //  Specify how long to wait for the JS to be loaded.
     },
+    groupCSSMediaQueries: config.groupCSSMediaQueries,
   }
 
   // Keep track of the file size changes
@@ -75,8 +77,8 @@ gulp.task('css', function() {
       // start optimizing...
       .pipe(gulpIf(options.minify, sizeBefore))
       .pipe(gulpIf(options.removeUnused, uncss(options.uncss)))
+      .pipe(gulpIf(options.groupCSSMediaQueries, gulpGroupCSSMediaQUeries()))
       .pipe(gulpIf(options.minify, gulpCleanCss(options.cleanCSS)))
-
       .pipe(autoprefixer(options.autoprefixer))
 
       // sourcemaps need a relative path from the output folder
