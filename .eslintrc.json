@@ -32,5 +32,14 @@
     "import/no-unresolved": "off",
     "simple-import-sort/sort": "warn",
     "import/named": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["**.test.(t|j)sx?"],
+      "plugins": ["jest"],
+      "env": {
+        "jest/globals": true
+      }
+    }
+  ]
 }
