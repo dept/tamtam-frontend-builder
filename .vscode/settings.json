@@ -1,24 +1,22 @@
 {
-  "eslint.autoFixOnSave": true,
-  "eslint.validate": [
-    "javascript",
-    {
-      "language": "vue",
-      "autoFix": true
-    },
-    {
-      "language": "typescript",
-      "autoFix": true
-    }
-  ],
+  "eslint.validate": ["javascript", "vue", "typescript"],
   "files.associations": {
     "*.js": "javascript"
   },
   "[javascript]": {
-    "editor.formatOnSave": true
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
   },
   "[scss]": {
-    "editor.formatOnSave": true
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  },
+  "[html]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": false
+    }
   },
   "json.format.enable": true,
   "eslint.enable": true
