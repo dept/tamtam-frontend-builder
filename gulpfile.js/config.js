@@ -25,6 +25,7 @@ config.minify = false
 config.optimizeImages = true
 config.sourcemaps = true
 config.cleanCSS = false // removes unused CSS, requires 'gulp-uncss' installation.
+config.groupCSSMediaQueries = false // Groups CSS media queries
 config.prettyHTML = false
 config.minifyHTML = false // requires 'gulp-htmlmin' installation.
 config.showGrid = true // Shows the grid overlay
