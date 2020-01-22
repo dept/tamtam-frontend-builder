@@ -1,26 +1,23 @@
-const config                    = require('../config');
-const requireCached             = require('../src/gulp/require-cached');
-const fs                        = require('fs');
-const gulp                      = requireCached('gulp');
+const config = require('../config')
+const requireCached = require('../src/gulp/require-cached')
+const fs = require('fs')
+const gulp = requireCached('gulp')
 
-const compilerPromise           = require ('./script/create-compiler-promise');
-const webpackConfigs            = require('./script/webpack-config');
-const hasESFile                 = fs.existsSync(`${config.source.getPath('javascript')}/main-es.js`);
+const compilerPromise = require('./script/create-compiler-promise')
+const webpackConfigs = require('./script/webpack-config')
+const hasESFile = fs.existsSync(`${config.source.getPath('javascript')}/main-es.js`)
 
-const compilerConfigs = {};
+const compilerConfigs = {}
 
-compilerConfigs.legacyConfig = webpackConfigs.legacyConfig;
-if (hasESFile) compilerConfigs.modernConfig = webpackConfigs.modernConfig;
+compilerConfigs.legacyConfig = webpackConfigs.legacyConfig
+if (hasESFile) compilerConfigs.modernConfig = webpackConfigs.modernConfig
 
-gulp.task('js', function (callback) {
-
-    Promise.all(compilerPromise.create(compilerConfigs))
-        .then(() => callback())
-        .catch(e => console.warn('Error whilst compiling JS', e));
-
-
-});
+gulp.task('js', function(callback) {
+  Promise.all(compilerPromise.create(compilerConfigs))
+    .then(() => callback())
+    .catch(e => console.warn('Error whilst compiling JS', e))
+})
 
 module.exports = {
-    compilerConfigs
+  compilerConfigs,
 }

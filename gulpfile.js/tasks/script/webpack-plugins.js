@@ -1,11 +1,10 @@
-const config            = require('../../config');
-const requireCached     = require('../../src/gulp/require-cached');
-const webpack           = requireCached('webpack');
+const config = require('../../config')
+const requireCached = require('../../src/gulp/require-cached')
+const webpack = requireCached('webpack')
 
-const plugins = [];
+const plugins = []
 
 if (config.minify) {
-
 }
 
-module.exports = plugins;
+module.exports = plugins

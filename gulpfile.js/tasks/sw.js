@@ -1,21 +1,41 @@
-const requireCached = require('../src/gulp/require-cached');
-const config = require('../config');
-const path = require('path');
+const requireCached = require('../src/gulp/require-cached')
+const log = require('../src/debug/log')
+const config = require('../config')
+const path = require('path')
 
-const gulp = requireCached('gulp');
-const swPrecache = requireCached('sw-precache');
+const gulp = requireCached('gulp')
+const workboxBuild = requireCached('workbox-build')
 
 /**
  *  Gulp task for compiling serviceworker
  */
-gulp.task('sw', function (callback) {
+gulp.task('sw', function(callback) {
+  const swDest = path.join(
+    path.resolve(config.projectDirectory, config.dest.getPath('sw')),
+    'sw.js',
+  )
 
-    swPrecache.write(path.join(path.resolve(config.projectDirectory, config.dest.getPath('sw')), 'sw.js'), {
-        directoryIndex: false,
-        staticFileGlobs: [config.source.getFileGlobs('sw')],
-        stripPrefix: config.source.sw.strip,
-        runtimeCaching: config.source.sw.runtimeCaching,
-        navigateFallback: '/?utm_source=homescreen'
-    }, callback);
+  const swConfig = config.source.sw
 
-});
+  // Added for backwards compatibility
+  if (swConfig.files) delete swConfig.files
+  if (swConfig.strip) delete swConfig.strip
+  if (swConfig.path) {
+    if (!swConfig.globDirectory) swConfig.globDirectory = swConfig.path
+    delete swConfig.path
+  }
+
+  workboxBuild
+    .generateSW({
+      swDest,
+      ...swConfig,
+    })
+    .then(({ count, size }) => {
+      const sizeInMB = (size / Math.pow(1024, 2)).toFixed(2)
+      log.info({
+        sender: 'ServiceWorker',
+        message: `Generated ${swDest}, which will precache ${count} files, totaling ${sizeInMB} MB.`,
+      })
+      callback()
+    })
+})

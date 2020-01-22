@@ -11,20 +11,15 @@
  *
  */
 
-
-
-const config                      = require('../../config');
+const config = require('../../config')
 
 // Note: we don't use requireCachedModule here because it causes a circular reference which causes problems.
-const humanSize                   = require('human-size');
-const path                        = require('path');
-const beeper                      = require('beeper');
-const colors                      = require('ansi-colors');
-const prettyHrtime                = require('pretty-hrtime');
-const notifier                    = require("node-notifier");
-
-
-
+const humanSize = require('human-size')
+const path = require('path')
+const beeper = require('beeper')
+const colors = require('ansi-colors')
+const prettyHrtime = require('pretty-hrtime')
+const notifier = require('node-notifier')
 
 /**
  * Log a message with size
@@ -39,28 +34,26 @@ const notifier                    = require("node-notifier");
  *
  * @param options {{sender: {string}, message: {string}, size: {object}, sizeAfter:{object} check: {boolean=}, wrap: {boolean=}}}
  */
-function logSize ( options ) {
+function logSize(options) {
+  if (options.wrap) {
+    options.wrap = false
+    return function() {
+      logSize.call(this, options)
+    }
+  } else {
+    let sizeLog = humanSize(options.size.size, true)
 
-    if( options.wrap ) {
-
-        options.wrap = false;
-        return function () { logSize.call( this, options ) }
-
-    } else {
-
-        let sizeLog = humanSize( options.size.size, true );
-
-        if( options.sizeAfter ) {
-            const difference = options.size.size - options.sizeAfter.size;
-            if( difference > 0 ) sizeLog = 'saved ' + humanSize( difference, true );
-            else sizeLog = 'gained ' + humanSize( difference );
-        }
-
-        if( typeof options.check !== 'undefined' && !options.check ) return;
-        console.log( colors.blue( '[' + options.sender + '] size: ' + options.message ) + colors.cyan( sizeLog ) );
-
+    if (options.sizeAfter) {
+      const difference = options.size.size - options.sizeAfter.size
+      if (difference > 0) sizeLog = 'saved ' + humanSize(difference, true)
+      else sizeLog = 'gained ' + humanSize(difference)
     }
 
+    if (typeof options.check !== 'undefined' && !options.check) return
+    console.log(
+      colors.blue('[' + options.sender + '] size: ' + options.message) + colors.cyan(sizeLog),
+    )
+  }
 }
 /**
  * Log a message with size
@@ -73,19 +66,19 @@ function logSize ( options ) {
  *
  * @param options {{sender: {string}, message: {string}, time: {number}, check: {boolean=}, wrap: {boolean=}}}
  */
-function logTime ( options ) {
-
-    if( options.wrap ) {
-
-        options.wrap = false;
-        return function () { logTime.call( this, options ) }
-
-    } else {
-
-        if( typeof options.check !== 'undefined' && !options.check ) return;
-        console.log( colors.blue( '[' + options.sender + '] time: ' + options.message ) + colors.cyan( prettyHrtime( options.time ) ) );
+function logTime(options) {
+  if (options.wrap) {
+    options.wrap = false
+    return function() {
+      logTime.call(this, options)
     }
-
+  } else {
+    if (typeof options.check !== 'undefined' && !options.check) return
+    console.log(
+      colors.blue('[' + options.sender + '] time: ' + options.message) +
+        colors.cyan(prettyHrtime(options.time)),
+    )
+  }
 }
 
 /**
@@ -99,20 +92,21 @@ function logTime ( options ) {
  *
  * @param options {{sender: {string}, message: {string}, data: {Array=}, check: {boolean=}, wrap: {boolean=}}}
  */
-function logDebug ( options ) {
-
-    if( options.wrap ) {
-
-        options.wrap = false;
-        return function () { logDebug.call( this, options ) }
-
-    } else {
-
-        if( typeof options.check !== 'undefined' && !options.check ) return;
-        console.log.apply( this, [ colors.blue( '[' + options.sender + '] debug: ' + options.message ) ].concat( options.data ? options.data : [] ) );
-
+function logDebug(options) {
+  if (options.wrap) {
+    options.wrap = false
+    return function() {
+      logDebug.call(this, options)
     }
-
+  } else {
+    if (typeof options.check !== 'undefined' && !options.check) return
+    console.log.apply(
+      this,
+      [colors.blue('[' + options.sender + '] debug: ' + options.message)].concat(
+        options.data ? options.data : [],
+      ),
+    )
+  }
 }
 
 /**
@@ -126,20 +120,21 @@ function logDebug ( options ) {
  *
  * @param options {{sender: {string}, message: {string}, data: {Array=}, check: {boolean=}, wrap: {boolean=}}}
  */
-function logWarn ( options ) {
-
-    if( options.wrap ) {
-
-        options.wrap = false;
-        return function () { logDebug.call( this, options ) }
-
-    } else {
-
-        if( typeof options.check !== 'undefined' && !options.check ) return;
-        console.log.apply( this, [ colors.yellow( '[' + options.sender + '] warn: ' + options.message ) ].concat( options.data ? options.data : [] ) );
-
+function logWarn(options) {
+  if (options.wrap) {
+    options.wrap = false
+    return function() {
+      logDebug.call(this, options)
     }
-
+  } else {
+    if (typeof options.check !== 'undefined' && !options.check) return
+    console.log.apply(
+      this,
+      [colors.yellow('[' + options.sender + '] warn: ' + options.message)].concat(
+        options.data ? options.data : [],
+      ),
+    )
+  }
 }
 
 /**
@@ -153,19 +148,21 @@ function logWarn ( options ) {
  *
  * @param options {{sender: {string}, message: {string}, data: {Array=}, check: {boolean=}, wrap: {boolean=}}}
  */
-function logInfo ( options ) {
-
-    if( options.wrap ) {
-
-        options.wrap = false;
-        return function () { logDebug.call( this, options ) }
-
-    } else {
-
-        if( typeof options.check !== 'undefined' && !options.check ) return;
-        console.log.apply( this, [ colors.blue( '[' + options.sender + '] info: ' ) + colors.cyan( options.message ) ].concat( options.data ? options.data : [] ) );
+function logInfo(options) {
+  if (options.wrap) {
+    options.wrap = false
+    return function() {
+      logDebug.call(this, options)
     }
-
+  } else {
+    if (typeof options.check !== 'undefined' && !options.check) return
+    console.log.apply(
+      this,
+      [colors.blue('[' + options.sender + '] info: ') + colors.cyan(options.message)].concat(
+        options.data ? options.data : [],
+      ),
+    )
+  }
 }
 
 /**
@@ -182,76 +179,61 @@ function logInfo ( options ) {
  * @param opt_stack {boolean=} deploy a stack trace in the console
  * @param opt_exit {boolean=} kill the process
  */
-function logError ( error, opt_stack, opt_exit ) {
+function logError(error, opt_stack, opt_exit) {
+  if (!error) return
 
-    if( !error ) return;
+  error.name = error.name || 'Error'
+  error.message = error.message || 'No message...'
+  error.stack = error.stack || 'No stack found...'
+  error.fileName = error.fileName || 'No filename found...'
 
-    
+  let title = error.name
 
-    error.name      = error.name        || 'Error';
-    error.message   = error.message     || 'No message...';
-    error.stack     = error.stack       || 'No stack found...';
-    error.fileName  = error.fileName    || 'No filename found...';
+  if (error.plugin) title += ' [' + error.plugin + ']'
+  else if (error.sender) title += ' [' + error.sender + ']'
 
-    
+  if (config.notifyError) {
+    notifier.notify(
+      {
+        title: title,
+        message: error.message.replace(/\"/g, '\\"'), // Make sure any quotes are properly escaped as this can break the notifier
+        icon: path.resolve(__dirname, '../assets/gulp-error.png'),
+        sound: false,
+      },
+      function(notifyError, notifyResponse) {
+        // just in case
+        if (notifyError) console.log(notifyError)
+        if (notifyResponse) console.log(notifyResponse)
+      },
+    )
+  }
 
-    let title = error.name;
+  let message
+  let stackTrace
 
-    if( error.plugin ) title += ' [' + (error.plugin) + ']';
-    else if( error.sender ) title += ' [' + error.sender + ']';
+  if (opt_stack && error.stack) {
+    stackTrace = error.stack
+    stackTrace = stackTrace.replace(new RegExp('^' + error.name + '.*'), '')
+  }
 
+  message = error.message
+  message = message.replace(new RegExp('^' + error.name + ''), '')
+  message = colors.red(`${title}${message}`)
 
-    if( config.notifyError ) {
+  console.log(message + (stackTrace ? stackTrace : ''))
+  if (error.data) console.log(error.data)
+  beeper()
 
-        notifier.notify( {
+  if (config.throwError) {
+    throw new Error(title + ': ' + error.message)
+  }
 
-            title: title,
-            message: error.message.replace( /\"/g, '\\"' ), // Make sure any quotes are properly escaped as this can break the notifier
-            icon: path.resolve( __dirname, '../assets/gulp-error.png' ),
-            sound: false
+  //Keep gulp from hanging on this task
+  if (this.emit) this.emit('end')
 
-        }, function ( notifyError, notifyResponse ) {
-
-            // just in case
-            if( notifyError ) console.log( notifyError );
-            if( notifyResponse ) console.log( notifyResponse );
-
-        } );
-
-    }
-
-
-    let message;
-    let stackTrace;
-
-    if( opt_stack && error.stack ) {
-
-        stackTrace = error.stack;
-        stackTrace = stackTrace.replace( new RegExp( '^' + error.name + '.*' ), '' );
-
-    }
-
-    message = error.message;
-    message = message.replace( new RegExp( '^' + error.name + '' ), '' );
-    message = colors.red(`${title}${message}`);
-
-    console.log( message + (stackTrace ? stackTrace : '') );
-    if(error.data) console.log(error.data);
-    beeper();
-
-    if( config.throwError ) {
-
-        throw new Error(title + ': ' + error.message);
-
-    }
-
-    //Keep gulp from hanging on this task
-    if( this.emit ) this.emit( 'end' );
-
-    // kill the process if necessary
-    if( opt_exit ) process.exit( 1 );
-};
-
+  // kill the process if necessary
+  if (opt_exit) process.exit(1)
+}
 
 /**
  * The complete collection of log functions to be used during the building process.
@@ -259,17 +241,15 @@ function logError ( error, opt_stack, opt_exit ) {
  * @type {{time: logTime, size: logSize, debug: logDebug, info: logInfo, warn: logWarn, error: logError}}
  */
 const log = {
+  colors: colors,
 
-    colors: colors,
+  time: logTime,
+  size: logSize,
 
-    time: logTime,
-    size: logSize,
+  debug: logDebug,
+  info: logInfo,
+  warn: logWarn,
+  error: logError,
+}
 
-    debug: logDebug,
-    info: logInfo,
-    warn: logWarn,
-    error: logError
-
-};
-
-module.exports = log;
+module.exports = log

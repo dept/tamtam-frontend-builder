@@ -5,20 +5,18 @@
  * @param compareTo {object}
  * @returns {object}
  */
-module.exports = function diff ( object, compareTo ) {
+module.exports = function diff(object, compareTo) {
+  var diff = {}
 
-	var diff = {};
+  for (var key in object) {
+    if (!object.hasOwnProperty(key)) continue
 
-	for ( var key in object ) {
+    var value = object[key]
 
-		if( !object.hasOwnProperty( key ) ) continue;
+    if (!compareTo[key] || compareTo[key] !== value) {
+      diff[key] = value
+    }
+  }
 
-		var value = object[ key ];
-
-		if( !compareTo[ key ] || compareTo[ key ] !== value ) {
-			diff[ key ] = value;
-		}
-	}
-
-	return diff;
+  return diff
 }
