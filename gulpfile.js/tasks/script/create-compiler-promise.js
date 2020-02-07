@@ -1,6 +1,8 @@
 const webpack = require('webpack')
 const fs = require('fs')
 const config = require('../../config')
+const log = require('../../src/debug/log')
+
 const hasLintfile =
   fs.existsSync(`${config.projectDirectory}/.eslintrc`) ||
   fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) ||
@@ -12,7 +14,7 @@ const logStats = stats => console.log(`\n ${stats.toString({ colors: true })} \n
 
 const createCompiler = config => {
   const compiler = webpack(config)
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     compiler.run((error, stats) => {
       onWebpackCallback(error, stats)
       resolve()
