@@ -65,7 +65,7 @@ const modernConfig = {
   },
   output: {
     ...baseConfig.output,
-    chunkFilename: 'chunks-es/[name].js',
+    chunkFilename: 'chunks-es/[name].[chunkhash].js',
   },
   plugins: webpackPlugins,
   module: {
