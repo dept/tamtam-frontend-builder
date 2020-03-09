@@ -1,4 +1,9 @@
+const config = require('../../config')
 const error = require('../../../utils/error')
+const fs = require('fs')
+
+const extendFilePath = `${config.projectDirectory}/babel.extend.js`
+const hasExtendFile = fs.existsSync(extendFilePath)
 
 module.exports = (browserlist, plugins) => {
   if (!browserlist) {
@@ -6,7 +11,7 @@ module.exports = (browserlist, plugins) => {
     return
   }
 
-  const options = {
+  let options = {
     plugins,
     presets: [
       [
@@ -21,6 +26,10 @@ module.exports = (browserlist, plugins) => {
         },
       ],
     ],
+  }
+
+  if (hasExtendFile) {
+    options = require(extendFilePath)(options)
   }
 
   return [
