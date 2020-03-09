@@ -1,6 +1,6 @@
 module.exports = esLintConfig = {
   enforce: 'pre',
-  test: /\.js?$/,
+  test: /\.jsx?$/,
   exclude: /node_modules/,
   use: [
     {

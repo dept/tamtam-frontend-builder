@@ -38,7 +38,7 @@ module.exports = (browserlist, plugins) => {
       ],
     },
     {
-      test: /\.js$/,
+      test: /\.jsx?$/,
       exclude: /(node_modules)/,
       use: {
         loader: require.resolve('babel-loader'),
