@@ -99,9 +99,9 @@ const legacyConfig = {
   },
 }
 
-function extendConfig(config) {
+function extendConfig(config, environment) {
   if (hasExtendFile) {
-    return require(extendFilePath)(config)
+    return require(extendFilePath)(config, environment)
   }
 
   return config
@@ -112,7 +112,7 @@ const getAliasObject = () => {
 }
 
 module.exports = {
-  modernConfig: extendConfig(modernConfig),
-  legacyConfig: extendConfig(legacyConfig),
+  modernConfig: extendConfig(modernConfig, 'modern'),
+  legacyConfig: extendConfig(legacyConfig, 'legacy'),
   getAliasObject,
 }
