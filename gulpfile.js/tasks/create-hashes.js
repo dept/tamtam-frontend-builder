@@ -38,7 +38,7 @@ gulp.task('create-hashes', function(callback) {
       path.resolve(config.projectDirectory, config.dest.getPath('html', '*.html')),
       path.resolve(config.projectDirectory, config.dest.getPath('sw', 'sw.js')),
     ])
-    .pipe(gulpif(config.buildStatic, revCollector()))
+    .pipe(revCollector())
     .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('html'))))
 
   return merge(renamer, updateHtml)
