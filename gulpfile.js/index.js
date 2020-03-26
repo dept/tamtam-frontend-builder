@@ -50,11 +50,14 @@ function registerMainTasks(gulp) {
    *  Deletes the old files and builds the project from scratch.
    */
   gulp.task('build', function(callback) {
+    config.cleanBuild = true
+
     runSequence(
       'clean',
       ['copy', 'images', 'svg', 'inject-component-css'],
       ['css-lint', 'css'],
       ['html', 'libs', 'js'],
+      ['create-hashes'],
       'sw',
       callback,
     )

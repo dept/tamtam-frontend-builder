@@ -20,6 +20,7 @@ config.cleanBuild = false
 config.debug = true
 config.notifyError = true
 config.throwError = false // Actually throws an (native) error when one occurs, useful for bamboo.
+config.buildStatic = false
 
 config.minify = false
 config.optimizeImages = true
