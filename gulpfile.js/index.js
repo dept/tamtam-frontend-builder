@@ -57,8 +57,8 @@ function registerMainTasks(gulp) {
       ['copy', 'images', 'svg', 'inject-component-css'],
       ['css-lint', 'css'],
       ['html', 'libs', 'js'],
-      ['create-hashes'],
       'sw',
+      'create-hashes',
       callback,
     )
   })
@@ -113,6 +113,7 @@ function registerMainTasks(gulp) {
       ['css-lint', 'css'],
       ['html', 'libs', 'js'],
       'sw',
+      'create-hashes',
       callback,
     )
   })
