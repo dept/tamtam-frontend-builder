@@ -8,7 +8,7 @@ const rev = require('gulp-rev')
 gulp.task('create-hashes', function(callback) {
   const basePath = path.resolve(config.projectDirectory, config.dest.getPath('root'))
 
-  if (!config.buildStatic) return callback.call(this)
+  if (!config.buildStatic && !config.debug) return callback.call(this)
 
   return gulp
     .src(
