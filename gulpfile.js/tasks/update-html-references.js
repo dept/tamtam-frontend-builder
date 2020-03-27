@@ -21,7 +21,7 @@ const removeOriginalFiles = () =>
   })
 
 gulp.task('update-html-references', function(callback) {
-  if (!config.buildStatic && !config.debug) return callback.call(this)
+  if (config.debug && !config.buildStatic) return callback.call(this)
 
   const updateHtml = gulp
     .src([
