@@ -88,7 +88,7 @@ const legacyConfig = {
   },
   output: {
     ...baseConfig.output,
-    chunkFilename: 'chunks/[name].js',
+    chunkFilename: 'chunks/[name].[chunkhash].js',
   },
   plugins: webpackPlugins,
   module: {
