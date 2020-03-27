@@ -32,7 +32,7 @@ const notifier = require('node-notifier')
  *  - wrap {boolean=}       wrap the log into a handler function
  *  - check {boolean=}      perform a boolean check before logging
  *
- * @param options {{sender: {string}, message: {string}, size: {object}, sizeAfter:{object} check: {boolean=}, wrap: {boolean=}}}
+ * @param options {{sender: string, message: string, size: object, sizeAfter:object, check: boolean, wrap: boolean}}
  */
 function logSize(options) {
   if (options.wrap) {
@@ -64,7 +64,7 @@ function logSize(options) {
  *  - wrap {boolean=}   wrap the log into a handler function
  *  - check {boolean=}  perform a boolean check before logging
  *
- * @param options {{sender: {string}, message: {string}, time: {number}, check: {boolean=}, wrap: {boolean=}}}
+ * @param options {{sender: string, message: string, time: {number}, check: {boolean=}, wrap: {boolean=}}}
  */
 function logTime(options) {
   if (options.wrap) {
@@ -90,7 +90,7 @@ function logTime(options) {
  *  - wrap {boolean=}   wrap the log into a handler function
  *  - check {boolean=}  perform a boolean check before logging
  *
- * @param options {{sender: {string}, message: {string}, data: {Array=}, check: {boolean=}, wrap: {boolean=}}}
+ * @param options {{sender: string, message: string, data: {Array=}, check: {boolean=}, wrap: {boolean=}}}
  */
 function logDebug(options) {
   if (options.wrap) {

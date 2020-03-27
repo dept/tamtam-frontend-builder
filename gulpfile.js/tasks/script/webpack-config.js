@@ -13,6 +13,10 @@ const hasLintfile =
   fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) ||
   fs.existsSync(`${config.projectDirectory}/.eslintrc.json`)
 
+const extendFilePath = `${config.projectDirectory}/webpack.extend.js`
+
+const hasExtendFile = fs.existsSync(extendFilePath)
+
 const baseConfig = {
   context: config.projectDirectory,
   mode: config.minify ? 'production' : 'development',
@@ -95,12 +99,20 @@ const legacyConfig = {
   },
 }
 
+function extendConfig(config, environment) {
+  if (hasExtendFile) {
+    return require(extendFilePath)(config, environment)
+  }
+
+  return config
+}
+
 const getAliasObject = () => {
   return createAliasObject()
 }
 
 module.exports = {
-  modernConfig,
-  legacyConfig,
+  modernConfig: extendConfig(modernConfig, 'modern'),
+  legacyConfig: extendConfig(legacyConfig, 'legacy'),
   getAliasObject,
 }
