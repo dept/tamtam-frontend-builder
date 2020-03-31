@@ -15,12 +15,18 @@ if (hasESFile) compilerConfigs.modernConfig = webpackConfigs.modernConfig
 
 gulp.task('js', function(callback) {
   Promise.all(compilerPromise.create(compilerConfigs))
-    .then(() => callback())
+    .then(a => {
+      callback()
+    })
     .catch(e => {
-      log.error({
-        sender: 'js',
-        message: 'Error whilst compiling JS',
-      })
+      log.error(
+        {
+          sender: 'js',
+          message: JSON.stringify(e),
+        },
+        true,
+        true,
+      )
       callback(e)
     })
 })

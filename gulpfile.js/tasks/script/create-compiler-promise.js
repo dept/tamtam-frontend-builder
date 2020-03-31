@@ -18,7 +18,8 @@ const createCompiler = config => {
     compiler.run((error, stats) => {
       onWebpackCallback(error, stats)
       if (error || stats.hasErrors()) {
-        reject()
+        const info = stats.toJson()
+        reject(info.errors)
         return
       }
       resolve()
