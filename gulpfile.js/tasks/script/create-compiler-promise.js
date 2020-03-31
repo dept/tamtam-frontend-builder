@@ -14,9 +14,13 @@ const logStats = stats => console.log(`\n ${stats.toString({ colors: true })} \n
 
 const createCompiler = config => {
   const compiler = webpack(config)
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     compiler.run((error, stats) => {
       onWebpackCallback(error, stats)
+      if (error || stats.hasErrors()) {
+        reject()
+        return
+      }
       resolve()
     })
   })

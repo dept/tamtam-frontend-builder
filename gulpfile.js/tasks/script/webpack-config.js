@@ -20,6 +20,7 @@ const hasExtendFile = fs.existsSync(extendFilePath)
 const baseConfig = {
   context: config.projectDirectory,
   mode: config.minify ? 'production' : 'development',
+  bail: config.minify ? true : false,
   optimization: {
     splitChunks: {
       chunks: 'async',
