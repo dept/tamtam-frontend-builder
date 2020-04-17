@@ -4,6 +4,8 @@ const gulp = require('gulp')
 const error = require('../utils/error')
 require('../gulpfile.js')
 
+global.cliCwd = process.cwd()
+
 yargs.command('build', 'build the project', undefined, () => {
   gulp.start('build')
 })
