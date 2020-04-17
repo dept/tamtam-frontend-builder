@@ -3,7 +3,7 @@ const gulp = require('gulp')
 const error = require('../utils/error')
 const task = process.argv[2]
 
-require('../gulpfile.js/index.js')
+require('../gulpfile.js')
 
 if (!task) {
   error('No task specified.')
