@@ -1,6 +1,6 @@
 {
 	"name": "tamtam-frontend-builder",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"license": "MIT",
 	"description": "Dept Frontend build tools",
 	"author": "Dept",
@@ -15,6 +15,9 @@
 		}
 	],
 	"private": true,
+	"bin": {
+		"dept-builder": "bin/cli.js"
+	},
 	"repository": {
 		"type": "git",
 		"url": "https://bitbucket.org/tamtam-nl/tamtam-frontend-builder"
