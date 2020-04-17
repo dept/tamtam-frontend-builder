@@ -15,6 +15,9 @@
 		}
 	],
 	"private": true,
+	"bin": {
+		"tamtam-builder": "bin/cli.js"
+	},
 	"repository": {
 		"type": "git",
 		"url": "https://bitbucket.org/tamtam-nl/tamtam-frontend-builder"
