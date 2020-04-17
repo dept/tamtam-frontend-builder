@@ -16,7 +16,7 @@
 	],
 	"private": true,
 	"bin": {
-		"tamtam-builder": "bin/cli.js"
+		"dept-builder": "bin/cli.js"
 	},
 	"repository": {
 		"type": "git",
