@@ -22,6 +22,14 @@ yargs.command('start', 'start the project', undefined, () => {
   gulp.start('default')
 })
 
+yargs.command('npm-install-recursive', 'install npm recursive', undefined, () => {
+  require('../utils/npm-install-recursive')
+})
+
+yargs.command('create', 'create new component', undefined, () => {
+  require('../utils/create')
+})
+
 yargs.command('task [task]', 'run gulp task', undefined, args => {
   if (!args.task) {
     error('No task specified.')
