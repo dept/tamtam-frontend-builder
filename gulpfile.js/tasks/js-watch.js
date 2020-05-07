@@ -7,7 +7,7 @@ const webpackConfig = require('./script/webpack-config')
 const browserSync = requireCached('browser-sync')
 const webpack = requireCached('webpack')
 
-exports.jsWatch = function(callback) {
+function jsWatch(callback) {
   let initialCompile = true
   if (config.webpackWatcher) {
     config.webpackWatcher.close(() => {
@@ -31,4 +31,8 @@ exports.jsWatch = function(callback) {
 
     browserSync.reload()
   })
+}
+
+module.exports = {
+  jsWatch,
 }

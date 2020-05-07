@@ -19,12 +19,7 @@ const { html } = require('./html')
 
 const watch = gulp.watch
 
-/**
- * Task for watching files and running related tasks when needed.
- * JavaScript is done via watchify instead for this task for optimized configuration.
- * @see https://www.npmjs.com/package/gulp-watch
- */
-function watchTask() {
+function assetWatch() {
   watch(config.source.getFileGlobs('images'), images)
 
   watch(config.source.getFileGlobs('svg'), svg)
@@ -58,6 +53,15 @@ function watchTask() {
     path.resolve(config.projectDirectory, config.dest.getPath('html', '**/*.html')),
     onHTMLChange,
   )
+}
+
+/**
+ * Task for watching files and running related tasks when needed.
+ * JavaScript is done via watchify instead for this task for optimized configuration.
+ * @see https://www.npmjs.com/package/gulp-watch
+ */
+function watchTask(done) {
+  return gulp.series(jsWatch, assetWatch)(done)
 }
 
 /**
