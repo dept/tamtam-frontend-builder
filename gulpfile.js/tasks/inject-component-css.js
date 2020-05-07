@@ -24,7 +24,12 @@ const createComponentsArray = folder => {
 function injectComponentCss() {
   const components = createComponentsArray('components')
 
-  var injectComponentsFiles = gulp.src(components, { read: false, cwd: config.projectDirectory })
+  const sassFolder = config.source.getPath('css')
+
+  var injectComponentsFiles = gulp.src(components, {
+    read: false,
+    cwd: sassFolder,
+  })
 
   var injectComponentsOptions = {
     transform: filePath => `@import '${filePath.replace('.scss', '')}';`,
