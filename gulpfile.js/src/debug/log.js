@@ -64,7 +64,7 @@ function logSize(options) {
  *  - wrap {boolean=}   wrap the log into a handler function
  *  - check {boolean=}  perform a boolean check before logging
  *
- * @param options {{sender: string, message: string, time: {number}, check: {boolean=}, wrap: {boolean=}}}
+ * @param options {{sender: string, message: string, time?: [number, number], check: boolean, wrap?: boolean}}
  */
 function logTime(options) {
   if (options.wrap) {
@@ -90,7 +90,7 @@ function logTime(options) {
  *  - wrap {boolean=}   wrap the log into a handler function
  *  - check {boolean=}  perform a boolean check before logging
  *
- * @param options {{sender: string, message: string, data: {Array=}, check: {boolean=}, wrap: {boolean=}}}
+ * @param options {{sender: string, message: string, data: Array, check?: boolean, wrap?: boolean}}
  */
 function logDebug(options) {
   if (options.wrap) {
@@ -118,7 +118,7 @@ function logDebug(options) {
  *  - wrap {boolean=}   wrap the log into a handler function
  *  - check {boolean=}  perform a boolean check before logging
  *
- * @param options {{sender: {string}, message: {string}, data: {Array=}, check: {boolean=}, wrap: {boolean=}}}
+ * @param options {{sender: string, message: string, data?: Array, check?: boolean, wrap?: boolean}}
  */
 function logWarn(options) {
   if (options.wrap) {
@@ -146,7 +146,7 @@ function logWarn(options) {
  *  - wrap {boolean=}   wrap the log into a handler function
  *  - check {boolean=}  perform a boolean check before logging
  *
- * @param options {{sender: {string}, message: {string}, data: {Array=}, check: {boolean=}, wrap: {boolean=}}}
+ * @param options {{sender: string, message: string, data?: Array, check?: boolean, wrap?: boolean}}
  */
 function logInfo(options) {
   if (options.wrap) {
@@ -175,7 +175,7 @@ function logInfo(options) {
  *  - stack {string}        stack trace
  *  - fileName {string=}    name of the file
  *
- * @param error {Error|{name:{string}, sender:{string=}, plugin:{string=}, message:{string}, stack:{string=}, fileName:{string}}
+ * @param error {Error|{name?:string, sender?:string, plugin?:string, message?:string, stack?:string, fileName?:string}}
  * @param opt_stack {boolean=} deploy a stack trace in the console
  * @param opt_exit {boolean=} kill the process
  */

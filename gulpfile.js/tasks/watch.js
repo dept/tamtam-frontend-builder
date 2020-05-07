@@ -5,7 +5,6 @@ const webpackConfig = require('./script/webpack-config')
 
 const _ = requireCached('lodash')
 const gulp = requireCached('gulp')
-const watch = requireCached('gulp-watch')
 const browserSync = requireCached('browser-sync')
 let reloadTimeout
 const RELOAD_TIMEOUT_DELAY = 200 // in milliseconds
@@ -18,12 +17,14 @@ const { css } = require('./css')
 const { cssLint } = require('./css-lint')
 const { html } = require('./html')
 
+const watch = gulp.watch
+
 /**
  * Task for watching files and running related tasks when needed.
  * JavaScript is done via watchify instead for this task for optimized configuration.
  * @see https://www.npmjs.com/package/gulp-watch
  */
-exports.watch = gulp.series(jsWatch, function() {
+function watchTask() {
   watch(config.source.getFileGlobs('images'), images)
 
   watch(config.source.getFileGlobs('svg'), svg)
@@ -57,7 +58,7 @@ exports.watch = gulp.series(jsWatch, function() {
     path.resolve(config.projectDirectory, config.dest.getPath('html', '**/*.html')),
     onHTMLChange,
   )
-})
+}
 
 /**
  *  A separate function to refresh the browser. This is to bypass a known bug in chrome.
@@ -67,4 +68,8 @@ function onHTMLChange(cb) {
   if (reloadTimeout) clearTimeout(reloadTimeout)
   reloadTimeout = setTimeout(browserSync.reload, RELOAD_TIMEOUT_DELAY)
   cb()
+}
+
+module.exports = {
+  watch: watchTask,
 }

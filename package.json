@@ -1,6 +1,6 @@
 {
 	"name": "tamtam-frontend-builder",
-	"version": "1.4.1",
+	"version": "2.0.0",
 	"license": "MIT",
 	"description": "Dept Frontend build tools",
 	"author": "Dept",
@@ -12,6 +12,10 @@
 		{
 			"name": "Dylan Vens",
 			"email": "dylan.vens@deptagency.com"
+		},
+		{
+			"name": "Tim de Wolf",
+			"email": "tim.dewolf@deptagency.com"
 		}
 	],
 	"private": true,
@@ -23,8 +27,8 @@
 		"url": "https://bitbucket.org/tamtam-nl/tamtam-frontend-builder"
 	},
 	"engines": {
-		"node": "10.17.0",
-		"npm": "6.11.3"
+		"node": "^12",
+		"npm": "^6"
 	},
 	"scripts": {
 		"gulp": "gulp"
@@ -102,8 +106,5 @@
 		"vinyl-source-stream": "2.0.0",
 		"webpack": "4.42.1",
 		"workbox-build": "4.3.1"
-	},
-	"devDependencies": {
-		"gulp-cli": "^2.2.0"
 	}
 }

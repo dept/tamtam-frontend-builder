@@ -3,7 +3,6 @@ const log = require('../src/debug/log')
 const config = require('../config')
 const path = require('path')
 
-const gulp = requireCached('gulp')
 const workboxBuild = requireCached('workbox-build')
 
 /**

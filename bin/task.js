@@ -1,9 +1,7 @@
 #!/usr/bin/env node
-const gulp = require('gulp')
 const error = require('../utils/error')
+const { runGulpTask } = require('../utils/run-gulp-task')
 const task = process.argv[2]
-
-require('../gulpfile.js')
 
 if (!task) {
   error('No task specified.')
@@ -11,7 +9,7 @@ if (!task) {
 }
 
 try {
-  gulp.series(task)
+  runGulpTask(task)
 } catch (e) {
   error(`Task name '${task}' not recognized.`)
 }

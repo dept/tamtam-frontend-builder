@@ -1,5 +1,3 @@
 #!/usr/bin/env node
-const gulp = require('gulp')
-require('../gulpfile.js')
-
-gulp.series('deploy')
+const { runGulpTask } = require('../utils/run-gulp-task')
+runGulpTask('deploy')

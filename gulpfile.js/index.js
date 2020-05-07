@@ -45,19 +45,19 @@ config.libs = function() {
 
 function build(done) {
   config.cleanBuild = true
+
   return gulp.series(
-    js,
-    // clean,
-    // gulp.parallel(copy, images, svg, injectComponentCss),
-    // gulp.parallel(cssLint, css),
-    // gulp.parallel(html, libs, js),
-    // sw,
-    // createHashes,
-    // updateHtmlReferences,
+    clean,
+    gulp.parallel(copy, images, svg, injectComponentCss),
+    gulp.parallel(cssLint, css),
+    gulp.parallel(html, libs, js),
+    sw,
+    createHashes,
+    updateHtmlReferences,
   )(done)
 }
 
-function dist() {
+function dist(done) {
   config.debug = false
   config.minify = true
   config.sourcemaps = false
@@ -73,10 +73,10 @@ function dist() {
   // Overwrite config with project specific settings.
   assigndeep(config, config.projectConfig.dist || {})
 
-  return build
+  return build(done)
 }
 
-function deploy() {
+function deploy(done) {
   config.debug = false
   config.sourcemaps = false
   config.throwError = true
@@ -101,13 +101,12 @@ function deploy() {
     sw,
     createHashes,
     updateHtmlReferences,
-  )
+  )(done)
 }
 
-function server() {
-  return gulp.series(build, browserSync, done => {
-    watch(done)
-  })
+function server(done) {
+  console.log('hello watch?')
+  return gulp.series(build, browserSync, watch)(done)
 }
 
 exports.build = build

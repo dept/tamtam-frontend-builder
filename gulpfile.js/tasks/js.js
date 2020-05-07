@@ -13,7 +13,7 @@ if (hasESFile) compilerConfigs.modernConfig = webpackConfigs.modernConfig
 
 function js(callback) {
   Promise.all(compilerPromise.create(compilerConfigs))
-    .then(a => {
+    .then(() => {
       callback()
     })
     .catch(e => {
