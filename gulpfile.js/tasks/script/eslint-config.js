@@ -7,6 +7,8 @@ module.exports = esLintConfig = {
       loader: require.resolve('eslint-loader'),
       options: {
         formatter: require('eslint/lib/cli-engine/formatters/stylish'),
+        emitWarning: true,
+        failOnWarning: false,
       },
     },
   ],
