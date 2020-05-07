@@ -1,4 +1,4 @@
-const requireCached = require('../../../src/gulp/require-cached')
+const requireCached = require('../../gulp/require-cached')
 const path = requireCached('path')
 const fs = requireCached('fs')
 

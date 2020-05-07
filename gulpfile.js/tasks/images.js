@@ -11,7 +11,7 @@ const imagemin = requireCached('gulp-imagemin')
  * Task for optimizing images (size).
  * @see https://www.npmjs.com/package/gulp-imagemin
  */
-gulp.task('images', function() {
+function images() {
   const options = {
     config: {
       optimizationLevel: 3, // default 3
@@ -23,8 +23,11 @@ gulp.task('images', function() {
 
   return gulp
     .src(config.source.getFileGlobs('images'))
-
     .pipe(changed(path.resolve(config.projectDirectory, config.dest.getPath('images')))) // Ignore unchanged files
     .pipe(gulpIf(config.optimizeImages, imagemin(options.config))) // Optimize
     .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('images')))) // Export
-})
+}
+
+module.exports = {
+  images,
+}

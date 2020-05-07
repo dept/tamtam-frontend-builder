@@ -1,7 +1,5 @@
 const config = require('../config')
-const requireCached = require('../src/gulp/require-cached')
 const fs = require('fs')
-const gulp = requireCached('gulp')
 const log = require('../src/debug/log')
 
 const compilerPromise = require('./script/create-compiler-promise')
@@ -13,7 +11,7 @@ const compilerConfigs = {}
 compilerConfigs.legacyConfig = webpackConfigs.legacyConfig
 if (hasESFile) compilerConfigs.modernConfig = webpackConfigs.modernConfig
 
-gulp.task('js', function(callback) {
+function js(callback) {
   Promise.all(compilerPromise.create(compilerConfigs))
     .then(a => {
       callback()
@@ -29,8 +27,9 @@ gulp.task('js', function(callback) {
       )
       callback(e)
     })
-})
+}
 
 module.exports = {
   compilerConfigs,
+  js,
 }

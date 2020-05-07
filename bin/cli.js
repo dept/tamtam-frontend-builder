@@ -1,25 +1,37 @@
 #!/usr/bin/env node
-global.cliCwd = process.cwd()
-
 const yargs = require('yargs')
 const gulp = require('gulp')
+const path = require('path')
 const error = require('../utils/error')
-require('../gulpfile.js')
+const { execSync } = require('child_process')
+
+const root = path.resolve(__dirname, '..')
+
+function runTask(task) {
+  execSync(`npm run gulp ${task}`, {
+    stdio: 'inherit',
+    cwd: root,
+    env: {
+      ...process.env,
+      projectDirectory: process.cwd(),
+    },
+  })
+}
 
 yargs.command('build', 'build the project', undefined, () => {
-  gulp.start('build')
+  runTask('build')
 })
 
 yargs.command('deploy', 'build for deploy', undefined, () => {
-  gulp.start('deploy')
+  runTask('deploy')
 })
 
 yargs.command('dist', 'export to dist folder', undefined, () => {
-  gulp.start('dist')
+  runTask('dist')
 })
 
 yargs.command('start', 'start the project', undefined, () => {
-  gulp.start('default')
+  runTask('default')
 })
 
 yargs.command('npm-install-recursive', 'install npm recursive', undefined, () => {
@@ -37,7 +49,7 @@ yargs.command('task [task]', 'run gulp task', undefined, args => {
   }
 
   try {
-    gulp.start(args.task)
+    runTask(args.task)
   } catch (e) {
     error(`Task name '${args.task}' not recognized.`)
   }

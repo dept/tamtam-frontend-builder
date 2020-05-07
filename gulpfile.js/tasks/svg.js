@@ -14,7 +14,7 @@ const SVG_CLASS_PREFIX = 'svg-'
  * Task for optimizing svg images and making them available in the markup.
  * @see https://www.npmjs.com/package/gulp-svgmin
  */
-gulp.task('svg', function() {
+function svg() {
   const options = {
     svgmin: {
       js2svg: {
@@ -38,7 +38,7 @@ gulp.task('svg', function() {
     .pipe(addSvgClass())
     .pipe(svgmin(options.svgmin)) // Optimize
     .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('svg')))) // Export
-})
+}
 
 function addSvgClass(cb) {
   return through.obj(function(file, enc, cb) {
@@ -70,4 +70,8 @@ function addSvgClass(cb) {
     // returning the file stream
     return cb()
   })
+}
+
+module.exports = {
+  svg,
 }

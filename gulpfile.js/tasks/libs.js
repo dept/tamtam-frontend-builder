@@ -12,7 +12,7 @@ const sourcemaps = requireCached('gulp-sourcemaps')
  * Task for optimizing images (size).
  * @see https://www.npmjs.com/package/gulp-imagemin
  */
-gulp.task('libs', function() {
+function libs(done) {
   const options = {
     uglifyOptions: {
       mangle: true, // Pass false to skip mangling names.
@@ -22,14 +22,20 @@ gulp.task('libs', function() {
 
   const libs = typeof config.libs === 'function' ? config.libs() : null
 
-  if (!libs || !libs.length) return null
+  if (!libs || !libs.length) {
+    done()
+    return null
+  }
 
   return gulp
     .src(libs)
-
     .pipe(gulpIf(config.sourcemaps, sourcemaps.init()))
     .pipe(gulpConcat('libs.js'))
     .pipe(gulpIf(config.minify, uglify(options.uglifyOptions)))
     .pipe(gulpIf(config.sourcemaps, sourcemaps.write('.')))
     .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('javascript')))) // Export
-})
+}
+
+module.exports = {
+  libs,
+}

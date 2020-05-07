@@ -1,7 +1,22 @@
 let config = require('./config')
-const runSequence = require('run-sequence')
-const init = require('./src/gulp/init')
 const assigndeep = require('assign-deep')
+const gulp = require('gulp')
+
+const { clean } = require('./tasks/clean')
+const { copy } = require('./tasks/copy')
+const { images } = require('./tasks/images')
+const { svg } = require('./tasks/svg')
+const { injectComponentCss } = require('./tasks/inject-component-css')
+const { css } = require('./tasks/css')
+const { cssLint } = require('./tasks/css-lint')
+const { html } = require('./tasks/html')
+const { libs } = require('./tasks/libs')
+const { js } = require('./tasks/js')
+const { sw } = require('./tasks/sw')
+const { createHashes } = require('./tasks/create-hashes')
+const { updateHtmlReferences } = require('./tasks/update-html-references')
+const { browserSync } = require('./tasks/browser-sync')
+const { watch } = require('./tasks/watch')
 
 config.applyProcessArgs()
 
@@ -28,106 +43,74 @@ config.libs = function() {
   return overrideLibs
 }
 
-//--------------     M A I N   T A S K S    L I S T     --------------
+function build(done) {
+  config.cleanBuild = true
+  return gulp.series(
+    js,
+    // clean,
+    // gulp.parallel(copy, images, svg, injectComponentCss),
+    // gulp.parallel(cssLint, css),
+    // gulp.parallel(html, libs, js),
+    // sw,
+    // createHashes,
+    // updateHtmlReferences,
+  )(done)
+}
 
-function registerMainTasks(gulp) {
-  // Specifies the default set of tasks to run when you run `gulp`.
-  gulp.task('default', ['server'])
+function dist() {
+  config.debug = false
+  config.minify = true
+  config.sourcemaps = false
+  config.prettyHTML = true
 
-  /**
-   *  @task server
-   *  Build the project.
-   *  Fires up a local server.
-   *  Starts watching all the used files and rebuilds on file changes.
-   *  - This will also automatically refresh your browser after something has been rebuild.
-   */
-  gulp.task('server', function(callback) {
-    runSequence('build', 'browser-sync', 'watch', callback)
-  })
+  config.dest.root.path = './build'
+  config.dest.html.path = config.dest.root.path
+  config.source.sw.path = config.dest.root.path + '/assets/'
+  config.source.sw.strip = config.dest.root.path
+  config.dest.manifest.path = config.dest.root.path
+  config.dest.sw.path = config.dest.root.path
 
-  /**
-   *  @task build
-   *  Deletes the old files and builds the project from scratch.
-   */
-  gulp.task('build', function(callback) {
-    config.cleanBuild = true
+  // Overwrite config with project specific settings.
+  assigndeep(config, config.projectConfig.dist || {})
 
-    runSequence(
-      'clean',
-      ['copy', 'images', 'svg', 'inject-component-css'],
-      ['css-lint', 'css'],
-      ['html', 'libs', 'js'],
-      'sw',
-      'create-hashes',
-      'update-html-references',
-      callback,
-    )
-  })
+  return build
+}
 
-  /**
-   * @task build:dist
-   * Builds the project in distribution mode pushes the files to the backend folder
-   */
-  gulp.task('dist', function(callback) {
-    config.debug = false
-    config.minify = true
-    config.sourcemaps = false
-    config.prettyHTML = true
+function deploy() {
+  config.debug = false
+  config.sourcemaps = false
+  config.throwError = true
+  config.minify = true
+  config.prettyHTML = false
 
-    config.dest.root.path = './build'
-    config.dest.html.path = config.dest.root.path
-    config.source.sw.path = config.dest.root.path + '/assets/'
-    config.source.sw.strip = config.dest.root.path
-    config.dest.manifest.path = config.dest.root.path
-    config.dest.sw.path = config.dest.root.path
+  config.dest.root.path = '../backend'
+  config.dest.html.path = config.dest.root.path + '/html'
+  config.source.sw.path = config.dest.root.path + '/assets/'
+  config.source.sw.strip = config.dest.root.path
+  config.dest.manifest.path = config.dest.root.path
+  config.dest.sw.path = config.dest.root.path
 
-    // Overwrite config with project specific settings.
-    assigndeep(config, config.projectConfig.dist || {})
+  // Overwrite config with project specific settings.
+  assigndeep(config, config.projectConfig.deploy || {})
 
-    runSequence('build', callback)
-  })
+  return gulp.series(
+    clean,
+    gulp.parallel(copy, images, svg, injectComponentCss),
+    gulp.parallel(cssLint, css),
+    gulp.parallel(html, libs, js),
+    sw,
+    createHashes,
+    updateHtmlReferences,
+  )
+}
 
-  /**
-   * @task build:deploy
-   * Builds the project for deployment.
-   */
-  gulp.task('deploy', function(callback) {
-    config.debug = false
-    config.sourcemaps = false
-    config.throwError = true
-    config.minify = true
-    config.prettyHTML = false
-
-    config.dest.root.path = '../backend'
-    config.dest.html.path = config.dest.root.path + '/html'
-    config.source.sw.path = config.dest.root.path + '/assets/'
-    config.source.sw.strip = config.dest.root.path
-    config.dest.manifest.path = config.dest.root.path
-    config.dest.sw.path = config.dest.root.path
-
-    // Overwrite config with project specific settings.
-    assigndeep(config, config.projectConfig.deploy || {})
-
-    runSequence(
-      'clean',
-      ['copy', 'images', 'svg', 'inject-component-css'],
-      ['css-lint', 'css'],
-      ['html', 'libs', 'js'],
-      'sw',
-      'create-hashes',
-      'update-html-references',
-      callback,
-    )
-  })
-
-  /**
-   * @task build:bamboo
-   * DEPRECATED TASK NAME
-   */
-  gulp.task('bamboo', function(callback) {
-    runSequence('deploy', callback)
+function server() {
+  return gulp.series(build, browserSync, done => {
+    watch(done)
   })
 }
 
-// Run initialisation
-init(registerMainTasks)
+exports.build = build
+exports.dist = dist
+exports.deploy = deploy
+exports.default = server

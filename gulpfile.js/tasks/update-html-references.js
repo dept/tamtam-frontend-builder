@@ -20,7 +20,7 @@ const removeOriginalFiles = () =>
       .catch(err => cb(err))
   })
 
-gulp.task('update-html-references', function(callback) {
+function updateHtmlReferences(callback) {
   if (config.debug || !config.buildStatic) return callback.call(this)
 
   const updateHtml = gulp
@@ -37,4 +37,8 @@ gulp.task('update-html-references', function(callback) {
     .pipe(removeOriginalFiles())
 
   return merge(updateHtml, removeManifest)
-})
+}
+
+module.exports = {
+  updateHtmlReferences,
+}

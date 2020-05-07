@@ -1,6 +1,5 @@
 const requireCached = require('../src/gulp/require-cached')
 const config = require('../config')
-const runSequence = require('run-sequence')
 const path = require('path')
 const walkFileListSync = require('../src/node/file/walk-file-list-sync')
 
@@ -22,7 +21,7 @@ const createComponentsArray = folder => {
 /**
  * Task for injecting scss
  */
-gulp.task('inject-component-css', function() {
+function injectComponentCss() {
   const components = createComponentsArray('components')
 
   var injectComponentsFiles = gulp.src(components, { read: false })
@@ -38,4 +37,8 @@ gulp.task('inject-component-css', function() {
     .src(config.source.getFileGlobs('css'))
     .pipe(inject(injectComponentsFiles, injectComponentsOptions))
     .pipe(gulp.dest(file => file.base))
-})
+}
+
+module.exports = {
+  injectComponentCss,
+}

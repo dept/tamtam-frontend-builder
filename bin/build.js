@@ -2,4 +2,4 @@
 const gulp = require('gulp')
 require('../gulpfile.js')
 
-gulp.start('build')
+gulp.series('build')

@@ -11,7 +11,7 @@ if (!task) {
 }
 
 try {
-  gulp.start(task)
+  gulp.series(task)
 } catch (e) {
   error(`Task name '${task}' not recognized.`)
 }

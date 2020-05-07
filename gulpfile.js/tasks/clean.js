@@ -1,20 +1,16 @@
-const requireCached = require('../src/gulp/require-cached')
 const log = require('../src/debug/log')
 const config = require('../config')
 const path = require('path')
-
-const gulp = requireCached('gulp')
-const del = requireCached('del')
+const del = require('del')
 
 /**
  *  Gulp task for cleaning up the destination folder.
  *  Deletes all files that match the patterns in the option.source
  *  @see: https://www.npmjs.com/package/del
  */
-gulp.task('clean', function(callback) {
+function clean(callback) {
   if (!config.cleanBuild) {
-    if (typeof callback === 'function') callback.call(this)
-
+    callback()
     return
   }
 
@@ -52,5 +48,9 @@ gulp.task('clean', function(callback) {
     })
   }
 
-  if (callback) callback.call(this)
-})
+  callback()
+}
+
+module.exports = {
+  clean,
+}

@@ -28,7 +28,7 @@ const RESERVED_DATA_KEYWORDS = ['project', 'ext']
  *  @see: http://mozilla.github.io/nunjucks/api.html
  *  @see: https://www.npmjs.com/package/gulp-nunjucks-render
  */
-gulp.task('html', function() {
+function html(done) {
   const options = {}
 
   options.minify = config.minifyHTML
@@ -109,7 +109,7 @@ gulp.task('html', function() {
     environment.addFilter(defaultsFilter.name, defaultsFilter.func)
   }
 
-  return gulp
+  gulp
     .src(config.source.getFileGlobs('html'))
 
     .pipe(gulpData(getDataForFile))
@@ -134,6 +134,12 @@ gulp.task('html', function() {
 
     .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('html'))))
 
+  done()
+
   // Browser Sync is reloaded from the watch task for HTML files to bypass a chrome bug.
   // See the watch task for more info.
-})
+}
+
+module.exports = {
+  html,
+}

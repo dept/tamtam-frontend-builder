@@ -12,7 +12,7 @@ const hasLintfile = fs.existsSync(`${config.projectDirectory}/.sass-lint.yml`)
 let shownMissingLintWarning = 0
 const warningLimit = 2
 
-gulp.task('css-lint', function() {
+function cssLint() {
   if (!hasLintfile) {
     if (shownMissingLintWarning < warningLimit)
       error("You don't use CSS Linting yet. Please upgrade ASAP.", true)
@@ -31,4 +31,8 @@ gulp.task('css-lint', function() {
       }),
     )
     .pipe(sassLint.format())
-})
+}
+
+module.exports = {
+  cssLint,
+}
