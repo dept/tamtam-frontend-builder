@@ -8,7 +8,9 @@ let projectConfig
 
 try {
   projectConfig = require(`${projectDirectory}/build-config/index.js`)
-} catch (e) {}
+} catch (e) {
+  /** noop */
+}
 
 let config = {}
 config.name = packageJSON.name
