@@ -105,7 +105,6 @@ function deploy(done) {
 }
 
 function server(done) {
-  console.log('hello watch?')
   return gulp.series(build, browserSync, watch)(done)
 }
 

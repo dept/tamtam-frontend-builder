@@ -126,9 +126,8 @@ function html(done) {
           // Make aliases for all available components
           walkFileListSync(config.source.getPath('components'), 'template'),
         ),
-      }),
+      }).on('error', console.error),
     )
-
     .pipe(gulpif(options.pretty, prettify(options.prettyConfig)))
     .pipe(gulpif(options.minify, htmlmin(options.htmlmin)))
 

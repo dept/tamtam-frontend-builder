@@ -7,7 +7,11 @@ const walkFileListSync = function(dir, folderToFind, filelist = []) {
 
   try {
     files = fs.readdirSync(dir)
-  } catch (e) {}
+  } catch (e) {
+    console.error({
+      e,
+    })
+  }
   filelist = filelist || []
 
   files.forEach(file => {
