@@ -28,7 +28,7 @@ const RESERVED_DATA_KEYWORDS = ['project', 'ext']
  *  @see: http://mozilla.github.io/nunjucks/api.html
  *  @see: https://www.npmjs.com/package/gulp-nunjucks-render
  */
-function html(done) {
+function html(callback) {
   const options = {}
 
   options.minify = config.minifyHTML
@@ -126,14 +126,14 @@ function html(done) {
           // Make aliases for all available components
           walkFileListSync(config.source.getPath('components'), 'template'),
         ),
-      }).on('error', console.error),
+      }),
     )
     .pipe(gulpif(options.pretty, prettify(options.prettyConfig)))
     .pipe(gulpif(options.minify, htmlmin(options.htmlmin)))
 
     .pipe(gulp.dest(path.resolve(config.projectDirectory, config.dest.getPath('html'))))
 
-  done()
+  callback()
 
   // Browser Sync is reloaded from the watch task for HTML files to bypass a chrome bug.
   // See the watch task for more info.

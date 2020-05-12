@@ -60,8 +60,8 @@ function assetWatch() {
  * JavaScript is done via watchify instead for this task for optimized configuration.
  * @see https://www.npmjs.com/package/gulp-watch
  */
-function watchTask(done) {
-  return gulp.series(jsWatch, assetWatch)(done)
+function watchTask(callback) {
+  return gulp.series(jsWatch, assetWatch)(callback)
 }
 
 /**

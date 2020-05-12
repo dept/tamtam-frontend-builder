@@ -17,6 +17,9 @@ const { createHashes } = require('./tasks/create-hashes')
 const { updateHtmlReferences } = require('./tasks/update-html-references')
 const { browserSync } = require('./tasks/browser-sync')
 const { watch } = require('./tasks/watch')
+const decorate = require('./src/gulp/decorator/decorate')
+
+decorate(gulp)
 
 config.applyProcessArgs()
 
@@ -43,7 +46,7 @@ config.libs = function() {
   return overrideLibs
 }
 
-function build(done) {
+function build(callback) {
   config.cleanBuild = true
 
   return gulp.series(
@@ -54,10 +57,10 @@ function build(done) {
     sw,
     createHashes,
     updateHtmlReferences,
-  )(done)
+  )(callback)
 }
 
-function dist(done) {
+function dist(callback) {
   config.debug = false
   config.minify = true
   config.sourcemaps = false
@@ -73,10 +76,10 @@ function dist(done) {
   // Overwrite config with project specific settings.
   assigndeep(config, config.projectConfig.dist || {})
 
-  return build(done)
+  return build(callback)
 }
 
-function deploy(done) {
+function deploy(callback) {
   config.debug = false
   config.sourcemaps = false
   config.throwError = true
@@ -101,11 +104,11 @@ function deploy(done) {
     sw,
     createHashes,
     updateHtmlReferences,
-  )(done)
+  )(callback)
 }
 
-function server(done) {
-  return gulp.series(build, browserSync, watch)(done)
+function server(callback) {
+  return gulp.series(build, browserSync, watch)(callback)
 }
 
 exports.build = build

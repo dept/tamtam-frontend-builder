@@ -11,7 +11,7 @@ const compression = requireCached('compression')
  * file changes and interactions across multiple devices
  * @see http://www.browsersync.io/
  */
-function browserSyncTask(done) {
+function browserSyncTask(callback) {
   var options = {
     // ghostMode: false,
 
@@ -34,7 +34,7 @@ function browserSyncTask(done) {
   }
 
   browserSync(options)
-  done()
+  callback()
 }
 
 module.exports = {

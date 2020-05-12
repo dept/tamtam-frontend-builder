@@ -73,7 +73,7 @@ function css() {
 
       .pipe(gulpIf(config.sourcemaps, sourcemaps.init()))
       // sass
-      .pipe(sass(options.sass).on('error', sass.logError))
+      .pipe(sass(options.sass))
       // start optimizing...
       .pipe(gulpIf(options.minify, sizeBefore))
       .pipe(gulpIf(options.removeUnused, uncss(options.uncss)))
