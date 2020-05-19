@@ -35,6 +35,9 @@ const baseConfig = {
           keep_fnames: true,
           mangle: true,
           safari10: true,
+          compress: {
+            drop_console: !config.debug,
+          },
         },
       }),
     ],
