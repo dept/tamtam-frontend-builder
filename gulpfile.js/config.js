@@ -1,6 +1,6 @@
 const path = require('path')
 const assigndeep = require('assign-deep')
-const projectDirectory = process.env.projectDirectory
+const projectDirectory = process.env.projectDirectory || process.cwd()
 const PathConfig = require('./src/data/path-config')
 const processArguments = require('./src/node/process-arguments')
 const packageJSON = require(`${projectDirectory}/package.json`)

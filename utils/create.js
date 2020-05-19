@@ -28,7 +28,7 @@ function generateJSON(name) {
 
 function generateFiles(rootPath, type, name, json, jsExt, html = false, css = false, js = false) {
   const rootDir = `${rootPath}/${name}`
-  const stylePrefix = type === 'component' ? '_components.' : '';
+  const stylePrefix = type === 'component' ? '_components.' : ''
   const filesObj = [
     {
       path: `${rootDir}/`,
