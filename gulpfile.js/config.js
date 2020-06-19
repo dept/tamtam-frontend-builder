@@ -1,6 +1,6 @@
 const path = require('path')
 const assigndeep = require('assign-deep')
-const projectDirectory = global.cliCwd || process.env.OLDPWD || path.normalize(process.env.INIT_CWD)
+const projectDirectory = process.env.projectDirectory || process.cwd()
 const PathConfig = require('./src/data/path-config')
 const processArguments = require('./src/node/process-arguments')
 const packageJSON = require(`${projectDirectory}/package.json`)
@@ -8,7 +8,9 @@ let projectConfig
 
 try {
   projectConfig = require(`${projectDirectory}/build-config/index.js`)
-} catch (e) {}
+} catch (e) {
+  /** noop */
+}
 
 let config = {}
 config.name = packageJSON.name

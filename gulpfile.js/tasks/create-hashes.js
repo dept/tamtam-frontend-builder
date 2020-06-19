@@ -5,10 +5,12 @@ const path = requireCached('path')
 const gulp = requireCached('gulp')
 const rev = require('gulp-rev')
 
-gulp.task('create-hashes', function(callback) {
+function createHashes(callback) {
   const basePath = path.resolve(config.projectDirectory, config.dest.getPath('root'))
 
-  if (config.debug || !config.buildStatic) return callback.call(this)
+  if (config.debug || !config.buildStatic) {
+    callback()
+  }
 
   return gulp
     .src(
@@ -24,4 +26,8 @@ gulp.task('create-hashes', function(callback) {
     .pipe(gulp.dest(basePath))
     .pipe(rev.manifest())
     .pipe(gulp.dest(basePath))
-})
+}
+
+module.exports = {
+  createHashes,
+}

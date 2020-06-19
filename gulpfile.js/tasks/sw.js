@@ -3,13 +3,12 @@ const log = require('../src/debug/log')
 const config = require('../config')
 const path = require('path')
 
-const gulp = requireCached('gulp')
 const workboxBuild = requireCached('workbox-build')
 
 /**
  *  Gulp task for compiling serviceworker
  */
-gulp.task('sw', function(callback) {
+function sw(callback) {
   const swDest = path.join(
     path.resolve(config.projectDirectory, config.dest.getPath('sw')),
     'sw.js',
@@ -38,4 +37,8 @@ gulp.task('sw', function(callback) {
       })
       callback()
     })
-})
+}
+
+module.exports = {
+  sw,
+}

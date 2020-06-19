@@ -22,7 +22,7 @@ const gulpGroupCSSMediaQUeries = requireCached('gulp-group-css-media-queries')
  * @see http://libsass.org/
  * @see: https://github.com/sindresorhus/gulp-size
  */
-gulp.task('css', function() {
+function css() {
   const options = {
     sass: {
       // indentedSyntax: true,     // Enable .sass syntax!
@@ -100,4 +100,8 @@ gulp.task('css', function() {
       )
       .pipe(browserSync.stream({ match: '**/*.css' }))
   )
-})
+}
+
+module.exports = {
+  css,
+}

@@ -1,25 +1,23 @@
 #!/usr/bin/env node
-global.cliCwd = process.cwd()
-
 const yargs = require('yargs')
-const gulp = require('gulp')
+
 const error = require('../utils/error')
-require('../gulpfile.js')
+const { runGulpTask } = require('../utils/run-gulp-task')
 
 yargs.command('build', 'build the project', undefined, () => {
-  gulp.start('build')
+  runGulpTask('build')
 })
 
 yargs.command('deploy', 'build for deploy', undefined, () => {
-  gulp.start('deploy')
+  runGulpTask('deploy')
 })
 
 yargs.command('dist', 'export to dist folder', undefined, () => {
-  gulp.start('dist')
+  runGulpTask('dist')
 })
 
 yargs.command('start', 'start the project', undefined, () => {
-  gulp.start('default')
+  runGulpTask('default')
 })
 
 yargs.command('npm-install-recursive', 'install npm recursive', undefined, () => {
@@ -37,10 +35,10 @@ yargs.command('task [task]', 'run gulp task', undefined, args => {
   }
 
   try {
-    gulp.start(args.task)
+    runGulpTask(args.task)
   } catch (e) {
     error(`Task name '${args.task}' not recognized.`)
   }
 })
 
-const argv = yargs.argv
+yargs.argv

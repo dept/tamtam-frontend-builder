@@ -5,10 +5,9 @@ const compilerPromise = require('./script/create-compiler-promise')
 const webpackConfig = require('./script/webpack-config')
 
 const browserSync = requireCached('browser-sync')
-const gulp = requireCached('gulp')
 const webpack = requireCached('webpack')
 
-gulp.task('js-watch', function jsWatch(callback) {
+function jsWatch(callback) {
   let initialCompile = true
   if (config.webpackWatcher) {
     config.webpackWatcher.close(() => {
@@ -32,4 +31,8 @@ gulp.task('js-watch', function jsWatch(callback) {
 
     browserSync.reload()
   })
-})
+}
+
+module.exports = {
+  jsWatch,
+}

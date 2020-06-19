@@ -29,10 +29,9 @@ function gulpInit(callback) {
     require('./load-tasks')() // loads all tasks ( if lazy loading is turned off ).
   }
 
-  gulpDecorate(gulp) // Decorate gulp with extra functionality for better debugging and error handling.
+  // gulpDecorate(gulp) // Decorate gulp with extra functionality for better debugging and error handling.
 
   log.time({ sender: 'gulp/init', message: 'init - ', time: process.hrtime(startTime) })
-
   callback(gulp)
 }
 

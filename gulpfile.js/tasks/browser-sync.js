@@ -3,7 +3,6 @@ const config = require('../config')
 const path = require('path')
 
 const browserSync = requireCached('browser-sync')
-const gulp = requireCached('gulp')
 const compression = requireCached('compression')
 
 /**
@@ -12,7 +11,7 @@ const compression = requireCached('compression')
  * file changes and interactions across multiple devices
  * @see http://www.browsersync.io/
  */
-gulp.task('browser-sync', function() {
+function browserSyncTask(callback) {
   var options = {
     // ghostMode: false,
 
@@ -35,4 +34,9 @@ gulp.task('browser-sync', function() {
   }
 
   browserSync(options)
-})
+  callback()
+}
+
+module.exports = {
+  browserSync: browserSyncTask,
+}

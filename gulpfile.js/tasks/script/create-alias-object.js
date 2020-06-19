@@ -28,7 +28,7 @@ const getReferences = folder => {
   )
 }
 
-module.exports = createAliasObject = () => {
+const createAliasObject = () => {
   const components = getReferences('components')
   const utilities = getReferences('utilities')
 
@@ -37,5 +37,12 @@ module.exports = createAliasObject = () => {
     path.join(config.source.getPath('utilities'), '/'),
   )
 
-  return { ...components, ...utilities }
+  const sourcePath = path.resolve(
+    config.projectDirectory,
+    path.join(config.source.getPath('root'), '/'),
+  )
+
+  return { ...components, ...utilities, '@': sourcePath }
 }
+
+module.exports = createAliasObject
