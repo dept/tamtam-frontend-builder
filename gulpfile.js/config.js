@@ -123,4 +123,7 @@ dest.sw = { path: '<%= root %>' }
 // Overwrite config with project specific settings.
 assigndeep(config, config.projectConfig.config || {})
 
+config.source.updateContext()
+config.dest.updateContext()
+
 module.exports = config

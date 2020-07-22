@@ -26,7 +26,9 @@ function PathConfig(root) {
    * @return {string}                         fully rendered (file) path.
    */
   _this.getPath = function(name, opt_pathExtension) {
-    if (!_context) createContext()
+    if (!_context) {
+      createContext()
+    }
 
     if (!_this.hasOwnProperty(name)) {
       log.error({
@@ -94,6 +96,10 @@ function PathConfig(root) {
     }
 
     return filePathsGlob
+  }
+
+  _this.updateContext = function() {
+    createContext()
   }
 
   /**

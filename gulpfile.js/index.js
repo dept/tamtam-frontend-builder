@@ -74,7 +74,7 @@ function dist(callback) {
   config.dest.sw.path = config.dest.root.path
 
   // Overwrite config with project specific settings.
-  assigndeep(config, config.projectConfig.dist || {})
+  mergeConfigs(config.projectConfig.dist)
 
   return build(callback)
 }
@@ -94,7 +94,7 @@ function deploy(callback) {
   config.dest.sw.path = config.dest.root.path
 
   // Overwrite config with project specific settings.
-  assigndeep(config, config.projectConfig.deploy || {})
+  mergeConfigs(config.projectConfig.deploy)
 
   return gulp.series(
     clean,
@@ -109,6 +109,12 @@ function deploy(callback) {
 
 function server(callback) {
   return gulp.series(build, browserSync, watch)(callback)
+}
+
+function mergeConfigs(extendedConfig = {}) {
+  assigndeep(config, extendedConfig)
+  config.source.updateContext()
+  config.dest.updateContext()
 }
 
 exports.build = build
