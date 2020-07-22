@@ -8,10 +8,10 @@ const hasESFile = fs.existsSync(`${config.source.getPath('javascript')}/main-es.
 
 const compilerConfigs = {}
 
-compilerConfigs.legacyConfig = webpackConfigs.legacyConfig
-if (hasESFile) compilerConfigs.modernConfig = webpackConfigs.modernConfig
-
 function js(callback) {
+  compilerConfigs.legacyConfig = webpackConfigs.generateConfig('legacy')
+  if (hasESFile) compilerConfigs.modernConfig = webpackConfigs.generateConfig('modern')
+
   Promise.all(compilerPromise.create(compilerConfigs))
     .then(() => {
       callback()

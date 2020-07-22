@@ -8,12 +8,13 @@ const browserSync = requireCached('browser-sync')
 const webpack = requireCached('webpack')
 
 function jsWatch(callback) {
+  const legacyConfig = webpackConfig.generateConfig('legacy')
+
   let initialCompile = true
   if (config.webpackWatcher) {
     config.webpackWatcher.close(() => {
-      webpackConfig.legacyConfig.resolve.alias = webpackConfig.getAliasObject(
-        webpackConfig.legacyConfig,
-      )
+      legacyConfig.resolve.alias = webpackConfig.getAliasObject()
+
       log.info({
         sender: 'gulp',
         message: 'Alias change detected. Restarting the webpack watcher.',
@@ -21,7 +22,7 @@ function jsWatch(callback) {
     })
   }
 
-  config.webpackWatcher = webpack(webpackConfig.legacyConfig).watch(200, (error, stats) => {
+  config.webpackWatcher = webpack(legacyConfig).watch(200, (error, stats) => {
     compilerPromise.onWebpackCallback(error, stats)
 
     if (initialCompile) {
