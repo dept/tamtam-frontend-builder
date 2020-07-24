@@ -1,6 +1,7 @@
 const requireCached = require('../src/gulp/require-cached')
 const config = require('../config')
 const path = require('path')
+const fs = require('fs')
 const walkFileListSync = require('../src/node/file/walk-file-list-sync')
 
 const gulp = requireCached('gulp')
