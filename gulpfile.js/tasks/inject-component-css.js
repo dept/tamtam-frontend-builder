@@ -8,14 +8,14 @@ const inject = requireCached('gulp-inject')
 
 const createComponentsArray = folder => {
   const components = walkFileListSync(config.source.getPath(folder), 'stylesheet')
-  return [].reduce.call(
-    components,
-    (data, component) => {
-      data.push(path.join(component, '*.scss'))
-      return data
-    },
-    [],
-  )
+  return components.reduce((data, component) => {
+    const files = fs.readdirSync(component)
+    const filteredFiles = files.filter(file => !file.startsWith('__') && file.endsWith('.scss'))
+
+    filteredFiles.forEach(file => data.push(path.join(component, file)))
+
+    return data
+  }, [])
 }
 
 /**
