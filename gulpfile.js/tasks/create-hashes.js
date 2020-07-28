@@ -10,6 +10,7 @@ function createHashes(callback) {
 
   if (config.debug || !config.buildStatic) {
     callback()
+    return null
   }
 
   return gulp
