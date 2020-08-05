@@ -17,7 +17,7 @@ const createCompiler = config => {
   return new Promise((resolve, reject) => {
     compiler.run((error, stats) => {
       onWebpackCallback(error, stats)
-      if (error || stats.hasErrors()) {
+      if (error || (stats && stats.hasErrors())) {
         const info = stats.toJson()
         reject(info.errors)
         return
@@ -40,14 +40,15 @@ const createCompilerPromise = compilerConfigs => {
   return promises
 }
 
-const onWebpackCallback = (error, stats, opt_prevStats) => {
-  if (stats.stats) {
-    stats.stats.forEach(stat => {
-      logStats(stat)
-    })
-  } else {
-    logStats(stats)
-  }
+const onWebpackCallback = (error, stats) => {
+  if (stats)
+    if (stats.stats) {
+      stats.stats.forEach(stat => {
+        logStats(stat)
+      })
+    } else {
+      logStats(stats)
+    }
 
   if (error)
     log.error({
