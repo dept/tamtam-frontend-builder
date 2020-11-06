@@ -3,7 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const child_process = require('child_process')
 
-const root = global.cliCwd || process.env.OLDPWD || path.normalize(process.env.INIT_CWD)
+const root = global.cliCwd || path.normalize(process.env.INIT_CWD) || process.env.OLDPWD
 
 const dirsToScan = argv.dirs ? argv.dirs.split(',') : []
 const dirsToIgnore = argv.ignore ? argv.ignore.split(',') : []
