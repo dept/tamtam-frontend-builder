@@ -41,7 +41,7 @@ const generateConfig = type => {
           },
         }),
       ],
-      noEmitOnErrors: config.minify ? true : false,
+      emitOnErrors: config.minify ? false : true,
     },
     output: {
       path: path.resolve(config.projectDirectory, config.dest.getPath('javascript')),
