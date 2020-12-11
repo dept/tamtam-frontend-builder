@@ -24,6 +24,8 @@ const generateConfig = type => {
     mode: config.minify ? 'production' : 'development',
     bail: config.minify ? true : false,
     optimization: {
+      chunkIds: config.minify ? 'deterministic' : 'named',
+      moduleIds: config.minify ? 'deterministic' : 'named',
       splitChunks: {
         chunks: 'async',
         automaticNameDelimiter: '.',
@@ -66,7 +68,7 @@ const generateConfig = type => {
     },
     output: {
       ...baseConfig.output,
-      chunkFilename: 'chunks-es/[name].[chunkhash].js',
+      chunkFilename: 'chunks-es/[name].[contenthash].js',
     },
     plugins: webpackPlugins,
     module: {
@@ -83,7 +85,7 @@ const generateConfig = type => {
     },
     output: {
       ...baseConfig.output,
-      chunkFilename: 'chunks/[name].[chunkhash].js',
+      chunkFilename: 'chunks/[name].[contenthash].js',
     },
     plugins: webpackPlugins,
     module: {
