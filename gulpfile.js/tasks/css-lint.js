@@ -8,12 +8,12 @@ const error = require('../../utils/error')
 const gulp = requireCached('gulp')
 const sassLint = requireCached('gulp-sass-lint')
 
-const hasLintfile = fs.existsSync(`${config.projectDirectory}/.sass-lint.yml`)
+const hasLintFile = fs.existsSync(`${config.projectDirectory}/.sass-lint.yml`)
 let shownMissingLintWarning = 0
 const warningLimit = 2
 
 function cssLint() {
-  if (!hasLintfile) {
+  if (!hasLintFile) {
     if (shownMissingLintWarning < warningLimit)
       error("You don't use CSS Linting yet. Please upgrade ASAP.", true)
     shownMissingLintWarning++

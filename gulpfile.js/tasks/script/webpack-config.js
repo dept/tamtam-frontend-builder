@@ -2,16 +2,10 @@ const config = require('../../config')
 const createAliasObject = require('./create-alias-object')
 const webpackPlugins = require('./webpack-plugins')
 const createBabelLoaderConfig = require('./create-babel-loader-config')
-const esLintConfig = require('./eslint-config')
 const TerserPlugin = require('terser-webpack-plugin')
 
 const fs = require('fs')
 const path = require('path')
-
-const hasLintfile =
-  fs.existsSync(`${config.projectDirectory}/.eslintrc`) ||
-  fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) ||
-  fs.existsSync(`${config.projectDirectory}/.eslintrc.json`)
 
 const extendFilePath = `${config.projectDirectory}/webpack.extend.js`
 
@@ -36,8 +30,6 @@ const generateConfig = type => {
       },
       minimizer: [
         new TerserPlugin({
-          cache: true,
-          parallel: true,
           terserOptions: {
             keep_classnames: true,
             keep_fnames: true,
@@ -78,16 +70,14 @@ const generateConfig = type => {
     },
     plugins: webpackPlugins,
     module: {
-      rules: [
-        ...createBabelLoaderConfig(config.browsers.modern, babelPlugins),
-        hasLintfile ? esLintConfig : {},
-      ],
+      rules: [...createBabelLoaderConfig(config.browsers.modern, babelPlugins)],
     },
   }
 
   const legacyConfig = {
     ...baseConfig,
     name: 'legacy',
+    target: ['web', 'es5'],
     entry: {
       main: ['./source/javascript/main'],
     },
@@ -97,10 +87,7 @@ const generateConfig = type => {
     },
     plugins: webpackPlugins,
     module: {
-      rules: [
-        ...createBabelLoaderConfig(config.browsers.legacy, babelPlugins),
-        hasLintfile ? esLintConfig : {},
-      ],
+      rules: [...createBabelLoaderConfig(config.browsers.legacy, babelPlugins)],
     },
   }
 
