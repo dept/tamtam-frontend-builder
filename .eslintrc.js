@@ -83,6 +83,12 @@ module.exports = {
   },
   overrides: [
     {
+      files: ['**/*.js?(x)'],
+      rules:{
+        'import/no-unresolved': 'off',
+      }
+    },
+    {
       files: ['**/*.ts?(x)'],
       parser: '@typescript-eslint/parser',
       parserOptions: {

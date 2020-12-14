@@ -1,5 +1,8 @@
-const webpack = require('webpack')
 const fs = require('fs')
+
+const webpack = require('webpack')
+
+
 const config = require('../../config')
 const log = require('../../src/debug/log')
 

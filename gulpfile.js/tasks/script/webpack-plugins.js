@@ -1,6 +1,9 @@
-const config = require('../../config')
 const fs = require('fs')
+
+
 const ESLintPlugin = require('eslint-webpack-plugin')
+
+const config = require('../../config')
 
 const hasLintFile =
   fs.existsSync(`${config.projectDirectory}/.eslintrc`) ||
