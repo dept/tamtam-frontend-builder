@@ -4,31 +4,31 @@ const yargs = require('yargs')
 const error = require('../utils/error')
 const { runGulpTask } = require('../utils/run-gulp-task')
 
-yargs.command('build', 'build the project', undefined, () => {
+yargs.command('build', 'build the project', {}, () => {
   runGulpTask('build')
 })
 
-yargs.command('deploy', 'build for deploy', undefined, () => {
+yargs.command('deploy', 'build for deploy', {}, () => {
   runGulpTask('deploy')
 })
 
-yargs.command('dist', 'export to dist folder', undefined, () => {
+yargs.command('dist', 'export to dist folder', {}, () => {
   runGulpTask('dist')
 })
 
-yargs.command('start', 'start the project', undefined, () => {
+yargs.command('start', 'start the project', {}, () => {
   runGulpTask('default')
 })
 
-yargs.command('npm-install-recursive', 'install npm recursive', undefined, () => {
+yargs.command('npm-install-recursive', 'install npm recursive', {}, () => {
   require('../utils/npm-install-recursive')
 })
 
-yargs.command('create', 'create new component', undefined, () => {
+yargs.command('create', 'create new component', {}, () => {
   require('../utils/create')
 })
 
-yargs.command('task [task]', 'run gulp task', undefined, args => {
+yargs.command('task [task]', 'run gulp task', {}, args => {
   if (!args.task) {
     error('No task specified.')
     return
