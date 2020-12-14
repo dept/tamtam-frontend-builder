@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   root: true,
@@ -10,6 +10,7 @@ module.exports = {
     jest: true,
     node: true,
   },
+  plugins: ['simple-import-sort', 'import'],
   extends: [
     'plugin:prettier/recommended',
     'plugin:import/errors',
@@ -24,7 +25,7 @@ module.exports = {
     dataLayer: true,
   },
   parserOptions: {
-  ecmaVersion: 2018,
+    ecmaVersion: 2018,
     sourceType: 'module',
     ecmaFeatures: {
       jsx: true,
@@ -51,42 +52,22 @@ module.exports = {
     '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/ban-ts-ignore': 'off',
     'prettier/prettier': 'off',
+    'sort-imports': 'off',
     'import/no-named-as-default': 'off',
     'import/no-named-as-default-member': 'off',
     'import/default': 'off',
     'import/named': 'off',
     'import/namespace': 'off',
-    'import/order': [
-      'warn',
-      {
-        groups: ['builtin', 'external', ['parent', 'sibling'], 'index'],
-        'newlines-between': 'always',
-        pathGroups: [
-          {
-            pattern: '@/**',
-            group: 'external',
-            position: 'after',
-          },
-          {
-            pattern: '@test/**',
-            group: 'external',
-            position: 'after',
-          },
-        ],
-        alphabetize: {
-          order:
-            'asc' /* sort in ascending order. Options: ['ignore', 'asc', 'desc'] */,
-          caseInsensitive: true /* ignore case. Options: [true, false] */,
-        },
-      },
-    ],
+    'import/order': 'off',
+    'simple-import-sort/imports': 'warn',
+    'simple-import-sort/exports': 'warn',
   },
   overrides: [
     {
       files: ['**/*.js?(x)'],
-      rules:{
+      rules: {
         'import/no-unresolved': 'off',
-      }
+      },
     },
     {
       files: ['**/*.ts?(x)'],
@@ -112,4 +93,4 @@ module.exports = {
       },
     },
   ],
-};
+}

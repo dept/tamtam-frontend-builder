@@ -1,6 +1,7 @@
-const config = require('../../config')
-const error = require('../../../utils/error')
 const fs = require('fs')
+
+const error = require('../../../utils/error')
+const config = require('../../config')
 
 const extendFilePath = `${config.projectDirectory}/babel.extend.js`
 const hasExtendFile = fs.existsSync(extendFilePath)
