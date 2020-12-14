@@ -1,5 +1,5 @@
-'use strict';
+'use strict'
 
 module.exports = {
-  "extends": ["./config/eslint"]
+  extends: ['./config/eslint'],
 }
