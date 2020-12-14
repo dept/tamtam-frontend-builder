@@ -1,14 +1,14 @@
-var nodeFs = require('fs')
-var nodePath = require('path')
-var mkdirp = require('mkdirp')
+const fs = require('fs')
+const nodePath = require('path')
+const mkdirp = require('mkdirp')
 
-var log = require('../../debug/log')
+const log = require('../../debug/log')
 
 module.exports = function safeWriteFileSync(path, file) {
   try {
     mkdirp.sync(nodePath.dirname(path)) // make sure directory exists
 
-    nodeFs.writeFileSync(path, file)
+    fs.writeFileSync(path, file)
   } catch (error) {
     log.error({
       sender: 'safe-write-file-sync',

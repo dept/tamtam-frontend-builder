@@ -1,6 +1,7 @@
-const config = require('../../config')
-const error = require('../../../utils/error')
 const fs = require('fs')
+
+const error = require('../../../utils/error')
+const config = require('../../config')
 
 const extendFilePath = `${config.projectDirectory}/babel.extend.js`
 const hasExtendFile = fs.existsSync(extendFilePath)
@@ -14,6 +15,7 @@ module.exports = (browserlist, plugins) => {
   let options = {
     plugins,
     presets: [
+      '@babel/preset-typescript',
       [
         '@babel/preset-env',
         {
@@ -34,20 +36,7 @@ module.exports = (browserlist, plugins) => {
 
   return [
     {
-      test: /\.tsx?$/,
-      exclude: /(node_modules)/,
-      use: [
-        {
-          loader: require.resolve('babel-loader'),
-          options,
-        },
-        {
-          loader: require.resolve('ts-loader'),
-        },
-      ],
-    },
-    {
-      test: /\.jsx?$/,
+      test: /\.(ts|js)x?$/,
       exclude: /(node_modules)/,
       use: {
         loader: require.resolve('babel-loader'),

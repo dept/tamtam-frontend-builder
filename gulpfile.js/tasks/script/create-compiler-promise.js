@@ -1,9 +1,12 @@
-const webpack = require('webpack')
 const fs = require('fs')
+
+const webpack = require('webpack')
+
+
 const config = require('../../config')
 const log = require('../../src/debug/log')
 
-const hasLintfile =
+const hasLintFile =
   fs.existsSync(`${config.projectDirectory}/.eslintrc`) ||
   fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) ||
   fs.existsSync(`${config.projectDirectory}/.eslintrc.json`)
@@ -56,7 +59,7 @@ const onWebpackCallback = (error, stats) => {
       data: [error],
     })
 
-  if (!hasLintfile) {
+  if (!hasLintFile) {
     if (shownMissingLintWarning < warningLimit)
       log.error({
         sender: 'js',

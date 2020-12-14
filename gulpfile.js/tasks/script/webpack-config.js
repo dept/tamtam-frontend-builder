@@ -2,16 +2,10 @@ const config = require('../../config')
 const createAliasObject = require('./create-alias-object')
 const webpackPlugins = require('./webpack-plugins')
 const createBabelLoaderConfig = require('./create-babel-loader-config')
-const esLintConfig = require('./eslint-config')
 const TerserPlugin = require('terser-webpack-plugin')
 
 const fs = require('fs')
 const path = require('path')
-
-const hasLintfile =
-  fs.existsSync(`${config.projectDirectory}/.eslintrc`) ||
-  fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) ||
-  fs.existsSync(`${config.projectDirectory}/.eslintrc.json`)
 
 const extendFilePath = `${config.projectDirectory}/webpack.extend.js`
 
@@ -30,14 +24,14 @@ const generateConfig = type => {
     mode: config.minify ? 'production' : 'development',
     bail: config.minify ? true : false,
     optimization: {
+      chunkIds: config.minify ? 'deterministic' : 'named',
+      moduleIds: config.minify ? 'deterministic' : 'named',
       splitChunks: {
         chunks: 'async',
         automaticNameDelimiter: '.',
       },
       minimizer: [
         new TerserPlugin({
-          cache: true,
-          parallel: true,
           terserOptions: {
             keep_classnames: true,
             keep_fnames: true,
@@ -49,7 +43,7 @@ const generateConfig = type => {
           },
         }),
       ],
-      noEmitOnErrors: config.minify ? true : false,
+      emitOnErrors: config.minify ? false : true,
     },
     output: {
       path: path.resolve(config.projectDirectory, config.dest.getPath('javascript')),
@@ -74,33 +68,28 @@ const generateConfig = type => {
     },
     output: {
       ...baseConfig.output,
-      chunkFilename: 'chunks-es/[name].[chunkhash].js',
+      chunkFilename: 'chunks-es/[name].[contenthash].js',
     },
     plugins: webpackPlugins,
     module: {
-      rules: [
-        ...createBabelLoaderConfig(config.browsers.modern, babelPlugins),
-        hasLintfile ? esLintConfig : {},
-      ],
+      rules: [...createBabelLoaderConfig(config.browsers.modern, babelPlugins)],
     },
   }
 
   const legacyConfig = {
     ...baseConfig,
     name: 'legacy',
+    target: ['web', 'es5'],
     entry: {
       main: ['./source/javascript/main'],
     },
     output: {
       ...baseConfig.output,
-      chunkFilename: 'chunks/[name].[chunkhash].js',
+      chunkFilename: 'chunks/[name].[contenthash].js',
     },
     plugins: webpackPlugins,
     module: {
-      rules: [
-        ...createBabelLoaderConfig(config.browsers.legacy, babelPlugins),
-        hasLintfile ? esLintConfig : {},
-      ],
+      rules: [...createBabelLoaderConfig(config.browsers.legacy, babelPlugins)],
     },
   }
 
