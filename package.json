@@ -18,7 +18,7 @@
 			"email": "tim.dewolf@deptagency.com"
 		}
 	],
-	"private": true,
+	"private": false,
 	"bin": {
 		"dept-builder": "bin/cli.js"
 	},
