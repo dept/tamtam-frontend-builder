@@ -1,6 +1,6 @@
-const requireCached = require('../../gulp/require-cached')
-const path = requireCached('path')
-const fs = requireCached('fs')
+const path = require('path')
+const fs = require('fs')
+const error = require('../error')
 
 const walkFileListSync = function(dir, folderToFind, filelist = []) {
   let files = []
@@ -8,9 +8,7 @@ const walkFileListSync = function(dir, folderToFind, filelist = []) {
   try {
     files = fs.readdirSync(dir)
   } catch (e) {
-    console.error({
-      e,
-    })
+    error(e, true)
   }
   filelist = filelist || []
 

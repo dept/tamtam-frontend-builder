@@ -18,6 +18,5 @@
       "source.fixAll.eslint": false
     }
   },
-  "json.format.enable": true,
-  "eslint.enable": true
+  "json.format.enable": true
 }

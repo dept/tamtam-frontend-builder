@@ -1,13 +1,14 @@
-const walkFileListSync = require('../../src/node/file/walk-file-list-sync')
-const config = require('../../config')
+const walkFileListSync = require('../utils/file/walk-file-list-sync')
 const path = require('path')
+const resolveApp = require('../utils/resolve-app')
 
 const getReferences = folder => {
+  const projectFolderPath = path.resolve(resolveApp('source'), folder)
   const components = walkFileListSync(
-    path.resolve(config.projectDirectory, config.source.getPath(folder)),
+    projectFolderPath,
     'javascript',
   )
-  const stripPath = path.join(config.source.getPath(folder), '/')
+  const stripPath = path.join(projectFolderPath, '/')
 
   return [].reduce.call(
     components,
@@ -16,10 +17,12 @@ const getReferences = folder => {
         .replace(stripPath, '')
         .replace('\\', '/')
         .split('/')[0]
-      data[`@${folder}/${moduleName}`] = path.resolve(
-        config.projectDirectory,
-        component,
-        moduleName,
+
+      data[`@${folder}/${moduleName}`] = resolveApp(
+        path.resolve(
+          component,
+          moduleName,
+        )
       )
 
       return data
@@ -33,13 +36,13 @@ const createAliasObject = () => {
   const utilities = getReferences('utilities')
 
   utilities['@utilities'] = path.resolve(
-    config.projectDirectory,
-    path.join(config.source.getPath('utilities'), '/'),
+    resolveApp(
+      path.join('source', 'utilities', '/')
+    ),
   )
 
-  const sourcePath = path.resolve(
-    config.projectDirectory,
-    path.join(config.source.getPath('root'), '/'),
+  const sourcePath = resolveApp(
+    'source/',
   )
 
   return { ...components, ...utilities, '@': sourcePath }

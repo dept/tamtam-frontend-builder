@@ -1,16 +1,10 @@
 const fs = require('fs')
+const resolveApp = require('../utils/resolve-app')
 
-const error = require('../../../utils/error')
-const config = require('../../config')
-
-const extendFilePath = `${config.projectDirectory}/babel.extend.js`
+const extendFilePath = resolveApp('/babel.extend.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
 
-module.exports = (browserlist, plugins) => {
-  if (!browserlist) {
-    error('No valid browserlist specified for babel loader config.')
-    return
-  }
+module.exports = (plugins) => {
 
   let options = {
     plugins,
@@ -22,9 +16,7 @@ module.exports = (browserlist, plugins) => {
           useBuiltIns: 'usage',
           modules: false,
           corejs: 3,
-          targets: {
-            browsers: browserlist,
-          },
+          configPath: resolveApp()
         },
       ],
     ],

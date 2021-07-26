@@ -1,15 +1,13 @@
 const fs = require('fs')
-
 const webpack = require('webpack')
-
-
-const config = require('../../config')
-const log = require('../../src/debug/log')
+const error = require('../utils/error')
+const resolveApp = require('../utils/resolve-app')
 
 const hasLintFile =
-  fs.existsSync(`${config.projectDirectory}/.eslintrc`) ||
-  fs.existsSync(`${config.projectDirectory}/.eslintrc.js`) ||
-  fs.existsSync(`${config.projectDirectory}/.eslintrc.json`)
+  fs.existsSync(resolveApp('/.eslintrc')) ||
+  fs.existsSync(resolveApp('/.eslintrc.js'))||
+  fs.existsSync(resolveApp('/.eslintrc.json'))
+
 let shownMissingLintWarning = 0
 const warningLimit = 2
 
@@ -43,7 +41,7 @@ const createCompilerPromise = compilerConfigs => {
   return promises
 }
 
-const onWebpackCallback = (error, stats) => {
+const onWebpackCallback = (err, stats) => {
   if (stats)
     if (stats.stats) {
       stats.stats.forEach(stat => {
@@ -53,18 +51,12 @@ const onWebpackCallback = (error, stats) => {
       logStats(stats)
     }
 
-  if (error)
-    log.error({
-      sender: 'js',
-      data: [error],
-    })
+  if (err)
+    error(error)
 
   if (!hasLintFile) {
     if (shownMissingLintWarning < warningLimit)
-      log.error({
-        sender: 'js',
-        message: "You don't use Javascript Linting yet. Please upgrade ASAP.",
-      })
+      error("You don't use Javascript Linting yet. Please upgrade ASAP.")
     shownMissingLintWarning++
   }
 }

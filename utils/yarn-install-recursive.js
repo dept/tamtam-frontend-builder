@@ -32,9 +32,9 @@ packageFolders.forEach(folder => {
 // Performs `npm install`
 function npm_install(target) {
   console.log('===================================================================')
-  console.log(`Performing "npm install" inside ${target} folder`)
+  console.log(`Performing "yarn install" inside ${target} folder`)
   console.log('===================================================================')
-  child_process.execSync('npm install', { cwd: target, env: process.env, stdio: 'inherit' })
+  child_process.execSync('yarn install', { cwd: target, env: process.env, stdio: 'inherit' })
 }
 
 // Lists subfolders in a folder
