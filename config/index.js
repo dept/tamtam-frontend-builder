@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const resolveApp = require('../utils/resolve-app');
 const fileCopyConfig = require('./copy');
 
@@ -14,7 +15,8 @@ const generateConfig = () => {
 
   // Source folder
   config.source = resolveApp('source');
-  config.pages = resolveApp('source/pages');
+  config.html = resolveApp('source/html');
+
   config.components = resolveApp('source/components');
   config.nodeModules = resolveApp('node_modules');
   config.dotenv = resolveApp('.env');
@@ -43,27 +45,18 @@ const generateConfig = () => {
   config.clientDist = config.dist;
 
   // Config asset prefix
-  config.assetPrefix = process.env.ASSET_PREFIX ? process.env.ASSET_PREFIX : '';
+  config.assetPrefix = process && process.env && process.env.ASSET_PREFIX ? process.env.ASSET_PREFIX : '/';
 
   // Assets dist folders
-  config.imagesOutputPath = '/assets/images/';
-  config.svgOutputPath = '/assets/svg/';
-  config.fontsOutputPath = '/assets/fonts/';
-  config.jsOutputPath = '/assets/js/';
-  config.faviconsOutputPath = '/assets/favicons/';
-  config.polyfillOutputPath = '/assets/js/polyfills/';
-  config.htmlOutputPath = '';
-  config.publicPath = config.assetPrefix;
+  config.imagesOutputPath = path.resolve(config.clientDist, '/assets/images/');
+  config.svgOutputPath = path.resolve(config.clientDist, '/assets/svg/');
+  config.fontsOutputPath = path.resolve(config.clientDist, '/assets/fonts/');
+  config.jsOutputPath = path.resolve(config.clientDist, '/assets/js/');
+  config.cssOutputPath = path.resolve(config.clientDist, '/assets/css/');
+  config.faviconsOutputPath = path.resolve(config.clientDist, '/assets/favicons/');
 
-  // Nunjucks config
-  config.nunjucks = {
-      envAppViews: [config.pages, config.components, config.public],
-      project: {
-          debug: process.env.NODE_ENV === 'development',
-          assetPrefix: config.assetPrefix,
-          ...require(`${config.data}/site.json`),
-      },
-  };
+  config.htmlOutputPath = config.clientDist;
+  config.publicPath = config.assetPrefix;
 
   // Service worker options
   config.injectManifest = false;

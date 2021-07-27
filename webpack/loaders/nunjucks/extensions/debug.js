@@ -1,10 +1,12 @@
-var debug = require('../../utils/debug')
+const debug = require('../utils/debug')
+const nunjucks = require('nunjucks')
+
 var NO_ARGUMENT = '__no-argument-supplied__'
 
-function DebugExtension(nunjucks) {
+function DebugExtension() {
   this.tags = ['debug']
 
-  this.parse = function(parser, nodes, lexer) {
+  this.parse = function(parser, nodes) {
     // get the tag token
     var tok = parser.nextToken()
 

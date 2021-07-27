@@ -4,14 +4,20 @@ const common = require('./webpack.common.js')
 
 module.exports = merge(common, {
   mode: 'development',
+  target: 'web',
   devtool: 'inline-source-map',
+  entry: {
+    'dev': './source/sass/_dev/dev.scss',
+  },
   devServer: {
     port: config.port,
     compress: true,
-    contentBase: './',
+    contentBase: '.',
     disableHostCheck: true,
     hot: true,
-    clientLogLevel: 'none',
+    clientLogLevel: 'debug',
+    overlay: { warnings: true, errors: true },
+    writeToDisk: true
   },
   optimization: {
     chunkIds: 'named',
@@ -23,3 +29,4 @@ module.exports = merge(common, {
     emitOnErrors: true,
   }
 })
+

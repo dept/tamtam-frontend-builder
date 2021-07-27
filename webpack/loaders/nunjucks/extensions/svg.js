@@ -1,15 +1,17 @@
-var svg = require('../../utils/svg')
+const svg = require('../utils/svg')
+const nunjucks = require('nunjucks')
 
-function SVGExtension(nunjucks) {
+function SVGExtension() {
+
   this.tags = ['svg']
 
-  this.parse = function(parser, nodes, lexer) {
+  this.parse = function(parser, nodes) {
     // get the tag token
-    var tok = parser.nextToken()
+    const tok = parser.nextToken()
 
     // parse the args and move after the block end. passing true
     // as the second arg is required if there are no parentheses
-    var args = parser.parseSignature(null, true)
+    const args = parser.parseSignature(null, true)
     parser.advanceAfterBlockEnd(tok.value)
 
     // See above for notes about CallExtension
@@ -17,7 +19,7 @@ function SVGExtension(nunjucks) {
   }
 
   this.run = function(context, name) {
-    var svgString = svg(name)
+    const svgString = svg(name)
     return new nunjucks.runtime.SafeString(svgString)
   }
 }

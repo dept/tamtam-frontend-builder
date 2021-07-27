@@ -1,8 +1,8 @@
 const fileSystem = require('fs')
 const path = require('path')
-const config = require('../../../../gulpfile.js/config')
-const log = require('../../debug/log')
-const SVG_CLASS_PREFIX = 'svg-'
+const error = require('../../../../utils/error')
+const config = require('../../../../utils/get-config')
+const resolveApp = require('../../../../utils/resolve-app')
 
 /**
  * Function to retrieve SVG code
@@ -17,15 +17,12 @@ module.exports = function(name) {
   name = name.replace(/\.svg$/, '')
 
   let svg = ''
-  const svgPath = path.resolve(config.projectDirectory, config.dest.getPath('svg', `/${name}.svg`))
+  const svgPath = `${config.svg}/${name}.svg`
 
   try {
     svg = fileSystem.readFileSync(svgPath)
-  } catch (error) {
-    log.error({
-      sender: 'SVG',
-      message: 'Failed to retrieve the svg: ' + svgPath,
-    })
+  } catch (err) {
+    error('Failed to retrieve the svg: ' + svgPath)
   }
 
   svg = svg.toString()

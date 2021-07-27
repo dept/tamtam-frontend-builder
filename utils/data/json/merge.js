@@ -1,10 +1,10 @@
-var path = require('path')
-var fs = require('fs')
+const path = require('path')
+const fs = require('fs')
 
-var log = require('../../debug/log')
-var getFileList = require('../../node/file/get-list')
+const getFileList = require('../../file/get-list')
+const error = require('../../error')
 
-var jsonFileRegExp = /.json$/i
+const jsonFileRegExp = /.json$/i
 
 /**
  * Loads and merges JSON data into one object
@@ -14,31 +14,23 @@ var jsonFileRegExp = /.json$/i
 function mergeJSONData(root, source) {
   if (root.slice(-1) !== path.sep) root += path.sep // force path separator as last character
 
-  var data = {}
-  var files = getFileList(source)
+  const data = {}
+  const files = getFileList(source)
 
-  for (var i = 0, leni = files.length; i < leni; i++) {
-    var filePath = files[i]
+  for (let i = 0, leni = files.length; i < leni; i++) {
+    const filePath = files[i]
 
     if (!jsonFileRegExp.test(filePath)) {
-      log.warn({
-        sender: 'mergeJSONData',
-        message: 'Can only merge JSON Data!',
-      })
+      console.warn('Can only merge JSON Data!')
       continue
     }
 
+    let fileData;
     try {
-      var fileData = fs.readFileSync(filePath, 'utf-8')
+      fileData = fs.readFileSync(filePath, 'utf-8')
       if (fileData) fileData = JSON.parse(fileData)
-    } catch (error) {
-      log.error({
-        sender: 'mergeJSONData',
-        message: 'Failed to load json data for file: ' + filePath,
-      })
-
-      log.error(error)
-
+    } catch (err) {
+      error(err)
       continue
     }
 
@@ -46,14 +38,14 @@ function mergeJSONData(root, source) {
       root = root.replace('\\', '/')
     }
 
-    var dataPath = filePath.replace(root, '')
+    let dataPath = filePath.replace(root, '')
 
     dataPath = dataPath.replace(jsonFileRegExp, '')
     dataPath = dataPath.split('/')
 
-    var currentNode = data
-    for (var j = 0, lenj = dataPath.length; j < lenj; j++) {
-      var key = dataPath[j]
+    let currentNode = data
+    for (let j = 0, lenj = dataPath.length; j < lenj; j++) {
+      const key = dataPath[j]
 
       if (!key.length) continue
 

@@ -2,15 +2,14 @@ var glob = require('glob')
 var path = require('path')
 var _ = require('lodash')
 
-module.exports = function getList(sourceGlob, opt_stripRoot, opt_stripExtension) {
+module.exports = function getList(sourceGlob, opt_stripRoot, opt_stripExtension, opt_ignore) {
   var fileList = []
-
   if (typeof sourceGlob === 'string') {
-    fileList = glob.sync(sourceGlob)
+    fileList = glob.sync(sourceGlob, { ignore: opt_ignore })
   } else if (Array.isArray(sourceGlob)) {
     for (var i = 0, leni = sourceGlob.length; i < leni; i++) {
       var source = sourceGlob[i]
-      var list = glob.sync(source)
+      var list = glob.sync(source, { ignore: opt_ignore })
       fileList = fileList.concat(list)
     }
   }
