@@ -16,7 +16,7 @@ module.exports = function(name) {
   name = name.replace(/\.svg$/, '')
 
   let svg = ''
-  const svgPath = path.join(config.dist, config.svgOutputPath, `${name}.svg`)
+  const svgPath = path.join(config.svg, `${name}.svg`)
 
   try {
     svg = fs.readFileSync(svgPath)

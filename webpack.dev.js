@@ -20,8 +20,7 @@ const webpackConfig = merge(common, {
     contentBase: config.dist,
     disableHostCheck: true,
     hot: true,
-    clientLogLevel: 'debug',
-    overlay: { warnings: true, errors: true },
+    // overlay: true,
     writeToDisk: true,
     watchContentBase: true
   },

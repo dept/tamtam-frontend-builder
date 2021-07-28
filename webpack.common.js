@@ -1,6 +1,6 @@
 const fs = require('fs')
-const resolveApp = require('./utils/resolve-app')
 
+const resolveApp = require('./utils/resolve-app')
 const config = require('./utils/get-config')
 
 const createAliasObject = require('./webpack/create-alias-object')
@@ -26,6 +26,7 @@ const babelPlugins = [
   '@babel/plugin-proposal-optional-chaining',
 ]
 
+
 let webpackConfig = {
   mode: 'development',
   context: resolveApp(),
@@ -34,7 +35,7 @@ let webpackConfig = {
     critical: './source/sass/critical.scss',
   },
   output: {
-    filename: `.${config.jsOutputPath}/[name].js`,
+    filename: `${config.jsOutputPath.substring(1)}/[name].js`,
     path: config.dist,
     publicPath: config.publicPath,
   },
@@ -65,6 +66,9 @@ let webpackConfig = {
       start: '/* components:scss */',
       end: '/* endinject */',
     }),
+    new MiniCssExtractPlugin({
+      filename: `${config.cssOutputPath.substring(1)}/[name].css`,
+    }),
     new CleanWebpackPlugin(),
     new WebpackBarPlugin(),
     configureNunjucksPlugin(),
@@ -76,12 +80,10 @@ let webpackConfig = {
       files: [resolveApp('source/sass/**/*.scss'), resolveApp('components/**/*.scss')].join(','),
       configPath: resolveApp('.sass-lint.yml'),
     }),
-    new MiniCssExtractPlugin({
-      filename: `.${config.cssOutputPath}/[name].css`,
-    }),
     new CopyPlugin({
       patterns: config.copy || [],
     }),
+
   ],
 }
 

@@ -3,11 +3,10 @@ const fs = require("fs");
 const getList = require("../../../utils/file/get-list");
 const config = require("../../../utils/get-config");
 const replace = require('replace-in-files');
+const replaceTags = require('../../../utils/replace-tags')
 const walkFileListSync = require("../../../utils/file/walk-file-list-sync");
 
 const PLUGIN_NAME = "InjectComponentsCSSPlugin";
-
-const replaceTags = s => s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
 
 const createComponentsArray = folder => {
   const components = walkFileListSync(folder, 'stylesheet')

@@ -1,9 +1,12 @@
 const fs = require('fs')
+
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
+const config = require('./utils/get-config')
 
 const extendFilePath = resolveApp('webpack.prod.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
+const WorkboxPlugin = require('workbox-webpack-plugin')
 
 const webpackConfig = merge(common, {
   mode: 'production',
@@ -17,7 +20,7 @@ const webpackConfig = merge(common, {
     },
     minimizer: [
       (compiler) => {
-        const TerserPlugin = require('terser-webpack-plugin');
+        const TerserPlugin = require('terser-webpack-plugin')
         new TerserPlugin({
           terserOptions: {
             keep_classnames: true,
@@ -32,6 +35,13 @@ const webpackConfig = merge(common, {
       },
     ],
   },
+  plugins: [
+    new WorkboxPlugin.GenerateSW({
+      clientsClaim: true,
+      skipWaiting: true,
+      ...config.swOptions,
+    }),
+  ],
 })
 
 
