@@ -1,11 +1,13 @@
 const fs = require('fs')
-
 const { merge } = require('webpack-merge')
-const common = require('./webpack.common.js')
+
+const resolveApp = require('./utils/resolve-app')
 const config = require('./utils/get-config')
 
+const common = require('./webpack.common.js')
 const extendFilePath = resolveApp('webpack.prod.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
+
 const WorkboxPlugin = require('workbox-webpack-plugin')
 
 const webpackConfig = merge(common, {

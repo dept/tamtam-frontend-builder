@@ -2,8 +2,8 @@ const { execSync } = require('child_process')
 const path = require('path')
 const root = path.resolve(__dirname, '..')
 
-function runGulpTask(task) {
-  execSync(`npm run gulp ${task}`, {
+const runYarn = (task) => {
+  execSync(`yarn ${task}`, {
     stdio: 'inherit',
     cwd: root,
     env: {
@@ -14,5 +14,5 @@ function runGulpTask(task) {
 }
 
 module.exports = {
-  runGulpTask,
+  runYarn,
 }

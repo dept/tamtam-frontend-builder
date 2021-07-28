@@ -26,16 +26,17 @@ const babelPlugins = [
   '@babel/plugin-proposal-optional-chaining',
 ]
 
-
 let webpackConfig = {
   mode: 'development',
   context: resolveApp(),
   entry: {
     main: './index',
     critical: './source/sass/critical.scss',
+    dev: './source/sass/_dev/dev.scss',
   },
   output: {
     filename: `${config.jsOutputPath.substring(1)}/[name].js`,
+    chunkFilename: `${config.jsOutputPath.substring(1)}/chunks/[name].[contenthash].js`,
     path: config.dist,
     publicPath: config.publicPath,
   },
@@ -68,6 +69,7 @@ let webpackConfig = {
     }),
     new MiniCssExtractPlugin({
       filename: `${config.cssOutputPath.substring(1)}/[name].css`,
+      chunkFilename: `${config.cssOutputPath.substring(1)}/chunks/[name].[contenthash].css`,
     }),
     new CleanWebpackPlugin(),
     new WebpackBarPlugin(),
@@ -83,7 +85,6 @@ let webpackConfig = {
     new CopyPlugin({
       patterns: config.copy || [],
     }),
-
   ],
 }
 

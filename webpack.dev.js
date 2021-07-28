@@ -1,9 +1,10 @@
 const fs = require('fs')
 const { merge } = require('webpack-merge')
-const config = require('./utils/get-config')
-const resolveApp = require('./utils/resolve-app')
-const common = require('./webpack.common.js')
 
+const resolveApp = require('./utils/resolve-app')
+const config = require('./utils/get-config')
+
+const common = require('./webpack.common.js')
 const extendFilePath = resolveApp('webpack.dev.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
 
@@ -11,9 +12,6 @@ const webpackConfig = merge(common, {
   mode: 'development',
   target: 'web',
   devtool: 'inline-source-map',
-  entry: {
-    'dev': './source/sass/_dev/dev.scss',
-  },
   devServer: {
     port: config.port,
     compress: true,

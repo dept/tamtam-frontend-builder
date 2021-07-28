@@ -19,6 +19,7 @@ const packageFolders = [].concat(
 
 if (!packageFolders.length) {
   console.log(`Found no additional modules.`)
+  console.log('===================================================================')
   return
 }
 
