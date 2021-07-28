@@ -7,13 +7,15 @@ const createAliasObject = require('./webpack/create-alias-object')
 const configureBabelLoader = require('./webpack/loaders/babel')
 const configureCSSLoader = require('./webpack/loaders/style')
 
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const WebpackBarPlugin = require('webpackbar');
 const ESLintPlugin = require('eslint-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const SassLintPlugin = require('sass-lint-webpack');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const configureNunjucksPlugin = require('./webpack/plugins/nunjucks')
+const InjectComponentsCSSPlugin = require('./webpack/plugins/inject-components-css')
+
 
 const extendFilePath = resolveApp('webpack.common.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
@@ -58,6 +60,12 @@ let webpackConfig = {
     ],
   },
   plugins:[
+    new InjectComponentsCSSPlugin({
+      sourcePath: `${config.styles}/*.scss`,
+      componentsPath: config.components,
+      start: '/* components:scss */',
+      end: '/* endinject */'
+    }),
     new CleanWebpackPlugin(),
     new WebpackBarPlugin(),
     configureNunjucksPlugin(),
@@ -75,9 +83,9 @@ let webpackConfig = {
     new MiniCssExtractPlugin({
       filename: `.${config.cssOutputPath}/[name].css`,
     }),
-    new CopyPlugin({
-      patterns: config.copy || []
-    }),
+    // new CopyPlugin({
+    //   patterns: config.copy || []
+    // }),
   ]
 }
 

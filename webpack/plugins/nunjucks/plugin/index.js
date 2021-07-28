@@ -1,8 +1,7 @@
 const path = require("path");
 const nunjucks = require("nunjucks");
 
-const pluginName = "NunjucksWebpackPlugin";
-
+const PLUGIN_NAME = "NunjucksWebpackPlugin";
 class NunjucksWebpackPlugin {
   constructor(options) {
     this.options = Object.assign(
@@ -99,7 +98,7 @@ class NunjucksWebpackPlugin {
 
       compilation.hooks.processAssets.tapAsync(
         {
-          name: pluginName,
+          name: PLUGIN_NAME,
           stage: compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
           additionalAssets: true
         },
@@ -139,8 +138,8 @@ class NunjucksWebpackPlugin {
       return callback();
     };
 
-    compiler.hooks.thisCompilation.tap(pluginName, emitCallback);
-    compiler.hooks.afterEmit.tapAsync(pluginName, afterEmitCallback);
+    compiler.hooks.thisCompilation.tap(PLUGIN_NAME, emitCallback);
+    compiler.hooks.afterEmit.tapAsync(PLUGIN_NAME, afterEmitCallback);
   }
 }
 
