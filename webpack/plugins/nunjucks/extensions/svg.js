@@ -18,7 +18,7 @@ function SVGExtension() {
     return new nodes.CallExtension(this, 'run', args)
   }
 
-  this.run = function(context, name) {
+  this.run = function(_, name) {
     const svgString = svg(name)
     return new nunjucks.runtime.SafeString(svgString)
   }

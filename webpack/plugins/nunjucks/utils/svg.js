@@ -1,8 +1,7 @@
-const fileSystem = require('fs')
+const fs = require('fs')
 const path = require('path')
 const error = require('../../../../utils/error')
 const config = require('../../../../utils/get-config')
-const resolveApp = require('../../../../utils/resolve-app')
 
 /**
  * Function to retrieve SVG code
@@ -17,10 +16,10 @@ module.exports = function(name) {
   name = name.replace(/\.svg$/, '')
 
   let svg = ''
-  const svgPath = `${config.svg}/${name}.svg`
+  const svgPath = path.join(config.dist, config.svgOutputPath, `${name}.svg`)
 
   try {
-    svg = fileSystem.readFileSync(svgPath)
+    svg = fs.readFileSync(svgPath)
   } catch (err) {
     error('Failed to retrieve the svg: ' + svgPath)
   }

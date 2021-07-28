@@ -14,7 +14,7 @@ console.log('===================================================================
 console.log(`Checking for subpackages`)
 
 const packageFolders = [].concat(
-  ...dirsToScan.map(dir => findPackageJsonRecursive(path.resolve(root, dir))),
+  ...dirsToScan.map((dir) => findPackageJsonRecursive(path.resolve(root, dir))),
 )
 
 if (!packageFolders.length) {
@@ -25,7 +25,7 @@ if (!packageFolders.length) {
 console.log(`Found ${packageFolders.length} modules.`)
 console.log('===================================================================')
 
-packageFolders.forEach(folder => {
+packageFolders.forEach((folder) => {
   npm_install(folder)
 })
 
@@ -45,8 +45,8 @@ function findPackageJsonRecursive(dir, fileToFind = FILE_TO_FIND, filelist = [])
   } catch (e) {}
   filelist = filelist || []
 
-  files.forEach(file => {
-    if (file === FILE_TO_FIND && dirsToIgnore.every(ignoreDir => dir.indexOf(ignoreDir) === -1)) {
+  files.forEach((file) => {
+    if (file === FILE_TO_FIND && dirsToIgnore.every((ignoreDir) => dir.indexOf(ignoreDir) === -1)) {
       filelist.push(path.join(dir))
     } else {
       if (fs.statSync(path.join(dir, file)).isDirectory()) {

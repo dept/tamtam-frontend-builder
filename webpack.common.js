@@ -7,15 +7,14 @@ const createAliasObject = require('./webpack/create-alias-object')
 const configureBabelLoader = require('./webpack/loaders/babel')
 const configureCSSLoader = require('./webpack/loaders/style')
 
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const WebpackBarPlugin = require('webpackbar');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const WebpackBarPlugin = require('webpackbar')
 const ESLintPlugin = require('eslint-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
-const SassLintPlugin = require('sass-lint-webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const CopyPlugin = require('copy-webpack-plugin')
+const SassLintPlugin = require('sass-lint-webpack')
 const configureNunjucksPlugin = require('./webpack/plugins/nunjucks')
 const InjectComponentsCSSPlugin = require('./webpack/plugins/inject-components-css')
-
 
 const extendFilePath = resolveApp('webpack.common.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
@@ -28,19 +27,19 @@ const babelPlugins = [
 ]
 
 let webpackConfig = {
-  mode:  'development',
+  mode: 'development',
   context: resolveApp(),
   entry: {
-    'main': './index',
-    'critical': './source/sass/critical.scss',
+    main: './index',
+    critical: './source/sass/critical.scss',
   },
   output: {
     filename: `.${config.jsOutputPath}/[name].js`,
     path: config.dist,
     publicPath: config.publicPath,
   },
-  stats:{
-    colors: true
+  stats: {
+    colors: true,
   },
   resolve: {
     alias: createAliasObject(),
@@ -55,38 +54,35 @@ let webpackConfig = {
       ...configureCSSLoader(),
       {
         test: /\.(jpe?g|png|gif|svg|webp)$/i,
-        type: "asset",
+        type: 'asset',
       },
     ],
   },
-  plugins:[
+  plugins: [
     new InjectComponentsCSSPlugin({
       sourcePath: `${config.styles}/*.scss`,
       componentsPath: config.components,
       start: '/* components:scss */',
-      end: '/* endinject */'
+      end: '/* endinject */',
     }),
     new CleanWebpackPlugin(),
     new WebpackBarPlugin(),
     configureNunjucksPlugin(),
     new ESLintPlugin({
       context: resolveApp(''),
-      emitWarning: true
+      emitWarning: true,
     }),
     new SassLintPlugin({
-      files: [
-        resolveApp('source/sass/**/*.scss'),
-        resolveApp('components/**/*.scss'),
-      ].join(','),
-      configPath: resolveApp('.sass-lint.yml')
+      files: [resolveApp('source/sass/**/*.scss'), resolveApp('components/**/*.scss')].join(','),
+      configPath: resolveApp('.sass-lint.yml'),
     }),
     new MiniCssExtractPlugin({
       filename: `.${config.cssOutputPath}/[name].css`,
     }),
-    // new CopyPlugin({
-    //   patterns: config.copy || []
-    // }),
-  ]
+    new CopyPlugin({
+      patterns: config.copy || [],
+    }),
+  ],
 }
 
 if (hasExtendFile) {

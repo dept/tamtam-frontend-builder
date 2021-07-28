@@ -52,23 +52,23 @@ function generateFiles(rootPath, type, name, json, jsExt, html = false, css = fa
     },
   ]
 
-  const files = filesObj.filter(fileObj => fileObj.content || fileObj.content === '')
+  const files = filesObj.filter((fileObj) => fileObj.content || fileObj.content === '')
 
   if (!files) {
     console.log(chalk.yellow(`Failed to create ${type}: ${name}.`))
     return
   }
 
-  const filesToCreate = files.map(dir => mkdirp.sync(dir.path))
+  const filesToCreate = files.map((dir) => mkdirp.sync(dir.path))
 
   Promise.all(filesToCreate)
-    .then(results => {
-      if (!results.filter(result => result).length) {
+    .then((results) => {
+      if (!results.filter((result) => result).length) {
         console.log(chalk.red(`The ${type} called ${name} already exists.`))
         return
       }
 
-      files.forEach(file => {
+      files.forEach((file) => {
         fs.writeFileSync(path.resolve(file.path, file.file), file.content)
       })
 
@@ -89,14 +89,14 @@ const question = [
     type: 'input',
     name: 'name',
     message: 'Please specify a name.',
-    result: result => {
+    result: (result) => {
       return result
         .toLowerCase()
         .replace(/ /g, '-')
         .replace(/[\.|,]/g, '')
         .replace(/[^a-z0-9-]/gi, '-')
     },
-    validate: result => result !== '',
+    validate: (result) => result !== '',
   },
   {
     type: 'select',
@@ -117,7 +117,7 @@ const question = [
 ]
 
 prompt(question)
-  .then(result => {
+  .then((result) => {
     if (!result.type || !result.name) {
       console.log(chalk.red(`Aborted creation of component/utility!`))
       return

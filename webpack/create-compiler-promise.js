@@ -5,15 +5,15 @@ const resolveApp = require('../utils/resolve-app')
 
 const hasLintFile =
   fs.existsSync(resolveApp('/.eslintrc')) ||
-  fs.existsSync(resolveApp('/.eslintrc.js'))||
+  fs.existsSync(resolveApp('/.eslintrc.js')) ||
   fs.existsSync(resolveApp('/.eslintrc.json'))
 
 let shownMissingLintWarning = 0
 const warningLimit = 2
 
-const logStats = stats => console.log(`\n ${stats.toString({ colors: true })} \n`)
+const logStats = (stats) => console.log(`\n ${stats.toString({ colors: true })} \n`)
 
-const createCompiler = config => {
+const createCompiler = (config) => {
   const compiler = webpack(config)
   return new Promise((resolve, reject) => {
     compiler.run((error, stats) => {
@@ -28,11 +28,11 @@ const createCompiler = config => {
   })
 }
 
-const createCompilerPromise = compilerConfigs => {
+const createCompilerPromise = (compilerConfigs) => {
   const promises = []
   const configArray = []
 
-  Object.keys(compilerConfigs).forEach(configName => {
+  Object.keys(compilerConfigs).forEach((configName) => {
     configArray.push(compilerConfigs[configName])
   })
 
@@ -44,15 +44,14 @@ const createCompilerPromise = compilerConfigs => {
 const onWebpackCallback = (err, stats) => {
   if (stats)
     if (stats.stats) {
-      stats.stats.forEach(stat => {
+      stats.stats.forEach((stat) => {
         logStats(stat)
       })
     } else {
       logStats(stats)
     }
 
-  if (err)
-    error(error)
+  if (err) error(error)
 
   if (!hasLintFile) {
     if (shownMissingLintWarning < warningLimit)
