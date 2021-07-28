@@ -10,6 +10,9 @@ const generateConfig = () => {
 
   const config = {};
 
+  config.isDevelopment = process.env.NODE_ENV === 'development';
+  config.debug = config.isDevelopment;
+
   // Root folder
   config.root = resolveApp('');
 
@@ -42,20 +45,19 @@ const generateConfig = () => {
 
   // Dist Folder
   config.dist = resolveApp('build');
-  config.clientDist = config.dist;
 
   // Config asset prefix
   config.assetPrefix = process && process.env && process.env.ASSET_PREFIX ? process.env.ASSET_PREFIX : '/';
 
   // Assets dist folders
-  config.imagesOutputPath = path.resolve(config.clientDist, '/assets/images/');
-  config.svgOutputPath = path.resolve(config.clientDist, '/assets/svg/');
-  config.fontsOutputPath = path.resolve(config.clientDist, '/assets/fonts/');
-  config.jsOutputPath = path.resolve(config.clientDist, '/assets/js/');
-  config.cssOutputPath = path.resolve(config.clientDist, '/assets/css/');
-  config.faviconsOutputPath = path.resolve(config.clientDist, '/assets/favicons/');
+  config.imagesOutputPath = path.resolve(config.dist, '/assets/images/');
+  config.svgOutputPath = path.resolve(config.dist, '/assets/svg/');
+  config.fontsOutputPath = path.resolve(config.dist, '/assets/fonts/');
+  config.jsOutputPath = path.resolve(config.dist, '/assets/js/');
+  config.cssOutputPath = path.resolve(config.dist, '/assets/css/');
+  config.faviconsOutputPath = path.resolve(config.dist, '/assets/favicons/');
 
-  config.htmlOutputPath = config.clientDist;
+  config.htmlOutputPath = config.dist;
   config.publicPath = config.assetPrefix;
 
   // Service worker options

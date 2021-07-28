@@ -1,6 +1,6 @@
-const isDevelopment = process.env.NODE_ENV === 'development';
+const config = require('./utils/get-config')
 
-module.exports = (api) => {
+module.exports = () => {
 
   const plugins = [
       require('autoprefixer')({
@@ -10,7 +10,7 @@ module.exports = (api) => {
   ];
 
   // Add minifier when production
-  if (!isDevelopment) {
+  if (!config.isDevelopment) {
       plugins.push(require('css-mqpacker')({
           sort: true
       }));

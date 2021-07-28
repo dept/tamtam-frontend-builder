@@ -1,7 +1,11 @@
+const fs = require('fs')
 const { merge } = require('webpack-merge')
 const common = require('./webpack.common.js')
 
-module.exports = merge(common, {
+const extendFilePath = resolveApp('webpack.prod.js')
+const hasExtendFile = fs.existsSync(extendFilePath)
+
+const webpackConfig = merge(common, {
   mode: 'production',
   bail: true,
   optimization: {
@@ -29,3 +33,10 @@ module.exports = merge(common, {
     ],
   },
 })
+
+
+if (hasExtendFile) {
+  require(extendFilePath)(webpackConfig)
+}
+
+module.exports = webpackConfig

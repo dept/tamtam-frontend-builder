@@ -5,16 +5,17 @@ const config = require('./utils/get-config')
 
 const createAliasObject = require('./webpack/create-alias-object')
 const configureBabelLoader = require('./webpack/loaders/babel')
-const configureNunjucksPlugin = require('./webpack/loaders/nunjucks')
-
-const ESLintPlugin = require('eslint-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const WebpackBar = require('webpackbar');
-const CopyPlugin = require('copy-webpack-plugin');
-const SassLintPlugin = require('sass-lint-webpack');
 const configureCSSLoader = require('./webpack/loaders/style')
 
-const extendFilePath = resolveApp('webpack.extend.js')
+const WebpackBarPlugin = require('webpackbar');
+const ESLintPlugin = require('eslint-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const SassLintPlugin = require('sass-lint-webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const configureNunjucksPlugin = require('./webpack/plugins/nunjucks')
+
+const extendFilePath = resolveApp('webpack.common.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
 
 const babelPlugins = [
@@ -33,12 +34,11 @@ let webpackConfig = {
   },
   output: {
     filename: `.${config.jsOutputPath}/[name].js`,
-    path: config.clientDist,
+    path: config.dist,
     publicPath: config.publicPath,
   },
   stats:{
-    // children: true,
-    errorDetails: true
+    colors: true
   },
   resolve: {
     alias: createAliasObject(),
@@ -51,13 +51,15 @@ let webpackConfig = {
     rules: [
       ...configureBabelLoader(babelPlugins),
       ...configureCSSLoader(),
+      {
+        test: /\.(jpe?g|png|gif|svg|webp)$/i,
+        type: "asset",
+      },
     ],
   },
   plugins:[
-    new WebpackBar(),
-    // new webpack.ProvidePlugin({
-    //   process: 'process/browser',
-    // }),
+    new CleanWebpackPlugin(),
+    new WebpackBarPlugin(),
     configureNunjucksPlugin(),
     new ESLintPlugin({
       context: resolveApp(''),
@@ -82,8 +84,5 @@ let webpackConfig = {
 if (hasExtendFile) {
   require(extendFilePath)(webpackConfig)
 }
-
-
-// console.log(JSON.stringify(webpackConfig))
 
 module.exports = webpackConfig

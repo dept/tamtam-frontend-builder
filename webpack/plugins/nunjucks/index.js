@@ -22,7 +22,6 @@ const generateFileGlobs = require('../../../utils/file/generate-file-globs');
 
 const RESERVED_DATA_KEYWORDS = ['project', 'ext']
 
-
 const configureNunjucksPlugin = () => {
 
   const contextData = {}

@@ -69,33 +69,31 @@ class NunjucksWebpackPlugin {
           fileDependencies.push(template.from);
         }
 
-
-        const res = configure.render(
+        configure.render(
           template.from,
           Object.assign(baseContext, template.context),
-        );
+          (err, res) => {
+            if (err) {
+              compilation.errors.push(err);
+              return
+            }
 
+            let webpackTo = template.to;
 
-        let webpackTo = template.to;
+            if (path.isAbsolute(webpackTo)) {
+              webpackTo = path.relative(output, webpackTo);
+            }
 
-        if (path.isAbsolute(webpackTo)) {
-          webpackTo = path.relative(output, webpackTo);
-        }
+            const source = {
+              size: () => res.length,
+              source: () => res
+            };
 
-        const source = {
-          size: () => res.length,
-          source: () => res
-        };
-
-        promises.push({
-          ...template,
-          source
+            promises.push({
+              ...template,
+              source
+            })
         })
-
-        // if (template.writeToFileEmit) {
-        //   const fileDest = path.join(output, webpackTo);
-        //   promises.push(fs.outputFile(fileDest, source.source()));
-        // }
 
       });
 
@@ -105,21 +103,19 @@ class NunjucksWebpackPlugin {
           stage: compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
           additionalAssets: true
         },
-        (assets, callback) => {
+        (_, callback) => {
           Promise.all(promises)
             .then((data) => {
-                data.forEach(template => {
-                  const asset = compilation.getAsset(template.to)
-                  compilation[asset ? 'updateAsset' : 'emitAsset'](
-                    template.to,
-                    new compiler.webpack.sources.RawSource(template.source.source())
-                  );
-                })
-                callback()
+              data.forEach(template => {
+                const asset = compilation.getAsset(template.to)
+                compilation[asset ? 'updateAsset' : 'emitAsset'](
+                  template.to,
+                  new compiler.webpack.sources.RawSource(template.source.source())
+                );
+              })
             })
-            .catch(error => {
-              compilation.errors.push(error);
-            })
+            .catch(error => compilation.errors.push(error))
+            .finally(callback)
         }
       )
 
