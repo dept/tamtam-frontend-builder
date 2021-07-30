@@ -1,5 +1,6 @@
+const path = require('path')
 const fs = require('fs')
-const { merge } = require('webpack-merge')
+const { mergeWithCustomize, unique } = require('webpack-merge')
 
 const resolveApp = require('./utils/resolve-app')
 const config = require('./utils/get-config')
@@ -9,11 +10,26 @@ const extendFilePath = resolveApp('webpack.prod.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
 
 const WorkboxPlugin = require('workbox-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin')
 
-const webpackConfig = merge(common, {
+const webpackConfig = mergeWithCustomize({
+  customizeArray: unique(
+    'plugins',
+    ['MiniCssExtractPlugin'],
+    (plugin) => plugin.constructor && plugin.constructor.name,
+  ),
+})(common, {
   mode: 'production',
   bail: true,
+  output: {
+    // clean: true,
+    ...(config.buildStatic
+      ? {
+          filename: `${config.jsOutputPath.substring(1)}/[name].[contenthash].js`,
+        }
+      : {}),
+  },
   optimization: {
     chunkIds: 'deterministic',
     moduleIds: 'deterministic',
@@ -39,12 +55,27 @@ const webpackConfig = merge(common, {
     ],
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
       ...config.swOptions,
     }),
+    ...(config.buildStatic
+      ? [
+          new WebpackManifestPlugin({
+            generate: (seed, files) =>
+              files.reduce((acc, file) => {
+                const oldName = path.basename(file.name)
+                const newName = path.basename(file.path)
+                if (oldName !== newName) acc[oldName] = newName
+                return acc
+              }, seed),
+          }),
+          new MiniCssExtractPlugin({
+            filename: `${config.cssOutputPath.substring(1)}/[name].[contenthash].css`,
+          }),
+        ]
+      : []),
   ],
 })
 

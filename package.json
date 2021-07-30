@@ -34,6 +34,7 @@
     "start": "NODE_ENV=development webpack serve --config webpack.dev.js",
     "build": "NODE_ENV=production webpack --config webpack.prod.js",
     "deploy": "NODE_ENV=production webpack --config webpack.prod.js",
+    "generate": "node ./utils/create.js",
     "favicons": "NODE_ENV=production node ./utils/scripts/run favicons"
   },
   "dependencies": {
@@ -103,6 +104,7 @@
     "webpack": "^5.46.0",
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2",
+    "webpack-manifest-plugin": "^4.0.2",
     "webpack-merge": "^5.8.0",
     "workbox-build": "6.0.2",
     "workbox-webpack-plugin": "^6.1.5"

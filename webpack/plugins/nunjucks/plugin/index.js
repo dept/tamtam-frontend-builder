@@ -4,8 +4,15 @@ const { default: chalk } = require('chalk')
 const glob = require('glob')
 const fileEntryCache = require('file-entry-cache')
 const logging = require('../../../../utils/logging')
+const SyncHook = require('tapable').SyncHook
 
 const PLUGIN_NAME = 'NunjucksWebpackPlugin'
+
+const hooks = {
+  emitHook: new SyncHook(['templates']),
+}
+
+const emitHook = () => null
 
 class NunjucksWebpackPlugin {
   constructor(options) {
@@ -33,6 +40,8 @@ class NunjucksWebpackPlugin {
   }
 
   apply(compiler) {
+    emitHook.bind(this, { compiler })
+
     let output = compiler.options.output.path
 
     if (output === '/' && compiler.options.devServer && compiler.options.devServer.outputPath) {
@@ -98,23 +107,24 @@ class NunjucksWebpackPlugin {
             name: PLUGIN_NAME,
             stage: compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
           },
-          (_, callback) => {
-            Promise.all(promises)
-              .then((data) => {
-                data.forEach((template) => {
-                  const asset = compilation.getAsset(template.to)
-                  compilation[asset ? 'updateAsset' : 'emitAsset'](
-                    template.to,
-                    new compiler.webpack.sources.RawSource(template.source.source()),
-                  )
-                })
+          async (_, callback) => {
+            try {
+              const data = await Promise.all(promises)
+              data.forEach((template) => {
+                const asset = compilation.getAsset(template.to)
+                compilation[asset ? 'updateAsset' : 'emitAsset'](
+                  template.to,
+                  new compiler.webpack.sources.RawSource(template.source.source()),
+                )
               })
-              .catch((error) => compilation.errors.push(error))
-              .finally(() => {
-                this.cache.reconcile()
-                this.compileEnd()
-                callback()
-              })
+            } catch (error) {
+              compilation.errors.push(error)
+            } finally {
+              this.cache.reconcile()
+              hooks.emitHook.call(this.options.templates)
+              this.compileEnd()
+              callback()
+            }
           },
         )
       } else {
@@ -154,4 +164,4 @@ class NunjucksWebpackPlugin {
   }
 }
 
-module.exports = NunjucksWebpackPlugin
+module.exports = { hooks, NunjucksWebpackPlugin }

@@ -3,7 +3,7 @@ const logging = require('../../../utils/logging')
 const resolveApp = require('../../../utils/resolve-app')
 const packageJSON = require(resolveApp('./package.json'))
 const config = require('../../../utils/get-config')
-const NunjucksWebpackPlugin = require('./plugin/index')
+const { NunjucksWebpackPlugin } = require('./plugin/index')
 const nunjucks = require('nunjucks')
 
 const walkFileListSync = require('../../../utils/file/walk-file-list-sync')
@@ -71,7 +71,7 @@ const configureNunjucksPlugin = () => {
 
   const templates = templatesList.map((filePath) => ({
     from: filePath,
-    to: filePath.replace(`${config.html}/`, ''),
+    to: filePath.replace(`${config.html}/`, `${config.htmlOutputPath.replace(config.dist, '')}/`),
     context: contextData,
     writeToFileEmit: false,
   }))

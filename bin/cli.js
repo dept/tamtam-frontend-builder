@@ -28,8 +28,8 @@ yargs.command('yarn-install-recursive', 'install yarn recursive', {}, () => {
   require('../utils/scripts/yarn-install-recursive')
 })
 
-yargs.command('create', 'create new component', {}, () => {
-  require('../utils/create')
+yargs.command('generate', 'generate new component/utility', {}, () => {
+  runYarn('generate')
 })
 
 yargs.argv

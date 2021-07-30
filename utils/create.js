@@ -1,12 +1,16 @@
-const config = require('../gulpfile.js/config')
 const fs = require('fs-extra')
 const mkdirp = require('mkdirp')
 const path = require('path')
 const { prompt } = require('enquirer')
 const logging = require('./logging')
+const { camelCase } = require('lodash')
+const config = require('./get-config')
 
 function generateHTML(name) {
-  return ``
+  return `{% macro ${camelCase(name)}(data) %}
+
+{% endmacro %}
+`
 }
 
 function generateJS(name) {
@@ -123,7 +127,7 @@ const question = [
 ]
 
 prompt(question)
-  .then((result) => {
+  .then(async (result) => {
     if (!result.type || !result.name) {
       logging.warning({
         message: `Aborted creation of component/utility!`,
@@ -135,10 +139,10 @@ prompt(question)
       message: `The ${result.type} with the name ${result.name} will be generated now!`,
     })
 
-    let rootPath = config.source.getPath('components')
+    let rootPath = config.components
 
     if (result.type === 'utility') {
-      rootPath = config.source.getPath('utilities')
+      rootPath = config.utilities
     }
 
     let html = false
@@ -154,9 +158,11 @@ prompt(question)
     json = generateJSON(result.name)
 
     generateFiles(rootPath, result.type, result.name, json, result.jsExt, html, css, js)
+    setTimeout(() => process.exit(0))
   })
   .catch(() => {
     logging.error({
       message: `Aborted creation of component/utility!`,
     })
+    process.exit(1)
   })
