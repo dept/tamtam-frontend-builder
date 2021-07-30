@@ -1,4 +1,5 @@
 const fs = require('fs')
+const chokidar = require('chokidar')
 const { merge } = require('webpack-merge')
 
 const resolveApp = require('./utils/resolve-app')
@@ -14,13 +15,19 @@ const webpackConfig = merge(common, {
   devtool: 'inline-source-map',
   devServer: {
     port: config.port,
+    progress: true,
     compress: true,
     contentBase: config.dist,
     disableHostCheck: true,
     hot: true,
     // overlay: true,
-    writeToDisk: true,
-    watchContentBase: true
+    writeToDisk: false,
+    watchContentBase: true,
+    after: (_, server) => {
+      chokidar.watch([`${config.source}/**/*.html`]).on('all', () => {
+        server.sockWrite(server.sockets, 'content-changed')
+      })
+    },
   },
   optimization: {
     chunkIds: 'named',
@@ -30,7 +37,7 @@ const webpackConfig = merge(common, {
       automaticNameDelimiter: '.',
     },
     emitOnErrors: true,
-  }
+  },
 })
 
 if (hasExtendFile) {

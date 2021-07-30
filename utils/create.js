@@ -1,9 +1,9 @@
 const config = require('../gulpfile.js/config')
 const fs = require('fs-extra')
 const mkdirp = require('mkdirp')
-const chalk = require('chalk')
 const path = require('path')
 const { prompt } = require('enquirer')
+const logging = require('./logging')
 
 function generateHTML(name) {
   return ``
@@ -55,7 +55,9 @@ function generateFiles(rootPath, type, name, json, jsExt, html = false, css = fa
   const files = filesObj.filter((fileObj) => fileObj.content || fileObj.content === '')
 
   if (!files) {
-    console.log(chalk.yellow(`Failed to create ${type}: ${name}.`))
+    logging.warning({
+      message: `Failed to create ${type}: ${name}.`,
+    })
     return
   }
 
@@ -64,7 +66,9 @@ function generateFiles(rootPath, type, name, json, jsExt, html = false, css = fa
   Promise.all(filesToCreate)
     .then((results) => {
       if (!results.filter((result) => result).length) {
-        console.log(chalk.red(`The ${type} called ${name} already exists.`))
+        logging.error({
+          message: `The ${type} called ${name} already exists.`,
+        })
         return
       }
 
@@ -72,7 +76,9 @@ function generateFiles(rootPath, type, name, json, jsExt, html = false, css = fa
         fs.writeFileSync(path.resolve(file.path, file.file), file.content)
       })
 
-      console.log(chalk.yellow(`Succesfully created ${type}: ${name}.`))
+      logging.success({
+        message: `Succesfully created ${type}: ${name}.`,
+      })
     })
     .catch(() => {})
 }
@@ -119,13 +125,15 @@ const question = [
 prompt(question)
   .then((result) => {
     if (!result.type || !result.name) {
-      console.log(chalk.red(`Aborted creation of component/utility!`))
+      logging.warning({
+        message: `Aborted creation of component/utility!`,
+      })
       return
     }
 
-    console.log(
-      chalk.magenta(`The ${result.type} with the name ${result.name} will be generated now!`),
-    )
+    logging.warning({
+      message: `The ${result.type} with the name ${result.name} will be generated now!`,
+    })
 
     let rootPath = config.source.getPath('components')
 
@@ -148,5 +156,7 @@ prompt(question)
     generateFiles(rootPath, result.type, result.name, json, result.jsExt, html, css, js)
   })
   .catch(() => {
-    console.log(chalk.red(`Aborted creation of component/utility!`))
+    logging.error({
+      message: `Aborted creation of component/utility!`,
+    })
   })

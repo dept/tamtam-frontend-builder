@@ -1,6 +1,6 @@
 const fs = require('fs')
 const webpack = require('webpack')
-const error = require('../utils/error')
+const logging = require('../utils/logging')
 const resolveApp = require('../utils/resolve-app')
 
 const hasLintFile =
@@ -51,11 +51,16 @@ const onWebpackCallback = (err, stats) => {
       logStats(stats)
     }
 
-  if (err) error(error)
+  if (err)
+    logging.error({
+      message: err,
+    })
 
   if (!hasLintFile) {
     if (shownMissingLintWarning < warningLimit)
-      error("You don't use Javascript Linting yet. Please upgrade ASAP.")
+      logging.error({
+        message: "You don't use Javascript Linting yet. Please upgrade ASAP.",
+      })
     shownMissingLintWarning++
   }
 }

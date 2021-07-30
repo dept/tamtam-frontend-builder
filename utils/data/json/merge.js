@@ -1,8 +1,7 @@
 const path = require('path')
 const fs = require('fs')
-
+const logging = require('../../logging')
 const getFileList = require('../../file/get-list')
-const error = require('../../error')
 
 const jsonFileRegExp = /.json$/i
 
@@ -21,16 +20,20 @@ function mergeJSONData(root, source) {
     const filePath = files[i]
 
     if (!jsonFileRegExp.test(filePath)) {
-      console.warn('Can only merge JSON Data!')
+      logging.warning({
+        message: 'Can only merge JSON Data!',
+      })
       continue
     }
 
-    let fileData;
+    let fileData
     try {
       fileData = fs.readFileSync(filePath, 'utf-8')
       if (fileData) fileData = JSON.parse(fileData)
     } catch (err) {
-      error(err)
+      logging.error({
+        message: err,
+      })
       continue
     }
 

@@ -1,7 +1,12 @@
-const path = require("path");
-const nunjucks = require("nunjucks");
+const path = require('path')
+const nunjucks = require('nunjucks')
+const { default: chalk } = require('chalk')
+const glob = require('glob')
+const fileEntryCache = require('file-entry-cache')
+const logging = require('../../../../utils/logging')
 
-const PLUGIN_NAME = "NunjucksWebpackPlugin";
+const PLUGIN_NAME = 'NunjucksWebpackPlugin'
+
 class NunjucksWebpackPlugin {
   constructor(options) {
     this.options = Object.assign(
@@ -9,138 +14,144 @@ class NunjucksWebpackPlugin {
       {
         configure: {
           options: {},
-          path: ""
+          path: '',
         },
-        templates: []
+        templates: [],
+        path: '',
       },
-      options || {}
-    );
+      options || {},
+    )
 
-    if (
-      !Array.isArray(this.options.templates) ||
-      this.options.templates.length === 0
-    ) {
-      throw new Error("Options `templates` must be an empty array");
+    this.watchFiles = this.getFiles()
+    this.cache = fileEntryCache.create('nunjucks')
+    // Clear the cache after we create it to make sure previous created caches are removed
+    this.cache.destroy()
+
+    if (!Array.isArray(this.options.templates) || this.options.templates.length === 0) {
+      throw new Error('Options `templates` must be an empty array')
     }
   }
 
   apply(compiler) {
-    const fileDependencies = [];
+    let output = compiler.options.output.path
 
-    let output = compiler.options.output.path;
-
-    if (
-      output === "/" &&
-      compiler.options.devServer &&
-      compiler.options.devServer.outputPath
-    ) {
-      output = compiler.options.devServer.outputPath;
+    if (output === '/' && compiler.options.devServer && compiler.options.devServer.outputPath) {
+      output = compiler.options.devServer.outputPath
     }
 
     const emitCallback = (compilation) => {
+      this.compileStart()
 
+      const templates = this.cache.getUpdatedFiles(this.watchFiles)
       const configure =
         this.options.configure instanceof nunjucks.Environment
           ? this.options.configure
-          : nunjucks.configure(
-              this.options.configure.path,
-              this.options.configure.options
-            );
+          : nunjucks.configure(this.options.configure.path, this.options.configure.options)
 
-      const promises = [];
+      const promises = []
 
       const baseContext = {
         __webpack__: {
-          hash: compilation.hash
-        }
-      };
+          hash: compilation.hash,
+        },
+        end: process.env,
+      }
 
-      this.options.templates.forEach(template => {
-        if (!template.from) {
-          throw new Error("Each template should have `from` option");
-        }
+      if (templates.length) {
+        this.options.templates.forEach((template) => {
+          if (!template.from)
+            compilation.errors.push(new Error('Each template should have `from` option'))
 
-        if (!template.to) {
-          throw new Error("Each template should have `to` option");
-        }
+          if (!template.to)
+            compilation.errors.push(new Error('Each template should have `to` option'))
 
-        if (fileDependencies.indexOf(template.from) === -1) {
-          fileDependencies.push(template.from);
-        }
+          configure.render(
+            template.from,
+            Object.assign(baseContext, template.context),
+            (err, res) => {
+              if (err) {
+                compilation.errors.push(err)
+                return
+              }
 
-        configure.render(
-          template.from,
-          Object.assign(baseContext, template.context),
-          (err, res) => {
-            if (err) {
-              compilation.errors.push(err);
-              return
-            }
+              let webpackTo = template.to
 
-            let webpackTo = template.to;
+              if (path.isAbsolute(webpackTo)) {
+                webpackTo = path.relative(output, webpackTo)
+              }
 
-            if (path.isAbsolute(webpackTo)) {
-              webpackTo = path.relative(output, webpackTo);
-            }
+              const source = {
+                size: () => res.length,
+                source: () => res,
+              }
 
-            const source = {
-              size: () => res.length,
-              source: () => res
-            };
-
-            promises.push({
-              ...template,
-              source
-            })
+              promises.push({
+                ...template,
+                source,
+              })
+            },
+          )
         })
 
-      });
-
-      compilation.hooks.processAssets.tapAsync(
-        {
-          name: PLUGIN_NAME,
-          stage: compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
-          additionalAssets: true
-        },
-        (_, callback) => {
-          Promise.all(promises)
-            .then((data) => {
-              data.forEach(template => {
-                const asset = compilation.getAsset(template.to)
-                compilation[asset ? 'updateAsset' : 'emitAsset'](
-                  template.to,
-                  new compiler.webpack.sources.RawSource(template.source.source())
-                );
+        compilation.hooks.processAssets.tapAsync(
+          {
+            name: PLUGIN_NAME,
+            stage: compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
+          },
+          (_, callback) => {
+            Promise.all(promises)
+              .then((data) => {
+                data.forEach((template) => {
+                  const asset = compilation.getAsset(template.to)
+                  compilation[asset ? 'updateAsset' : 'emitAsset'](
+                    template.to,
+                    new compiler.webpack.sources.RawSource(template.source.source()),
+                  )
+                })
               })
-            })
-            .catch(error => compilation.errors.push(error))
-            .finally(callback)
-        }
-      )
-
-    };
+              .catch((error) => compilation.errors.push(error))
+              .finally(() => {
+                this.cache.reconcile()
+                this.compileEnd()
+                callback()
+              })
+          },
+        )
+      } else {
+        this.compileEnd()
+      }
+    }
 
     const afterEmitCallback = (compilation, callback) => {
-      let compilationFileDependencies = compilation.fileDependencies;
-      let addFileDependency = file => compilation.fileDependencies.add(file);
+      this.watchFiles = this.getFiles()
+      this.watchFiles.map((file) => compilation.fileDependencies.add(file))
+      return callback()
+    }
 
-      if (Array.isArray(compilation.fileDependencies)) {
-        compilationFileDependencies = new Set(compilation.fileDependencies);
-        addFileDependency = file => compilation.fileDependencies.push(file);
-      }
+    compiler.hooks.thisCompilation.tap(PLUGIN_NAME, emitCallback)
+    compiler.hooks.afterEmit.tapAsync(PLUGIN_NAME, afterEmitCallback)
+  }
 
-      for (const file of fileDependencies) {
-        if (!compilationFileDependencies.has(file)) {
-          addFileDependency(file);
-        }
-      }
+  getFiles() {
+    return glob.sync(this.options.path)
+  }
 
-      return callback();
-    };
+  compileStart() {
+    this.start = new Date()
+    logging.success({
+      time: this.start,
+      message: `${chalk.bold('Starting')} '${PLUGIN_NAME}'`,
+    })
+  }
 
-    compiler.hooks.thisCompilation.tap(PLUGIN_NAME, emitCallback);
-    compiler.hooks.afterEmit.tapAsync(PLUGIN_NAME, afterEmitCallback);
+  compileEnd() {
+    this.end = new Date()
+    const time = this.end.getTime() - this.start.getTime()
+    logging.success({
+      time: this.end,
+      message: `${chalk.bold('Finished')} '${PLUGIN_NAME}' after ${chalk.bold(`${time}ms`)}`,
+    })
   }
 }
 
-module.exports = NunjucksWebpackPlugin;
+module.exports = NunjucksWebpackPlugin

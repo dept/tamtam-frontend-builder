@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const error = require('../error')
+const logging = require('../logging')
 
 const walkFileListSync = function(dir, folderToFind, filelist = []) {
   let files = []
@@ -8,7 +8,9 @@ const walkFileListSync = function(dir, folderToFind, filelist = []) {
   try {
     files = fs.readdirSync(dir)
   } catch (e) {
-    error(e, true)
+    logging.error({
+      message: e,
+    })
   }
   filelist = filelist || []
 

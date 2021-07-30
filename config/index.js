@@ -34,6 +34,7 @@ const generateConfig = () => {
   config.assets = resolveApp('source/assets')
   config.images = resolveApp('source/assets/images')
   config.svg = resolveApp('source/assets/svg')
+  config.fonts = resolveApp('source/assets/fonts')
   config.favicons = resolveApp('source/assets/favicons')
 
   // Data folder
@@ -65,9 +66,7 @@ const generateConfig = () => {
   config.swOptions = {
     swDest: `sw.js`,
     include: [/\.(js|css|eot|ttf|woff|json)$/],
-    exclude: [
-      /(tmp|dev|favicons|critical)/,
-    ],
+    exclude: [/(tmp|dev|favicons|critical)/],
     runtimeCaching: [{ urlPattern: /\/assets\/images\//, handler: 'StaleWhileRevalidate' }],
   }
 
@@ -77,7 +76,7 @@ const generateConfig = () => {
   if (hasExtendFile) {
     return require(extendFilePath)(config)
   }
-  console.log(config)
+
   return config
 }
 

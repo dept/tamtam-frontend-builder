@@ -1,25 +1,25 @@
 const chalk = require('chalk')
-
-function format(time) {
-  return time.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1')
-}
+const logging = require('../logging')
 
 function run(fn, options) {
   const task = typeof fn.default === 'undefined' ? fn : fn.default
   const start = new Date()
 
-  console.log(
-    chalk.yellow(`[${format(start)}] Starting '${task.name}${options ? ` (${options})` : ''}'...`),
-  )
+  logging.success({
+    message: `Starting '${task.name}${options ? ` (${options})` : ''}'`,
+    time: start,
+  })
 
   return task(options).then((resolution) => {
     const end = new Date()
     const time = end.getTime() - start.getTime()
 
-    console.log(
-      chalk.green.bold(`[${format(end)}] Finished`),
-      chalk.green(`'${task.name}${options ? ` (${options})` : ''}' after ${time} ms`),
-    )
+    logging.success({
+      message: `${chalk.bold('Finished')} '${task.name}${
+        options ? ` (${options})` : ''
+      }' after ${chalk.bold(`${time}ms`)}`,
+      time: end,
+    })
 
     return resolution
   })
@@ -31,7 +31,10 @@ if (require.main === module && process.argv.length > 2) {
   const module = require(`./${process.argv[2]}.js`) // eslint-disable-line import/no-dynamic-require
 
   run(module).catch((err) => {
-    console.error(chalk.red(err.stack))
+    logging.error({
+      message: err.stack,
+      time: new Date(),
+    })
     process.exit(1)
   })
 }

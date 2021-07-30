@@ -2,15 +2,18 @@
 const yargs = require('yargs')
 
 const { runYarn } = require('../utils/scripts/run-yarn')
-const { default: chalk } = require('chalk')
+const logging = require('../utils/logging')
 
 yargs.command('deploy', 'build for deploy', {}, () => {
-  runYarn('run deploy')
+  runYarn('deploy')
 })
 
 yargs.command('dist', 'build for deploy', {}, () => {
-  console.warn(chalk.yellow('This command is deprecated, using `yarn deploy` instead'))
-  runYarn('run deploy')
+  logging.warning({
+    message: 'This command is deprecated, using `yarn deploy` instead',
+    time: new Date(),
+  })
+  runYarn('deploy')
 })
 
 yargs.command('start', 'start the project', {}, () => {

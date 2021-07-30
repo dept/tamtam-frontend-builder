@@ -7,14 +7,13 @@ const createAliasObject = require('./webpack/create-alias-object')
 const configureBabelLoader = require('./webpack/loaders/babel')
 const configureCSSLoader = require('./webpack/loaders/style')
 
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const WebpackBarPlugin = require('webpackbar')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
 const SassLintPlugin = require('sass-lint-webpack')
 const configureNunjucksPlugin = require('./webpack/plugins/nunjucks')
 const InjectComponentsCSSPlugin = require('./webpack/plugins/inject-components-css')
+const DonePlugin = require('./webpack/plugins/done')
 
 const extendFilePath = resolveApp('webpack.common.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
@@ -53,14 +52,16 @@ let webpackConfig = {
   module: {
     rules: [
       ...configureBabelLoader(babelPlugins),
-      ...configureCSSLoader(),
       {
-        test: /\.(jpe?g|png|gif|svg|webp)$/i,
-        type: 'asset',
+        test: /\.(woff2?|ttf|otf|eot|svg|jpe?g|png|gif|webp)$/,
+        type: 'asset/resource',
       },
+      ...configureCSSLoader(),
     ],
   },
   plugins: [
+    // This plugin is needed due to Webpack 5 not always exiting properly when done building
+    new DonePlugin(),
     new InjectComponentsCSSPlugin({
       sourcePath: `${config.styles}/*.scss`,
       componentsPath: config.components,
@@ -71,8 +72,6 @@ let webpackConfig = {
       filename: `${config.cssOutputPath.substring(1)}/[name].css`,
       chunkFilename: `${config.cssOutputPath.substring(1)}/chunks/[name].[contenthash].css`,
     }),
-    new CleanWebpackPlugin(),
-    new WebpackBarPlugin(),
     configureNunjucksPlugin(),
     new ESLintPlugin({
       context: resolveApp(''),

@@ -1,5 +1,7 @@
 const path = require('path')
 const { ImagePool } = require('@squoosh/lib')
+const logging = require('../../../utils/logging')
+const { default: chalk } = require('chalk')
 
 const defaultOptions = {
   mozjpeg: {
@@ -22,6 +24,7 @@ const targets = {
   '.avif': 'avif',
 }
 
+const imagePool = new ImagePool()
 const images = async (buffer, filePath) => {
   const ext = path.extname(filePath).toLowerCase()
   const targetCodec = targets[ext]
@@ -33,13 +36,20 @@ const images = async (buffer, filePath) => {
       ...defaultOptions[targetCodec],
     },
   }
-
-  const imagePool = new ImagePool()
   const image = imagePool.ingestImage(buffer)
   await image.encode(options)
-  await imagePool.close()
+  const output = await image.encodedWith[targetCodec]
+  const inputSize = Buffer.byteLength(buffer)
+  const outputSize = output.size
 
-  return Buffer.from((await image.encodedWith[targetCodec]).binary)
+  logging.success({
+    message: `${chalk.bold('Finished optimizing:')} '${path.basename(filePath)}' saved ${chalk.bold(
+      `${(100 - (outputSize / inputSize) * 100).toFixed(2)}%`,
+    )}`,
+    time: new Date(),
+  })
+
+  return Buffer.from(output.binary)
 }
 
 module.exports = images

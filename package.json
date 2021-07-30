@@ -67,6 +67,7 @@
     "eslint-plugin-simple-import-sort": "7.0.0",
     "eslint-webpack-plugin": "2.4.1",
     "favicons": "^6.2.2",
+    "file-entry-cache": "^6.0.1",
     "glob": "7.1.6",
     "html-loader": "^2.1.2",
     "html-webpack-plugin": "^5.3.2",
@@ -85,6 +86,8 @@
     "mkdirp": "0.5.1",
     "node-sass": "^6.0.1",
     "nunjucks": "^3.2.3",
+    "postcss": "^8.3.6",
+    "postcss-combine-media-query": "^1.0.1",
     "postcss-loader": "^6.1.1",
     "prettier": "^2.3.2",
     "replace-in-files": "^3.0.0",
@@ -101,7 +104,6 @@
     "webpack-cli": "^4.7.2",
     "webpack-dev-server": "^3.11.2",
     "webpack-merge": "^5.8.0",
-    "webpackbar": "^5.0.0-3",
     "workbox-build": "6.0.2",
     "workbox-webpack-plugin": "^6.1.5"
   }

@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = {
-  // root: true,
+  root: true,
   parser: 'babel-eslint',
   env: {
     browser: true,

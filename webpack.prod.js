@@ -9,6 +9,7 @@ const extendFilePath = resolveApp('webpack.prod.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
 
 const WorkboxPlugin = require('workbox-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const webpackConfig = merge(common, {
   mode: 'production',
@@ -38,6 +39,7 @@ const webpackConfig = merge(common, {
     ],
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new WorkboxPlugin.GenerateSW({
       clientsClaim: true,
       skipWaiting: true,
@@ -45,7 +47,6 @@ const webpackConfig = merge(common, {
     }),
   ],
 })
-
 
 if (hasExtendFile) {
   require(extendFilePath)(webpackConfig)

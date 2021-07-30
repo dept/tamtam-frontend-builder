@@ -1,7 +1,6 @@
 const fs = require('fs')
 const nodePath = require('path')
-
-const error = require('../error')
+const logging = require('../logging')
 
 module.exports = function safeReadFileSync(path, opt_encoding) {
   try {
@@ -9,8 +8,9 @@ module.exports = function safeReadFileSync(path, opt_encoding) {
 
     return fs.readFileSync(path, 'utf-8' || opt_encoding)
   } catch (e) {
-    error(e, true)
-
+    logging.error({
+      message: e,
+    })
     return null
   }
 }
