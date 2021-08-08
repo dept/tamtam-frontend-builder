@@ -90,8 +90,8 @@ const configureNunjucksPlugin = () => {
     },
   )
 
-  environment.addExtension('SVGExtension', new SvgExtension())
-  environment.addExtension('DebugExtension', new DebugExtension())
+  environment.addExtension('SVGExtension', SvgExtension)
+  environment.addExtension('DebugExtension', DebugExtension)
 
   environment.addFilter('assign', assignFilter)
   environment.addFilter('merge', mergeFilter)

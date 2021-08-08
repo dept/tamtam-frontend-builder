@@ -24,4 +24,4 @@ function SVGExtension() {
   }
 }
 
-module.exports = SVGExtension
+module.exports = new SVGExtension()

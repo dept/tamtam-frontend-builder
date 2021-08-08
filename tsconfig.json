@@ -1,5 +1,5 @@
 {
-  "extends": "config/typescript/base",
+  "extends": "./config/typescript/base",
   "include": [".", "./types"],
   "exclude": ["node_modules", "*/.spec.tsx", "*/.spec.ts"]
 }

@@ -18,13 +18,6 @@ const DonePlugin = require('./webpack/plugins/done')
 const extendFilePath = resolveApp('webpack.common.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
 
-const babelPlugins = [
-  '@babel/syntax-dynamic-import',
-  '@babel/plugin-proposal-class-properties',
-  '@babel/plugin-proposal-object-rest-spread',
-  '@babel/plugin-proposal-optional-chaining',
-]
-
 let webpackConfig = {
   mode: 'development',
   context: resolveApp(),
@@ -51,7 +44,7 @@ let webpackConfig = {
   },
   module: {
     rules: [
-      ...configureBabelLoader(babelPlugins),
+      ...configureBabelLoader(),
       {
         test: /\.(woff2?|ttf|otf|eot|svg|jpe?g|png|gif|webp)$/,
         type: 'asset/resource',

@@ -31,4 +31,4 @@ function DebugExtension() {
   }
 }
 
-module.exports = DebugExtension
+module.exports = new DebugExtension()

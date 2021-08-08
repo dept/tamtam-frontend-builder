@@ -2,14 +2,18 @@ const path = require('path')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const config = require('../../utils/get-config')
 
-const configureCSSLoader = () => {
+const configureCSSLoader = ({ extract = true } = {}) => {
   const extractedCSSConfig = {
     test: /\.(s*)css$/,
     exclude: /node_modules/,
     use: [
-      {
-        loader: MiniCssExtractPlugin.loader,
-      },
+      ...(extract
+        ? [
+            {
+              loader: MiniCssExtractPlugin.loader,
+            },
+          ]
+        : []),
       {
         loader: require.resolve('css-loader'),
         options: {

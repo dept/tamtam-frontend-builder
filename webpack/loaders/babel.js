@@ -4,10 +4,14 @@ const resolveApp = require('../../utils/resolve-app')
 const extendFilePath = resolveApp('/babel.extend.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
 
-module.exports = (plugins) => {
-
+module.exports = () => {
   let options = {
-    plugins,
+    plugins: [
+      '@babel/syntax-dynamic-import',
+      '@babel/plugin-proposal-class-properties',
+      '@babel/plugin-proposal-object-rest-spread',
+      '@babel/plugin-proposal-optional-chaining',
+    ],
     presets: [
       '@babel/preset-typescript',
       [
@@ -16,7 +20,7 @@ module.exports = (plugins) => {
           useBuiltIns: 'usage',
           modules: false,
           corejs: 3,
-          configPath: resolveApp()
+          configPath: resolveApp(),
         },
       ],
     ],
