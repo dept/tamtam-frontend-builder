@@ -71,7 +71,9 @@ const configureNunjucksPlugin = () => {
 
   const templates = templatesList.map((filePath) => ({
     from: filePath,
-    to: filePath.replace(`${config.html}/`, `${config.htmlOutputPath.replace(config.dist, '')}/`),
+    to: filePath
+      .replace(`${config.html}/`, `${config.htmlOutputPath.replace(config.dist, '')}/`)
+      .substring(1),
     context: contextData,
     writeToFileEmit: false,
   }))
