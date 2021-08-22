@@ -11,7 +11,7 @@ const generateConfig = () => {
 
   config.isDevelopment = process.env.NODE_ENV === 'development'
   config.debug = config.isDevelopment
-  config.buildStatic = true
+  config.buildStatic = false
 
   // Root folder
   config.root = resolveApp('')

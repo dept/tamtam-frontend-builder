@@ -7,6 +7,7 @@ const createAliasObject = require('./webpack/create-alias-object')
 const configureBabelLoader = require('./webpack/loaders/babel')
 const configureCSSLoader = require('./webpack/loaders/style')
 
+const WebpackBar = require('webpackbar')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
@@ -53,6 +54,7 @@ let webpackConfig = {
     ],
   },
   plugins: [
+    new WebpackBar(),
     // This plugin is needed due to Webpack 5 not always exiting properly when done building
     new DonePlugin(),
     new InjectComponentsCSSPlugin({

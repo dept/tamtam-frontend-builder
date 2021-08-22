@@ -23,7 +23,7 @@ const webpackConfig = mergeWithCustomize({
   mode: 'production',
   bail: true,
   output: {
-    // clean: true,
+    clean: true,
     ...(config.buildStatic
       ? {
           filename: `${config.jsOutputPath.substring(1)}/[name].[contenthash].js`,
