@@ -1,8 +1,8 @@
-'use strict'
+const path = require('path')
 
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   env: {
     browser: true,
     commonjs: true,
@@ -30,6 +30,10 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
       modules: true,
+    },
+    requireConfigFile: false,
+    babelOptions: {
+      configFile: false,
     },
   },
   rules: {

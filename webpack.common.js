@@ -3,7 +3,6 @@ const fs = require('fs')
 const resolveApp = require('./utils/resolve-app')
 const config = require('./utils/get-config')
 
-const createAliasObject = require('./webpack/create-alias-object')
 const configureBabelLoader = require('./webpack/loaders/babel')
 const configureCSSLoader = require('./webpack/loaders/style')
 
@@ -37,7 +36,11 @@ let webpackConfig = {
     colors: true,
   },
   resolve: {
-    alias: createAliasObject(),
+    alias: {
+      '@components': config.components,
+      '@utilities': config.utilities,
+      '@': config.source,
+    },
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
   resolveLoader: {

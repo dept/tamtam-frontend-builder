@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@babel/core": "7.12.10",
+    "@babel/eslint-parser": "^7.15.0",
     "@babel/plugin-proposal-class-properties": "7.12.1",
     "@babel/plugin-proposal-object-rest-spread": "7.12.1",
     "@babel/plugin-proposal-optional-chaining": "7.12.7",
@@ -50,7 +51,6 @@
     "@typescript-eslint/eslint-plugin": "4.9.1",
     "@typescript-eslint/parser": "4.9.1",
     "autoprefixer": "^10.3.1",
-    "babel-eslint": "10.1.0",
     "babel-loader": "8.2.2",
     "chalk": "2.4.2",
     "copy-webpack-plugin": "^9.0.1",
@@ -105,10 +105,9 @@
     "webpack-dev-server": "^3.11.2",
     "webpack-manifest-plugin": "^4.0.2",
     "webpack-merge": "^5.8.0",
+    "webpackbar": "^5.0.0-3",
     "workbox-build": "6.0.2",
     "workbox-webpack-plugin": "^6.1.5"
   },
-  "devDependencies": {
-    "webpackbar": "^5.0.0-3"
-  }
+  "devDependencies": {}
 }
