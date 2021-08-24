@@ -3,7 +3,7 @@ const mkdirp = require('mkdirp')
 const path = require('path')
 const { prompt } = require('enquirer')
 const logging = require('./logging')
-const { camelCase } = require('lodash')
+const { camelCase, startCase } = require('lodash')
 const config = require('./get-config')
 
 function generateHTML(name) {
@@ -13,8 +13,27 @@ function generateHTML(name) {
 `
 }
 
-function generateJS(name) {
-  return ``
+function generateJS(name, type) {
+  if (type === 'component')
+    return `class ${startCase(camelCase(name))} {
+  element: HTMLElement
+  constructor(element: HTMLElement) {
+    this.element = element
+  }
+}
+
+export default ${startCase(camelCase(name))}`
+
+  return `export const ${camelCase(name)} = () => null`
+}
+
+function generateIndex(name, type) {
+  if (type === 'component')
+    return `import ${startCase(camelCase(name))} from './javascript/${name}'
+
+export default ${startCase(camelCase(name))}`
+
+  return `export * from './javascript/${name}'`
 }
 
 function generateCSS(name) {
@@ -27,10 +46,12 @@ function generateCSS(name) {
 function generateJSON(name) {
   return {
     name,
+    license: 'MIT',
+    version: '1.0.0',
   }
 }
 
-function generateFiles(rootPath, type, name, json, jsExt, html = false, css = false, js = false) {
+function generateFiles({ rootPath, type, name, json, jsExt, html, css, js, index }) {
   const rootDir = `${rootPath}/${name}`
   const stylePrefix = type === 'component' ? '_components.' : ''
   const filesObj = [
@@ -54,9 +75,14 @@ function generateFiles(rootPath, type, name, json, jsExt, html = false, css = fa
       file: `${name}.${jsExt}`,
       content: js,
     },
+    {
+      path: `${rootDir}`,
+      file: `index.${jsExt}`,
+      content: index,
+    },
   ]
 
-  const files = filesObj.filter((fileObj) => fileObj.content || fileObj.content === '')
+  const files = filesObj.filter(fileObj => fileObj.content || fileObj.content === '')
 
   if (!files) {
     logging.warning({
@@ -65,18 +91,18 @@ function generateFiles(rootPath, type, name, json, jsExt, html = false, css = fa
     return
   }
 
-  const filesToCreate = files.map((dir) => mkdirp.sync(dir.path))
+  const filesToCreate = files.map(dir => mkdirp.sync(dir.path))
 
   Promise.all(filesToCreate)
-    .then((results) => {
-      if (!results.filter((result) => result).length) {
+    .then(results => {
+      if (!results.filter(result => result).length) {
         logging.error({
           message: `The ${type} called ${name} already exists.`,
         })
         return
       }
 
-      files.forEach((file) => {
+      files.forEach(file => {
         fs.writeFileSync(path.resolve(file.path, file.file), file.content)
       })
 
@@ -99,14 +125,14 @@ const question = [
     type: 'input',
     name: 'name',
     message: 'Please specify a name.',
-    result: (result) => {
+    result: result => {
       return result
         .toLowerCase()
         .replace(/ /g, '-')
         .replace(/[\.|,]/g, '')
         .replace(/[^a-z0-9-]/gi, '-')
     },
-    validate: (result) => result !== '',
+    validate: result => result !== '',
   },
   {
     type: 'select',
@@ -127,7 +153,7 @@ const question = [
 ]
 
 prompt(question)
-  .then(async (result) => {
+  .then(async result => {
     if (!result.type || !result.name) {
       logging.warning({
         message: `Aborted creation of component/utility!`,
@@ -154,13 +180,25 @@ prompt(question)
       html = generateHTML(result.name)
       css = generateCSS(result.name)
     }
-    js = generateJS(result.name)
+    index = generateIndex(result.name, result.type)
+    js = generateJS(result.name, result.type)
     json = generateJSON(result.name)
 
-    generateFiles(rootPath, result.type, result.name, json, result.jsExt, html, css, js)
+    generateFiles({
+      rootPath,
+      type: result.type,
+      name: result.name,
+      json,
+      jsExt: result.jsExt,
+      html,
+      css,
+      js,
+      index,
+    })
+
     setTimeout(() => process.exit(0))
   })
-  .catch(() => {
+  .catch(e => {
     logging.error({
       message: `Aborted creation of component/utility!`,
     })
