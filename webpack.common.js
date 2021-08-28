@@ -10,7 +10,7 @@ const WebpackBar = require('webpackbar')
 const ESLintPlugin = require('eslint-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
-const SassLintPlugin = require('sass-lint-webpack')
+const StylelintPlugin = require('stylelint-webpack-plugin')
 const configureNunjucksPlugin = require('./webpack/plugins/nunjucks')
 const InjectComponentsCSSPlugin = require('./webpack/plugins/inject-components-css')
 const DonePlugin = require('./webpack/plugins/done')
@@ -75,9 +75,9 @@ let webpackConfig = {
       context: resolveApp(''),
       emitWarning: true,
     }),
-    new SassLintPlugin({
-      files: [resolveApp('source/sass/**/*.scss'), resolveApp('components/**/*.scss')].join(','),
-      configPath: resolveApp('.sass-lint.yml'),
+    new StylelintPlugin({
+      configFile: resolveApp('stylelint.config.js'),
+      files: [resolveApp('source/**/*.scss')].join(','),
     }),
     new CopyPlugin({
       patterns: config.copy || [],
