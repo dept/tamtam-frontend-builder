@@ -11,9 +11,9 @@ module.exports = () => {
 
   // Add minifier when production
   if (!config.isDevelopment) {
-      plugins.push(require('css-mqpacker')({
-          sort: true
-      }));
+      plugins.push(
+        require('postcss-sort-media-queries')(),
+      )
 
       plugins.push(require('cssnano')({
           preset: [
