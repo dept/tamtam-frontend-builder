@@ -21,7 +21,6 @@ const webpackConfig = mergeWithCustomize({
   ),
 })(common, {
   mode: 'production',
-  bail: true,
   output: {
     clean: true,
     ...(config.buildStatic

@@ -11,16 +11,16 @@ class DonePlugin {
   apply(compiler) {
     const { afterEmit } = getCompilerHooks(compiler)
 
-    afterEmit.tap(PLUGIN_NAME, (manifest) => (this.manifest = manifest))
-    hooks.emitHook.tap(PLUGIN_NAME, (templates) => (this.templates = templates))
+    afterEmit.tap(PLUGIN_NAME, manifest => (this.manifest = manifest))
+    hooks.emitHook.tap(PLUGIN_NAME, templates => (this.templates = templates))
 
-    compiler.hooks.done.tap(PLUGIN_NAME, (stats) => {
+    compiler.hooks.done.tap(PLUGIN_NAME, stats => {
       if (!config.isDevelopment && config.buildStatic) {
         logging.success({
           time: new Date(),
           message: `${chalk.bold('Starting')} 'DonePlugin' updating file hashes`,
         })
-        this.templates.forEach((template) => {
+        this.templates.forEach(template => {
           const filePath = `${config.dist}/${template.to}`
           let file = fs.readFileSync(filePath, {
             encoding: 'utf-8',
