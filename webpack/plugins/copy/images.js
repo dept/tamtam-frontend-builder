@@ -1,7 +1,7 @@
 const path = require('path')
 const { ImagePool } = require('@squoosh/lib')
 const logging = require('../../../utils/logging')
-const { default: chalk } = require('chalk')
+const chalk = require('chalk')
 
 const defaultOptions = {
   mozjpeg: {

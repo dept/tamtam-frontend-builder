@@ -16,6 +16,10 @@ const webpackConfig = merge(common, {
     port: config.port,
     allowedHosts: 'all',
     hot: true,
+    client: {
+      overlay: false,
+      progress: false,
+    },
     devMiddleware: {
       writeToDisk: false,
     },

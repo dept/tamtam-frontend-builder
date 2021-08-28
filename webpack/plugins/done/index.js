@@ -1,6 +1,6 @@
 const fs = require('fs')
 const config = require('../../../utils/get-config')
-const { default: chalk } = require('chalk')
+const chalk = require('chalk')
 const logging = require('../../../utils/logging')
 const { hooks } = require('../nunjucks/plugin')
 const { getCompilerHooks } = require('webpack-manifest-plugin')

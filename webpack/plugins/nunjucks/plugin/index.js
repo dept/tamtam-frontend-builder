@@ -1,6 +1,6 @@
 const path = require('path')
 const nunjucks = require('nunjucks')
-const { default: chalk } = require('chalk')
+const chalk = require('chalk')
 const glob = require('glob')
 const fileEntryCache = require('file-entry-cache')
 const logging = require('../../../../utils/logging')
