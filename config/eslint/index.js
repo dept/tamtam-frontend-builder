@@ -18,7 +18,6 @@ module.exports = {
     'plugin:import/typescript',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    'eslint-config-prettier/@typescript-eslint',
   ],
   globals: {
     google: true,
