@@ -14,6 +14,7 @@ const StylelintPlugin = require('stylelint-webpack-plugin')
 const configureNunjucksPlugin = require('./webpack/plugins/nunjucks')
 const InjectComponentsCSSPlugin = require('./webpack/plugins/inject-components-css')
 const DonePlugin = require('./webpack/plugins/done')
+const resolveAliases = require('./webpack/resolveAliases')
 
 const extendFilePath = resolveApp('webpack.common.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
@@ -36,11 +37,7 @@ let webpackConfig = {
     colors: true,
   },
   resolve: {
-    alias: {
-      '@components': config.components,
-      '@utilities': config.utilities,
-      '@': config.source,
-    },
+    alias: resolveAliases(),
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
   resolveLoader: {

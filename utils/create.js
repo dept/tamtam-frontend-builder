@@ -110,7 +110,7 @@ function generateFiles({ rootPath, type, name, json, jsExt, html, css, js, index
         message: `Succesfully created ${type}: ${name}.`,
       })
     })
-    .catch(() => {})
+    .catch(() => null)
 }
 
 const question = [
@@ -198,7 +198,7 @@ prompt(question)
 
     setTimeout(() => process.exit(0))
   })
-  .catch(e => {
+  .catch(() => {
     logging.error({
       message: `Aborted creation of component/utility!`,
     })

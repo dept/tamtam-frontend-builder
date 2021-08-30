@@ -28,17 +28,6 @@
     "noImplicitThis": true,
     "strictNullChecks": true,
     "baseUrl": ".",
-    "outDir": "build",
-    "paths": {
-      "@utilities/*": [
-        "./source/utilities/*"
-      ],
-      "@components/*": [
-        "./source/components/*"
-      ],
-      "@/*": [
-        "./source/*"
-      ]
-    }
+    "outDir": "build"
   }
 }
