@@ -2,9 +2,11 @@ const path = require('path')
 const nunjucks = require('nunjucks')
 const chalk = require('chalk')
 const glob = require('glob')
+const globParent = require('glob-parent')
 const fileEntryCache = require('file-entry-cache')
 const logging = require('../../../../utils/logging')
 const SyncHook = require('tapable').SyncHook
+const getGlobalContext = require('../utils/getGlobalContext')
 
 const PLUGIN_NAME = 'NunjucksWebpackPlugin'
 
@@ -24,7 +26,7 @@ class NunjucksWebpackPlugin {
           path: '',
         },
         templates: [],
-        path: '',
+        paths: '',
       },
       options || {},
     )
@@ -48,7 +50,7 @@ class NunjucksWebpackPlugin {
       output = compiler.options.devServer.outputPath
     }
 
-    const emitCallback = (compilation) => {
+    const emitCallback = compilation => {
       this.compileStart()
 
       const templates = this.cache.getUpdatedFiles(this.watchFiles)
@@ -57,42 +59,40 @@ class NunjucksWebpackPlugin {
           ? this.options.configure
           : nunjucks.configure(this.options.configure.path, this.options.configure.options)
 
+      configure.addGlobal('global', getGlobalContext())
+
       const promises = []
 
       if (templates.length) {
-        this.options.templates.forEach((template) => {
+        this.options.templates.forEach(template => {
           if (!template.from)
             compilation.errors.push(new Error('Each template should have `from` option'))
 
           if (!template.to)
             compilation.errors.push(new Error('Each template should have `to` option'))
 
-          configure.render(
-            template.from,
-            template.context,
-            (err, res) => {
-              if (err) {
-                compilation.errors.push(err)
-                return
-              }
+          configure.render(template.from, template.context, (err, res) => {
+            if (err) {
+              compilation.errors.push(err)
+              return
+            }
 
-              let webpackTo = template.to
+            let webpackTo = template.to
 
-              if (path.isAbsolute(webpackTo)) {
-                webpackTo = path.relative(output, webpackTo)
-              }
+            if (path.isAbsolute(webpackTo)) {
+              webpackTo = path.relative(output, webpackTo)
+            }
 
-              const source = {
-                size: () => res.length,
-                source: () => res,
-              }
+            const source = {
+              size: () => res.length,
+              source: () => res,
+            }
 
-              promises.push({
-                ...template,
-                source,
-              })
-            },
-          )
+            promises.push({
+              ...template,
+              source,
+            })
+          })
         })
 
         compilation.hooks.processAssets.tapAsync(
@@ -103,7 +103,7 @@ class NunjucksWebpackPlugin {
           async (_, callback) => {
             try {
               const data = await Promise.all(promises)
-              data.forEach((template) => {
+              data.forEach(template => {
                 const asset = compilation.getAsset(template.to)
                 compilation[asset ? 'updateAsset' : 'emitAsset'](
                   template.to,
@@ -125,9 +125,13 @@ class NunjucksWebpackPlugin {
       }
     }
 
-    const afterEmitCallback = (compilation, callback) => {
+    const afterEmitCallback = async (compilation, callback) => {
       this.watchFiles = this.getFiles()
-      this.watchFiles.map((file) => compilation.fileDependencies.add(file))
+      this.watchFiles.map(file => {
+        const parentDir = globParent(file)
+        if (parentDir) compilation.contextDependencies.add(parentDir)
+        compilation.fileDependencies.add(file)
+      })
       return callback()
     }
 
@@ -136,7 +140,7 @@ class NunjucksWebpackPlugin {
   }
 
   getFiles() {
-    return glob.sync(this.options.path)
+    return this.options.paths.map(p => glob.sync(p)).flat()
   }
 
   compileStart() {
