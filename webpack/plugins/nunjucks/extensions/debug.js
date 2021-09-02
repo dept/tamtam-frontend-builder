@@ -6,7 +6,7 @@ var NO_ARGUMENT = '__no-argument-supplied__'
 function DebugExtension() {
   this.tags = ['debug']
 
-  this.parse = function(parser, nodes) {
+  this.parse = function (parser, nodes) {
     // get the tag token
     var tok = parser.nextToken()
 
@@ -22,11 +22,11 @@ function DebugExtension() {
     return new nodes.CallExtension(this, 'run', args)
   }
 
-  this.run = function(context, name) {
+  this.run = function (context, name) {
     var value =
       typeof name === 'string' && name !== NO_ARGUMENT ? context['ctx'][name] : context['ctx']
 
-    var debugString = debug(value)
+    var debugString = debug({ ...value, global: context.env.globals.global })
     return new nunjucks.runtime.SafeString(debugString)
   }
 }

@@ -59,13 +59,6 @@ class NunjucksWebpackPlugin {
 
       const promises = []
 
-      const baseContext = {
-        __webpack__: {
-          hash: compilation.hash,
-        },
-        end: process.env,
-      }
-
       if (templates.length) {
         this.options.templates.forEach((template) => {
           if (!template.from)
@@ -76,7 +69,7 @@ class NunjucksWebpackPlugin {
 
           configure.render(
             template.from,
-            Object.assign(baseContext, template.context),
+            template.context,
             (err, res) => {
               if (err) {
                 compilation.errors.push(err)

@@ -47,7 +47,7 @@ const configureNunjucksPlugin = () => {
     generateFileGlobs(config.html, ['{*.html, !(_dev|generic|layouts)**/*.html}']),
   )
 
-  const pagesList = templatesList.map((template) => template.replace(`${config.html}/`, ''))
+  const pagesList = templatesList.map(template => template.replace(`${config.html}/`, ''))
   const svgList = getFileList(
     generateFileGlobs(config.svg, ['*.svg', '**/*.svg']),
     config.svg,
@@ -55,26 +55,11 @@ const configureNunjucksPlugin = () => {
   )
   const hasCriticalCSS = fs.existsSync(resolveApp(`${config.css}/critical.css`))
 
-  contextData.project = {
-    name: packageJSON.name,
-    description: packageJSON.description,
-    author: packageJSON.author,
-    version: packageJSON.version,
-    debug: config.debug,
-    showGrid: config.showGrid,
-    pages: pagesList,
-    criticalCSS: hasCriticalCSS
-      ? fs.readFileSync(resolveApp(`${config.css}/critical.css`), 'utf8')
-      : false,
-    svgs: svgList,
-  }
-
-  const templates = templatesList.map((filePath) => ({
+  const templates = templatesList.map(filePath => ({
     from: filePath,
     to: filePath
       .replace(`${config.html}/`, `${config.htmlOutputPath.replace(config.dist, '')}/`)
       .substring(1),
-    context: contextData,
     writeToFileEmit: false,
   }))
 
@@ -98,6 +83,24 @@ const configureNunjucksPlugin = () => {
   environment.addFilter('assign', assignFilter)
   environment.addFilter('merge', mergeFilter)
   environment.addFilter('defaults', defaultsFilter)
+
+  environment.addGlobal('global', {
+    ...contextData,
+    env: process.env,
+    project: {
+      name: packageJSON.name,
+      description: packageJSON.description,
+      author: packageJSON.author,
+      version: packageJSON.version,
+      debug: config.debug,
+      showGrid: config.showGrid,
+      pages: pagesList,
+      criticalCSS: hasCriticalCSS
+        ? fs.readFileSync(resolveApp(`${config.css}/critical.css`), 'utf8')
+        : false,
+      svgs: svgList,
+    },
+  })
 
   return new NunjucksWebpackPlugin({
     path: `${config.source}/**/*.html`,
