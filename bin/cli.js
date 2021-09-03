@@ -1,44 +1,35 @@
 #!/usr/bin/env node
 const yargs = require('yargs')
 
-const error = require('../utils/error')
-const { runGulpTask } = require('../utils/run-gulp-task')
-
-yargs.command('build', 'build the project', {}, () => {
-  runGulpTask('build')
-})
+const { runYarn } = require('../utils/scripts/run-yarn')
+const logging = require('../utils/logging')
 
 yargs.command('deploy', 'build for deploy', {}, () => {
-  runGulpTask('deploy')
+  runYarn('deploy')
 })
 
-yargs.command('dist', 'export to dist folder', {}, () => {
-  runGulpTask('dist')
+yargs.command('dist', 'build for deploy', {}, () => {
+  logging.warning({
+    message: 'This command is deprecated, using `yarn deploy` instead',
+    time: new Date(),
+  })
+  runYarn('deploy')
 })
 
 yargs.command('start', 'start the project', {}, () => {
-  runGulpTask('default')
+  runYarn('start')
 })
 
-yargs.command('npm-install-recursive', 'install npm recursive', {}, () => {
-  require('../utils/npm-install-recursive')
+yargs.command('favicons', 'generate favicons', {}, () => {
+  runYarn('favicons')
 })
 
-yargs.command('create', 'create new component', {}, () => {
-  require('../utils/create')
+yargs.command('yarn-install-recursive', 'install yarn recursive', {}, () => {
+  require('../utils/scripts/yarn-install-recursive')
 })
 
-yargs.command('task [task]', 'run gulp task', {}, args => {
-  if (!args.task) {
-    error('No task specified.')
-    return
-  }
-
-  try {
-    runGulpTask(args.task)
-  } catch (e) {
-    error(`Task name '${args.task}' not recognized.`)
-  }
+yargs.command('generate', 'generate new component/utility', {}, () => {
+  runYarn('generate')
 })
 
 yargs.argv

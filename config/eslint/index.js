@@ -1,8 +1,6 @@
-'use strict'
-
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
+  parser: '@babel/eslint-parser',
   env: {
     browser: true,
     commonjs: true,
@@ -18,7 +16,6 @@ module.exports = {
     'plugin:import/typescript',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
-    'eslint-config-prettier/@typescript-eslint',
   ],
   globals: {
     google: true,
@@ -30,6 +27,10 @@ module.exports = {
     ecmaFeatures: {
       jsx: true,
       modules: true,
+    },
+    requireConfigFile: false,
+    babelOptions: {
+      configFile: false,
     },
   },
   rules: {

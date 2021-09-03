@@ -1,7 +1,15 @@
 {
   "eslint.validate": ["javascript", "vue", "typescript"],
+  "eslint.nodePath": "./node_modules",
+  "eslint.workingDirectories": ["./"],
   "files.associations": {
-    "*.js": "javascript"
+    "*.js": "javascript",
+    "*.ts": "typescript"
+  },
+  "[typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
   },
   "[javascript]": {
     "editor.codeActionsOnSave": {
@@ -18,6 +26,5 @@
       "source.fixAll.eslint": false
     }
   },
-  "json.format.enable": true,
-  "eslint.enable": true
+  "json.format.enable": true
 }
