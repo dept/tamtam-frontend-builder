@@ -43,7 +43,7 @@ const configureNunjucksPlugin = () => {
   environment.addFilter('defaults', defaultsFilter)
 
   return new NunjucksWebpackPlugin({
-    paths: [`${config.source}/**/*.html`, `${config.data}/**/*.json`],
+    paths: [`${config.source}/**/*.html`, `${config.data}/**/*.json`, `${config.assets}/**/*.svg`],
     configure: environment,
     templates: templates,
   })

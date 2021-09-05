@@ -27,7 +27,11 @@ const webpackConfig = merge(common, {
       directory: config.dist,
       watch: true,
     },
-    watchFiles: [`${config.source}/**/*.html`, `${config.data}/**/*.json`],
+    watchFiles: [
+      `${config.source}/**/*.html`,
+      `${config.data}/**/*.json`,
+      `${config.assets}/**/*.svg`,
+    ],
   },
   optimization: {
     chunkIds: 'named',

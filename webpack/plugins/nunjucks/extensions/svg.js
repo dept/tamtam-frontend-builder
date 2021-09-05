@@ -2,10 +2,9 @@ const svg = require('../utils/svg')
 const nunjucks = require('nunjucks')
 
 function SVGExtension() {
-
   this.tags = ['svg']
 
-  this.parse = function(parser, nodes) {
+  this.parse = function (parser, nodes) {
     // get the tag token
     const tok = parser.nextToken()
 
@@ -15,12 +14,16 @@ function SVGExtension() {
     parser.advanceAfterBlockEnd(tok.value)
 
     // See above for notes about CallExtension
-    return new nodes.CallExtension(this, 'run', args)
+    return new nodes.CallExtensionAsync(this, 'run', args)
   }
 
-  this.run = function(_, name) {
-    const svgString = svg(name)
-    return new nunjucks.runtime.SafeString(svgString)
+  this.run = async function (_, name, callback) {
+    try {
+      const svgString = await svg(name)
+      return callback(null, new nunjucks.runtime.SafeString(svgString))
+    } catch (error) {
+      callback(error)
+    }
   }
 }
 
