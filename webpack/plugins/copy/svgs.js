@@ -7,15 +7,18 @@ const svgoOptions = {
       name: 'preset-default',
       params: {
         overrides: {
-          removeViewBox: { active: false },
-          cleanupIDs: { active: false },
-          removeTitle: { active: false },
-          removeComments: { active: true },
-          removeUnknownsAndDefaults: { active: false },
-        },
-      },
-    },
-  ],
+          removeViewBox: false,
+          cleanupIDs: false,
+          removeTitle: false,
+          removeComments: true,
+          removeUnknownsAndDefaults: {
+            keepAriaAttrs: true,
+            keepRoleAttr: true,
+          }
+        }
+      }
+    }
+  ]
 }
 
 const options = {
