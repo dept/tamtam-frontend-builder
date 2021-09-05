@@ -1,4 +1,5 @@
 const fs = require('fs')
+const path = require('path')
 const resolveApp = require('../../../../utils/resolve-app')
 const config = require('../../../../utils/get-config')
 const logging = require('../../../../utils/logging')
@@ -34,12 +35,12 @@ const getGlobalContext = () => {
     }
   }
 
-  const pagesList = getTemplatesList().map(template => template.replace(`${config.html}/`, ''))
+  const pagesList = getTemplatesList().map(template => path.relative(config.html, template))
   const svgList = getFileList(
     generateFileGlobs(config.svg, ['*.svg', '**/*.svg']),
     config.svg,
     true,
-  )
+  ).map(svg => svg.split(path.sep).join(path.posix.sep))
 
   return {
     ...contextData,

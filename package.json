@@ -31,11 +31,11 @@
     "npm": "^6"
   },
   "scripts": {
-    "start": "NODE_ENV=development webpack serve --config webpack.dev.js",
-    "build": "NODE_ENV=production webpack --config webpack.prod.js",
-    "deploy": "NODE_ENV=production webpack --config webpack.prod.js",
+    "start": "cross-env NODE_ENV=development webpack serve --config webpack.dev.js",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
+    "deploy": "cross-env NODE_ENV=production webpack --config webpack.prod.js",
     "generate": "node ./utils/create.js",
-    "favicons": "NODE_ENV=production node ./utils/scripts/run favicons"
+    "favicons": "cross-env NODE_ENV=production node ./utils/scripts/run favicons"
   },
   "dependencies": {
     "@babel/core": "7.15.0",
@@ -111,5 +111,7 @@
     "workbox-build": "^6.0.2",
     "workbox-webpack-plugin": "^6.1.5"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
 }

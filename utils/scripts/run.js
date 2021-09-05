@@ -21,6 +21,7 @@ function run(fn, options) {
       time: end,
     })
 
+    process.exit(0)
     return resolution
   })
 }

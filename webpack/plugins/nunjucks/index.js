@@ -1,4 +1,5 @@
 const config = require('../../../utils/get-config')
+const path = require('path')
 const { NunjucksWebpackPlugin } = require('./plugin/index')
 const nunjucks = require('nunjucks')
 
@@ -16,9 +17,7 @@ const getTemplatesList = require('./utils/getTemplatesList')
 const configureNunjucksPlugin = () => {
   const templates = getTemplatesList().map(filePath => ({
     from: filePath,
-    to: filePath
-      .replace(`${config.html}/`, `${config.htmlOutputPath.replace(config.dist, '')}/`)
-      .substring(1),
+    to: path.join(config.htmlOutputPath, path.relative(config.html, filePath)),
     writeToFileEmit: false,
   }))
 

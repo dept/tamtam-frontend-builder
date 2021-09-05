@@ -53,15 +53,15 @@ const generateConfig = () => {
     process && process.env && process.env.ASSET_PREFIX ? process.env.ASSET_PREFIX : '/'
 
   // Assets dist folders
-  config.assetsOutputPath = path.resolve(config.dist, '/assets')
-  config.imagesOutputPath = path.join(config.assetsOutputPath, '/images')
-  config.svgOutputPath = path.join(config.assetsOutputPath, '/svg')
-  config.fontsOutputPath = path.join(config.assetsOutputPath, '/fonts')
-  config.jsOutputPath = path.join(config.assetsOutputPath, '/js')
-  config.cssOutputPath = path.join(config.assetsOutputPath, '/css')
-  config.faviconsOutputPath = path.join(config.assetsOutputPath, '/favicons')
+  config.assetsOutputPath = 'assets'
+  config.imagesOutputPath = path.join(config.assetsOutputPath, 'images')
+  config.svgOutputPath = path.join(config.assetsOutputPath, 'svg')
+  config.fontsOutputPath = path.join(config.assetsOutputPath, 'fonts')
+  config.jsOutputPath = path.join(config.assetsOutputPath, 'js')
+  config.cssOutputPath = path.join(config.assetsOutputPath, 'css')
+  config.faviconsOutputPath = path.join(config.assetsOutputPath, 'favicons')
 
-  config.htmlOutputPath = config.dist
+  config.htmlOutputPath = ''
   config.publicPath = config.assetPrefix
 
   // Service worker options

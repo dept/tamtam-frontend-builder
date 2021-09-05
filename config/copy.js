@@ -10,7 +10,7 @@ function fileCopyConfig(config) {
     {
       ...defaultOptions,
       from: config.images,
-      to: `.${config.imagesOutputPath}`,
+      to: `${config.imagesOutputPath}`,
       transform: async (image, filePath) => {
         if (config.isDevelopment || filePath.includes('tmp')) return image
         return await images(image, filePath)
@@ -19,18 +19,18 @@ function fileCopyConfig(config) {
     {
       ...defaultOptions,
       from: config.svg,
-      to: `.${config.svgOutputPath}`,
+      to: `${config.svgOutputPath}`,
       transform: async (svg) => await svgs(svg),
     },
     {
       ...defaultOptions,
       from: config.favicons,
-      to: `.${config.faviconsOutputPath}`,
+      to: `${config.faviconsOutputPath}`,
     },
     {
       ...defaultOptions,
       from: config.fonts,
-      to: `.${config.fontsOutputPath}`,
+      to: `${config.fontsOutputPath}`,
     },
   ]
 }
