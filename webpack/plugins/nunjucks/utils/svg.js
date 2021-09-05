@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const config = require('../../../../utils/get-config')
 const logging = require('../../../../utils/logging')
-const svgs = require('../../copy/svgs')
 
 /**
  * Function to retrieve SVG code
@@ -11,7 +10,7 @@ const svgs = require('../../copy/svgs')
  * @param opt_altText {=string} alt text to inject into the svg
  * @returns {string} svg code
  */
-module.exports = async function (name) {
+module.exports = function (name) {
   if (!name) return ''
 
   name = name.replace(/\.svg$/, '')
@@ -21,7 +20,6 @@ module.exports = async function (name) {
 
   try {
     svg = fs.readFileSync(svgPath)
-    svg = await svgs(svg)
   } catch (err) {
     logging.error({ message: 'Failed to retrieve the svg: ' + svgPath })
   }
