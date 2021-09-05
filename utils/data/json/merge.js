@@ -37,11 +37,7 @@ function mergeJSONData(root, source) {
       continue
     }
 
-    if (path.sep === '\\') {
-      root = root.replace('\\', '/')
-    }
-
-    let dataPath = filePath.replace(root, '')
+    let dataPath = path.relative(root, filePath).split(path.sep).join(path.posix.sep)
 
     dataPath = dataPath.replace(jsonFileRegExp, '')
     dataPath = dataPath.split('/')

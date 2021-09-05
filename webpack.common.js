@@ -28,8 +28,8 @@ let webpackConfig = {
     dev: './source/sass/_dev/dev.scss',
   },
   output: {
-    filename: `${config.jsOutputPath.substring(1)}/[name].js`,
-    chunkFilename: `${config.jsOutputPath.substring(1)}/chunks/[name].[contenthash].js`,
+    filename: `${config.jsOutputPath}/[name].js`,
+    chunkFilename: `${config.jsOutputPath}/chunks/[name].[contenthash].js`,
     path: config.dist,
     publicPath: config.publicPath,
   },
@@ -64,8 +64,8 @@ let webpackConfig = {
       end: '/* endinject */',
     }),
     new MiniCssExtractPlugin({
-      filename: `${config.cssOutputPath.substring(1)}/[name].css`,
-      chunkFilename: `${config.cssOutputPath.substring(1)}/chunks/[name].[contenthash].css`,
+      filename: `${config.cssOutputPath}/[name].css`,
+      chunkFilename: `${config.cssOutputPath}/chunks/[name].[contenthash].css`,
     }),
     configureNunjucksPlugin(),
     new ESLintPlugin({

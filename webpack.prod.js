@@ -25,7 +25,7 @@ const webpackConfig = mergeWithCustomize({
     clean: true,
     ...(config.buildStatic
       ? {
-          filename: `${config.jsOutputPath.substring(1)}/[name].[contenthash].js`,
+          filename: `${config.jsOutputPath}/[name].[contenthash].js`,
         }
       : {}),
   },
@@ -71,7 +71,7 @@ const webpackConfig = mergeWithCustomize({
               }, seed),
           }),
           new MiniCssExtractPlugin({
-            filename: `${config.cssOutputPath.substring(1)}/[name].[contenthash].css`,
+            filename: `${config.cssOutputPath}/[name].[contenthash].css`,
           }),
         ]
       : []),

@@ -14,16 +14,12 @@ function SVGExtension() {
     parser.advanceAfterBlockEnd(tok.value)
 
     // See above for notes about CallExtension
-    return new nodes.CallExtensionAsync(this, 'run', args)
+    return new nodes.CallExtension(this, 'run', args)
   }
 
-  this.run = async function (_, name, callback) {
-    try {
-      const svgString = await svg(name)
-      return callback(null, new nunjucks.runtime.SafeString(svgString))
-    } catch (error) {
-      callback(error)
-    }
+  this.run = function (_, name) {
+    const svgString = svg(name)
+    return new nunjucks.runtime.SafeString(svgString)
   }
 }
 

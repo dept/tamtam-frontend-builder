@@ -15,7 +15,7 @@ const createComponentsArray = (folder) => {
     const filteredFiles = files.filter((file) => !file.startsWith('__') && file.endsWith('.scss'))
 
     filteredFiles.forEach((file) =>
-      data.push(path.join(component, file).replace(config.source, '')),
+      data.push(path.join(component, file).replace(config.source, '').split(path.sep).join(path.posix.sep)),
     )
 
     return data
