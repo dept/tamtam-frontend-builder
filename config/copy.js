@@ -20,7 +20,10 @@ function fileCopyConfig(config) {
       ...defaultOptions,
       from: config.svg,
       to: `${config.svgOutputPath}`,
-      transform: async (svg) => await svgs(svg),
+      transform: {
+        transformer: async svg => await svgs(svg),
+        cache: true,
+      },
     },
     {
       ...defaultOptions,
