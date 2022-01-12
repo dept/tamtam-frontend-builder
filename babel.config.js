@@ -1,7 +1,7 @@
 const resolveApp = require('./utils/resolve-app')
 const fs = require('fs')
 
-const extendFilePath = resolveApp('/babel.extend.js')
+const extendFilePath = resolveApp('babel.extend.js')
 const hasExtendFile = fs.existsSync(extendFilePath)
 
 module.exports = (api) => {
