@@ -10,7 +10,6 @@ const svgoOptions = {
           removeViewBox: false,
           cleanupIDs: false,
           removeTitle: false,
-          removeComments: true,
           removeUnknownsAndDefaults: false,
         },
       },
