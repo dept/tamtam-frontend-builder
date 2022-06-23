@@ -3,7 +3,7 @@ const mkdirp = require('mkdirp')
 const path = require('path')
 const { prompt } = require('enquirer')
 const logging = require('./logging')
-const { camelCase, startCase } = require('lodash')
+const { camelCase, upperFirst } = require('lodash')
 const config = require('./get-config')
 
 function generateHTML(name) {
@@ -15,36 +15,36 @@ function generateHTML(name) {
 
 function generateJS(name, type) {
   if (type === 'component')
-    return `class ${startCase(camelCase(name))} {
+    return `class ${upperFirst(camelCase(name))} {
   constructor(element) {
     this.element = element
   }
 }
 
-export default ${startCase(camelCase(name))}`
+export default ${upperFirst(camelCase(name))}`
 
   return `export const ${camelCase(name)} = () => null`
 }
 
 function generateTS(name, type) {
   if (type === 'component')
-    return `class ${startCase(camelCase(name))} {
+    return `class ${upperFirst(camelCase(name))} {
   element: HTMLElement
   constructor(element: HTMLElement) {
     this.element = element
   }
 }
 
-export default ${startCase(camelCase(name))}`
+export default ${upperFirst(camelCase(name))}`
 
   return `export const ${camelCase(name)} = () => null`
 }
 
 function generateIndex(name, type) {
   if (type === 'component')
-    return `import ${startCase(camelCase(name))} from './javascript/${name}'
+    return `import ${upperFirst(camelCase(name))} from './javascript/${name}'
 
-export default ${startCase(camelCase(name))}`
+export default ${upperFirst(camelCase(name))}`
 
   return `export * from './javascript/${name}'`
 }
