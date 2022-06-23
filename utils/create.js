@@ -16,6 +16,19 @@ function generateHTML(name) {
 function generateJS(name, type) {
   if (type === 'component')
     return `class ${startCase(camelCase(name))} {
+  constructor(element) {
+    this.element = element
+  }
+}
+
+export default ${startCase(camelCase(name))}`
+
+  return `export const ${camelCase(name)} = () => null`
+}
+
+function generateTS(name, type) {
+  if (type === 'component')
+    return `class ${startCase(camelCase(name))} {
   element: HTMLElement
   constructor(element: HTMLElement) {
     this.element = element
@@ -38,7 +51,6 @@ export default ${startCase(camelCase(name))}`
 
 function generateCSS(name) {
   return `.c-${name} {
-
 }
 `
 }
@@ -53,34 +65,40 @@ function generateJSON(name) {
 
 function generateFiles({ rootPath, type, name, json, jsExt, html, css, js, index }) {
   const rootDir = `${rootPath}/${name}`
-  const stylePrefix = type === 'component' ? '_components.' : ''
   const filesObj = [
     {
       path: `${rootDir}/`,
       file: `package.json`,
       content: JSON.stringify(json, null, 4),
     },
-    {
+  ]
+
+  if (type === 'component') {
+    const stylePrefix = type === 'component' ? '_components.' : ''
+    filesObj.push({
       path: `${rootDir}/template/`,
       file: `${name}.html`,
       content: html,
-    },
-    {
+    })
+    filesObj.push({
       path: `${rootDir}/stylesheet/`,
       file: `${stylePrefix}${name}.scss`,
       content: css,
-    },
-    {
-      path: `${rootDir}/javascript/`,
-      file: `${name}.${jsExt}`,
-      content: js,
-    },
-    {
+    })
+  }
+
+  if (js) {
+    filesObj.push({
       path: `${rootDir}`,
       file: `index.${jsExt}`,
       content: index,
-    },
-  ]
+    })
+    filesObj.push({
+      path: `${rootDir}/javascript/`,
+      file: `${name}.${jsExt}`,
+      content: js,
+    })
+  }
 
   const files = filesObj.filter(fileObj => fileObj.content || fileObj.content === '')
 
@@ -137,16 +155,20 @@ const question = [
   {
     type: 'select',
     name: 'jsExt',
-    message: 'Should this use TypeScript?',
+    message: 'Do you need .js, .ts or none?',
     initial: false,
     choices: [
       {
-        message: 'No',
+        message: 'js',
         value: 'js',
       },
       {
-        message: 'Yes',
+        message: 'ts',
         value: 'ts',
+      },
+      {
+        message: 'none',
+        value: 'none',
       },
     ],
   },
@@ -180,8 +202,15 @@ prompt(question)
       html = generateHTML(result.name)
       css = generateCSS(result.name)
     }
+
     index = generateIndex(result.name, result.type)
-    js = generateJS(result.name, result.type)
+
+    if (result.jsExt !== 'none')
+      js =
+        result.jsExt === 'ts'
+          ? generateTS(result.name, result.type)
+          : generateJS(result.name, result.type)
+
     json = generateJSON(result.name)
 
     generateFiles({
