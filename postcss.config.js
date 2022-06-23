@@ -11,9 +11,10 @@ module.exports = () => {
 
   // Add minifier when production
   if (!config.isDevelopment) {
-      plugins.push(
-        require('postcss-sort-media-queries')(),
-      )
+      // Disabled for now due to issues in sorting
+      // plugins.push(
+      //   require('postcss-sort-media-queries')(),
+      // )
 
       plugins.push(require('cssnano')({
           preset: [
