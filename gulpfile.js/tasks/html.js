@@ -21,7 +21,7 @@ const htmlmin = requireCached('gulp-htmlmin')
 const gulpif = requireCached('gulp-if')
 const prettify = requireCached('gulp-jsbeautifier')
 
-const RESERVED_DATA_KEYWORDS = ['project', 'ext']
+const RESERVED_DATA_KEYWORDS = ['project', 'ext', 'env']
 
 /**
  *  Gulp task responsible for compiling the templates into normal HTML using Mozilla nunjucks templates
@@ -96,9 +96,11 @@ function html(callback) {
     svgs: svgList,
   }
 
-  const getDataForFile = file => contextData
+  contextData.env = process.env
 
-  const environment = environment => {
+  const getDataForFile = (file) => contextData
+
+  const environment = (environment) => {
     // add custom tags
     environment.addExtension('SVGExtension', new SvgExtension(gulpNunjucks.nunjucks))
     environment.addExtension('DebugExtension', new DebugExtension(gulpNunjucks.nunjucks))
