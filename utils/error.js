@@ -11,7 +11,7 @@ function error(msg, warn = false) {
 `)
 
   if (!warn) throw new Error(styledMsg)
-  else console.warn(styledMsg)
+  else console.log(styledMsg)
 }
 
 module.exports = error

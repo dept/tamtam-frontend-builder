@@ -1,21 +1,56 @@
-const config = require('../gulpfile.js/config')
 const fs = require('fs-extra')
 const mkdirp = require('mkdirp')
-const chalk = require('chalk')
 const path = require('path')
 const { prompt } = require('enquirer')
+const logging = require('./logging')
+const { camelCase, upperFirst } = require('lodash')
+const config = require('./get-config')
 
 function generateHTML(name) {
-  return ``
+  return `{% macro ${camelCase(name)}(data) %}
+
+{% endmacro %}
+`
 }
 
-function generateJS(name) {
-  return ``
+function generateJS(name, type) {
+  if (type === 'component')
+    return `class ${upperFirst(camelCase(name))} {
+  constructor(element) {
+    this.element = element
+  }
+}
+
+export default ${upperFirst(camelCase(name))}`
+
+  return `export const ${camelCase(name)} = () => null`
+}
+
+function generateTS(name, type) {
+  if (type === 'component')
+    return `class ${upperFirst(camelCase(name))} {
+  element: HTMLElement
+  constructor(element: HTMLElement) {
+    this.element = element
+  }
+}
+
+export default ${upperFirst(camelCase(name))}`
+
+  return `export const ${camelCase(name)} = () => null`
+}
+
+function generateIndex(name, type) {
+  if (type === 'component')
+    return `import ${upperFirst(camelCase(name))} from './javascript/${name}'
+
+export default ${upperFirst(camelCase(name))}`
+
+  return `export * from './javascript/${name}'`
 }
 
 function generateCSS(name) {
   return `.c-${name} {
-
 }
 `
 }
@@ -23,39 +58,54 @@ function generateCSS(name) {
 function generateJSON(name) {
   return {
     name,
+    license: 'MIT',
+    version: '1.0.0',
   }
 }
 
-function generateFiles(rootPath, type, name, json, jsExt, html = false, css = false, js = false) {
+function generateFiles({ rootPath, type, name, json, jsExt, html, css, js, index }) {
   const rootDir = `${rootPath}/${name}`
-  const stylePrefix = type === 'component' ? '_components.' : ''
   const filesObj = [
     {
       path: `${rootDir}/`,
       file: `package.json`,
       content: JSON.stringify(json, null, 4),
     },
-    {
+  ]
+
+  if (type === 'component') {
+    const stylePrefix = type === 'component' ? '_components.' : ''
+    filesObj.push({
       path: `${rootDir}/template/`,
       file: `${name}.html`,
       content: html,
-    },
-    {
+    })
+    filesObj.push({
       path: `${rootDir}/stylesheet/`,
       file: `${stylePrefix}${name}.scss`,
       content: css,
-    },
-    {
+    })
+  }
+
+  if (js) {
+    filesObj.push({
+      path: `${rootDir}`,
+      file: `index.${jsExt}`,
+      content: index,
+    })
+    filesObj.push({
       path: `${rootDir}/javascript/`,
       file: `${name}.${jsExt}`,
       content: js,
-    },
-  ]
+    })
+  }
 
   const files = filesObj.filter(fileObj => fileObj.content || fileObj.content === '')
 
   if (!files) {
-    console.log(chalk.yellow(`Failed to create ${type}: ${name}.`))
+    logging.warning({
+      message: `Failed to create ${type}: ${name}.`,
+    })
     return
   }
 
@@ -64,7 +114,9 @@ function generateFiles(rootPath, type, name, json, jsExt, html = false, css = fa
   Promise.all(filesToCreate)
     .then(results => {
       if (!results.filter(result => result).length) {
-        console.log(chalk.red(`The ${type} called ${name} already exists.`))
+        logging.error({
+          message: `The ${type} called ${name} already exists.`,
+        })
         return
       }
 
@@ -72,9 +124,11 @@ function generateFiles(rootPath, type, name, json, jsExt, html = false, css = fa
         fs.writeFileSync(path.resolve(file.path, file.file), file.content)
       })
 
-      console.log(chalk.yellow(`Succesfully created ${type}: ${name}.`))
+      logging.success({
+        message: `Succesfully created ${type}: ${name}.`,
+      })
     })
-    .catch(() => {})
+    .catch(() => null)
 }
 
 const question = [
@@ -101,36 +155,42 @@ const question = [
   {
     type: 'select',
     name: 'jsExt',
-    message: 'Should this use TypeScript?',
+    message: 'Do you need .js, .ts or none?',
     initial: false,
     choices: [
       {
-        message: 'No',
+        message: 'js',
         value: 'js',
       },
       {
-        message: 'Yes',
+        message: 'ts',
         value: 'ts',
+      },
+      {
+        message: 'none',
+        value: 'none',
       },
     ],
   },
 ]
 
 prompt(question)
-  .then(result => {
+  .then(async result => {
     if (!result.type || !result.name) {
-      console.log(chalk.red(`Aborted creation of component/utility!`))
+      logging.warning({
+        message: `Aborted creation of component/utility!`,
+      })
       return
     }
 
-    console.log(
-      chalk.magenta(`The ${result.type} with the name ${result.name} will be generated now!`),
-    )
+    logging.warning({
+      message: `The ${result.type} with the name ${result.name} will be generated now!`,
+    })
 
-    let rootPath = config.source.getPath('components')
+    let rootPath = config.components
 
     if (result.type === 'utility') {
-      rootPath = config.source.getPath('utilities')
+      rootPath = config.utilities
     }
 
     let html = false
@@ -142,11 +202,34 @@ prompt(question)
       html = generateHTML(result.name)
       css = generateCSS(result.name)
     }
-    js = generateJS(result.name)
+
+    index = generateIndex(result.name, result.type)
+
+    if (result.jsExt !== 'none')
+      js =
+        result.jsExt === 'ts'
+          ? generateTS(result.name, result.type)
+          : generateJS(result.name, result.type)
+
     json = generateJSON(result.name)
 
-    generateFiles(rootPath, result.type, result.name, json, result.jsExt, html, css, js)
+    generateFiles({
+      rootPath,
+      type: result.type,
+      name: result.name,
+      json,
+      jsExt: result.jsExt,
+      html,
+      css,
+      js,
+      index,
+    })
+
+    setTimeout(() => process.exit(0))
   })
   .catch(() => {
-    console.log(chalk.red(`Aborted creation of component/utility!`))
+    logging.error({
+      message: `Aborted creation of component/utility!`,
+    })
+    process.exit(1)
   })
