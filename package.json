@@ -111,7 +111,8 @@
     "webpack-merge": "^5.8.0",
     "webpackbar": "^5.0.2",
     "workbox-build": "^6.5.4",
-    "workbox-webpack-plugin": "^6.5.4"
+    "workbox-webpack-plugin": "^6.5.4",
+    "yargs": "^17.6.2"
   },
   "devDependencies": {}
 }
