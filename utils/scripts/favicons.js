@@ -6,8 +6,8 @@ const resolveApp = require('../resolve-app')
 async function generateFavicons() {
   const favicon = require(resolveApp('config/favicons.js'))(config)
 
-  await favicons(favicon.source, favicon.faviconsPlugin, async (error, response) => {
-    if (error) throw new Error(error.message)
+  try {
+    const response = await favicons(favicon.source, favicon.faviconsPlugin)
 
     const metaTags = response.html.join('\n')
 
@@ -20,7 +20,9 @@ async function generateFavicons() {
     })
 
     await fs.writeFileSync(favicon.output, metaTags)
-  })
+  } catch (error) {
+    if (error) throw new Error(error.message)
+  }
 }
 
 module.exports = generateFavicons
