@@ -36,10 +36,23 @@ class DonePlugin {
         })
       }
 
-      if (stats.compilation.options.mode === 'production')
+      if (stats.compilation.options.mode === 'production') {
+        if (!compiler.watchMode && stats.compilation.errors.length) {
+          stats.compilation.errors.map(error => {
+            logging.error({
+              time: new Date(),
+              message: error.toString(),
+            })
+          })
+          setTimeout(() => {
+            process.exit(1)
+          })
+          return
+        }
         setTimeout(() => {
           process.exit(0)
         })
+      }
     })
   }
 }
