@@ -1,14 +1,14 @@
 const fs = require('fs')
 const nodePath = require('path')
-const mkdirp = require('mkdirp')
 const error = require('../error')
 
-module.exports = function safeWriteFileSync(path, file) {
+const safeWriteFileSync = async (path, file) => {
   try {
-    mkdirp.sync(nodePath.dirname(path)) // make sure directory exists
-
-    fs.writeFileSync(path, file)
+    await fs.promises.mkdir(nodePath.dirname(path)) // make sure directory exists
+    await fs.promises.writeFile(path, file)
   } catch (e) {
     error(e)
   }
 }
+
+module.exports = safeWriteFileSync
