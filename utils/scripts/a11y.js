@@ -8,6 +8,7 @@ const config = require('../get-config')
 const resolveApp = require('../resolve-app')
 const getFileList = require('../file/get-list')
 const generateFileGlobs = require('../file/generate-file-globs')
+const batchTasks = require('../batch-tasks')
 const pa11y = require('pa11y')
 const reporter = require('pa11y/lib/reporters/cli')
 const pa11yConfig = require(resolveApp('.pa11yconfig.js'))
@@ -48,22 +49,19 @@ const accessibilityScanner = async () => {
       await fs.promises.mkdir(screenshotPath, { recursive: true })
     }
 
-    let results = await Promise.all(
-      files.map(path =>
-        pa11y(path, {
-          ...pa11yConfig,
-          screenCapture: `${screenshotPath}/${path
-            .replace(`${serverUrl}/`, '')
-            .replace(/(\/|\.)/g, '-')}.png`,
-        }),
+    let results = await batchTasks(
+      files.map(
+        path => () =>
+          pa11y(path, {
+            ...pa11yConfig,
+            screenCapture: `${screenshotPath}/${path
+              .replace(`${serverUrl}/`, '')
+              .replace(/(\/|\.)/g, '-')}.png`,
+          }),
       ),
+      4,
     )
-    await Promise.all(
-      results.map(async result => {
-        const report = await reporter.results(result)
-        console.log(report)
-      }),
-    )
+    results.map(result => console.log(reporter.results(result)))
 
     if (results.some(r => r.issues.find(issue => issue.type === 'error'))) {
       throw new Error('Found a11y errors')
