@@ -4,8 +4,13 @@ const error = require('../error')
 
 const safeWriteFileSync = async (path, file) => {
   try {
-    await fs.promises.mkdir(nodePath.dirname(path)) // make sure directory exists
+    try {
+      await fs.promises.access(nodePath.dirname(path))
+    } catch {
+      await fs.promises.mkdir(nodePath.dirname(path), { recursive: true })
+    }
     await fs.promises.writeFile(path, file)
+    return path
   } catch (e) {
     error(e)
   }
