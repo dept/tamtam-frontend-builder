@@ -3,6 +3,7 @@ const path = require('path')
 const fs = require('fs')
 const url = require('url')
 const express = require('express')
+const chalk = require('chalk')
 
 const serveStatic = require('serve-static')
 
@@ -83,7 +84,7 @@ const accessibilityScanner = async () => {
         viewport: {
           width: 1280,
           ...pa11yConfig.viewport,
-          height: height || 1024,
+          height: height || pa11yConfig.viewport.height || 1024,
         },
         screenCapture: `${resultsPath}/${path
           .replace(`${serverUrl}/`, '')
@@ -97,7 +98,7 @@ const accessibilityScanner = async () => {
 
     await cluster.idle()
 
-    let reportHtmlFiles = await Promise.all(
+    await Promise.all(
       results.map(async result => {
         console.log(cliReporter.results(result))
         const reportHtmlPath = `${resultsPath}${result.pageUrl.replace(serverUrl, '')}`
@@ -105,17 +106,13 @@ const accessibilityScanner = async () => {
       }),
     )
 
-    logging.success({
-      message: 'Report files can be found here:',
-    })
-
-    logging.success({
-      message: `${console.table(
-        reportHtmlFiles.map(file => ({
-          path: url.pathToFileURL(file).toString(),
-        })),
-      )}`,
-    })
+    const reportString = ` A11y results: ${url.pathToFileURL(resultsPath)} `
+    const dividerString = [...new Array(reportString.length)].fill('─').join('')
+    console.log(
+      chalk.white.bgGreen(`${dividerString}
+${reportString}
+${dividerString}`),
+    )
 
     await cluster.close()
 
