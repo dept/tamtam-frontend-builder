@@ -1,46 +1,53 @@
 const path = require('path')
-const { ImagePool } = require('@squoosh/lib')
+const sharp = require('sharp')
 const logging = require('../../../utils/logging')
 const chalk = require('chalk')
 
 const defaultOptions = {
-  mozjpeg: {
+  jpeg: {
+    // https://sharp.pixelplumbing.com/api-output#jpeg
     quality: 100,
   },
   webp: {
-    lossless: 1,
+    // https://sharp.pixelplumbing.com/api-output#webp
+    lossless: true,
   },
   avif: {
-    cqLevel: 0,
+    // https://sharp.pixelplumbing.com/api-output#avif
+    lossless: true,
   },
+  // png by default sets the quality to 100%, which is same as lossless
+  // https://sharp.pixelplumbing.com/api-output#png
+  png: {},
+  // gif does not support lossless compression at all
+  // https://sharp.pixelplumbing.com/api-output#gif
+  gif: {},
 }
 
 const targets = {
-  '.png': 'oxipng',
-  '.jpg': 'mozjpeg',
-  '.jpeg': 'mozjpeg',
-  '.jxl': 'jxl',
-  '.webp': 'webp',
-  '.avif': 'avif',
+  png: 'png',
+  jpg: 'jpeg',
+  jpeg: 'jpeg',
+  jxl: 'jxl',
+  webp: 'webp',
+  avif: 'avif',
+  gif: 'gif',
 }
 
-const imagePool = new ImagePool()
 const images = async (buffer, filePath) => {
-  const ext = path.extname(filePath).toLowerCase()
-  const targetCodec = targets[ext]
+  const image = sharp(filePath)
+  const meta = await image.metadata()
+  const { format } = meta
 
+  const targetCodec = targets[format]
   if (!targetCodec) return buffer
 
-  const options = {
-    [targetCodec]: {
-      ...defaultOptions[targetCodec],
-    },
-  }
-  const image = imagePool.ingestImage(buffer)
-  await image.encode(options)
-  const output = await image.encodedWith[targetCodec]
+  const { data, info: outputInfo } = await image[format](defaultOptions[targetCodec]).toBuffer({
+    resolveWithObject: true,
+  })
+
   const inputSize = Buffer.byteLength(buffer)
-  const outputSize = output.size
+  const outputSize = outputInfo.size
 
   logging.success({
     message: `${chalk.bold('Finished optimizing:')} '${path.basename(filePath)}' saved ${chalk.bold(
@@ -49,7 +56,7 @@ const images = async (buffer, filePath) => {
     time: new Date(),
   })
 
-  return Buffer.from(output.binary)
+  return data
 }
 
 module.exports = images

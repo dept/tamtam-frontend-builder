@@ -1,6 +1,6 @@
 {
   "name": "dept-builder",
-  "version": "3.0.13",
+  "version": "3.1.0",
   "license": "MIT",
   "description": "Dept Frontend build tools",
   "author": "Dept",
@@ -40,7 +40,6 @@
     "@babel/plugin-transform-arrow-functions": "7.21.5",
     "@babel/preset-env": "7.21.5",
     "@babel/preset-typescript": "7.21.5",
-    "@squoosh/lib": "0.4.0",
     "@typescript-eslint/eslint-plugin": "5.59.6",
     "@typescript-eslint/parser": "5.59.6",
     "@typescript-eslint/typescript-estree": "5.59.6",
@@ -95,6 +94,7 @@
     "replace-in-files": "3.0.0",
     "sass-loader": "13.2.0",
     "serve-static": "^1.15.0",
+    "sharp": "^0.32.1",
     "style-loader": "3.3.1",
     "stylelint": "14.16.0",
     "stylelint-prettier": "2.0.0",
