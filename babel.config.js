@@ -17,6 +17,7 @@ module.exports = api => {
       '@babel/plugin-proposal-numeric-separator',
       '@babel/plugin-proposal-private-methods',
       '@babel/plugin-proposal-private-property-in-object',
+      '@babel/helper-skip-transparent-expression-wrappers',
     ],
     presets: [
       '@babel/preset-typescript',
