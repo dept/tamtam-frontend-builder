@@ -36,7 +36,16 @@ const targets = {
 
 const images = async (buffer, filePath) => {
   const image = sharp(filePath)
-  const meta = await image.metadata()
+
+  const meta = await image.metadata().catch((eror) => {
+    logging.error({
+      message: `Error reading metadata from image: ${filePath}`,
+      error,
+    })
+
+    return buffer;
+  })
+
   const { format } = meta
 
   const targetCodec = targets[format]
@@ -48,6 +57,17 @@ const images = async (buffer, filePath) => {
 
   const inputSize = Buffer.byteLength(buffer)
   const outputSize = outputInfo.size
+
+  if(outputSize > inputSize) {
+    logging.warning({
+      message: `${chalk.bold('Not saving:')} '${path.basename(filePath)}' optimization was ${chalk.bold(
+        ` ${Math.round((outputSize - inputSize) / 1000 )} kb bigger`,
+      )}`,
+      time: new Date(),
+    })
+
+    return buffer
+  }
 
   logging.success({
     message: `${chalk.bold('Finished optimizing:')} '${path.basename(filePath)}' saved ${chalk.bold(
