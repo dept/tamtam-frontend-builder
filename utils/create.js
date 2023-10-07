@@ -3,12 +3,12 @@ const mkdirp = require('mkdirp')
 const path = require('path')
 const { prompt } = require('enquirer')
 const logging = require('./logging')
-const { camelCase, upperFirst } = require('lodash')
+const { camelCase, upperFirst, kebabCase } = require('lodash')
 const config = require('./get-config')
 
 function generateHTML(name) {
   return `{% macro ${camelCase(name)}(data) %}
-
+  <div class="c-${kebabCase(name)}"></div>
 {% endmacro %}
 `
 }
