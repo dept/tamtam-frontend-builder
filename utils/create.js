@@ -8,7 +8,9 @@ const config = require('./get-config')
 
 function generateHTML(name) {
   return `{% macro ${camelCase(name)}(data) %}
-  <div class="c-${kebabCase(name)}"></div>
+  <div class="c-${kebabCase(name)}">
+  
+  </div>
 {% endmacro %}
 `
 }
