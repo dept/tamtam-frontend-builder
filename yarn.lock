@@ -37,7 +37,7 @@
   resolved "https://registry.yarnpkg.com/@babel/compat-data/-/compat-data-7.23.3.tgz#3febd552541e62b5e883a25eb3effd7c7379db11"
   integrity sha512-BmR4bWbDIoFJmJ9z2cZ8Gmm2MXgEDgjdWgpKmKWUt54UGFJdlj31ECtbaDvCG/qVdG3AQ1SfpZEs01lUFbzLOQ==
 
-"@babel/core@^7.11.1", "@babel/core@^7.23.3":
+"@babel/core@7.23.3", "@babel/core@^7.11.1":
   version "7.23.3"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.23.3.tgz#5ec09c8803b91f51cc887dedc2654a35852849c9"
   integrity sha512-Jg+msLuNuCJDyBvFv5+OKOUjWMZgd85bKjbICd3zWrKAo+bJ49HJufi7CQE0q0uR8NGyO6xkCACScNqyjHSZew==
@@ -58,7 +58,7 @@
     json5 "^2.2.3"
     semver "^6.3.1"
 
-"@babel/eslint-parser@^7.23.3":
+"@babel/eslint-parser@7.23.3":
   version "7.23.3"
   resolved "https://registry.yarnpkg.com/@babel/eslint-parser/-/eslint-parser-7.23.3.tgz#7bf0db1c53b54da0c8a12627373554a0828479ca"
   integrity sha512-9bTuNlyx7oSstodm1cR1bECj4fkiknsDa1YniISkJemMY3DGhJNYBECbe6QD/q54mp2J8VO66jW3/7uP//iFCw==
@@ -330,7 +330,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.14.5"
 
-"@babel/plugin-syntax-dynamic-import@^7.8.3":
+"@babel/plugin-syntax-dynamic-import@7.8.3", "@babel/plugin-syntax-dynamic-import@^7.8.3":
   version "7.8.3"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-dynamic-import/-/plugin-syntax-dynamic-import-7.8.3.tgz#62bf98b2da3cd21d626154fc96ee5b3cb68eacb3"
   integrity sha512-5gdGbFon+PszYzqs83S3E5mpi7/y/8M9eC90MRTZfduQOYW76ig6SOSPNe41IG5LoP3FGBn2N0RjVDSQiS94kQ==
