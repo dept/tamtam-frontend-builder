@@ -12,6 +12,7 @@ function fileCopyConfig(config) {
       from: config.images,
       to: `${config.imagesOutputPath}`,
       transform: async (image, filePath) => {
+        if (filePath.includes('.DS_Store')) return image
         if (config.isDevelopment || filePath.includes('tmp')) return image
         return await images(image, filePath)
       },
