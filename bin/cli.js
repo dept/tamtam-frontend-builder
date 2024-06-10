@@ -24,6 +24,10 @@ yargs.command('favicons', 'generate favicons', {}, () => {
   runYarn('favicons')
 })
 
+yargs.command('a11y', 'generate favicons', {}, () => {
+  runYarn('a11y')
+})
+
 yargs.command('yarn-install-recursive', 'install yarn recursive', {}, () => {
   require('../utils/scripts/yarn-install-recursive')
 })

@@ -11,20 +11,20 @@ module.exports = function debug(object) {
   var html
 
   if (typeof object === 'undefined' || object == null) {
-    html = '<span class="null">' + object + '</span>'
+    html = `<span class="null">${object}</span>`
   } else if (typeof object === 'string') {
-    html = '<span class="string">"' + object + '"</span>'
+    html = `<span class="string">"${object}"</span>`
   } else if (typeof object === 'number') {
-    html = '<span class="number">' + object + '</span>'
+    html = `<span class="number">${object}</span>`
   } else if (typeof object === 'boolean') {
-    html = '<span class="boolean">' + object + '</span>'
+    html = `<span class="boolean">${object}</span>`
   } else if (typeof object === 'function') {
-    html = '<span class="function">' + object + '</span>'
+    html = `<span class="function">${object}</span>`
   } else {
     html = syntaxHighlight(object)
   }
 
-  return '<div class="' + DEBUG_CLASS_NAME + '"><pre>' + html + '</pre></div>'
+  return `<div class="${DEBUG_CLASS_NAME}" tabindex="0"><pre>${html}</pre></div>`
 }
 
 /**
@@ -41,14 +41,11 @@ function syntaxHighlight(json) {
 
   if (typeof json !== 'string') json = JSON.stringify(json, undefined, 2)
 
-  json = json
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
+  json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 
   return json.replace(
     /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
-    function(match) {
+    function (match) {
       var spanClass = 'number'
       if (/^"/.test(match)) {
         if (/\[\sFunction\s\]/.test(match)) spanClass = 'function'
@@ -57,7 +54,7 @@ function syntaxHighlight(json) {
       } else if (/true|false/.test(match)) spanClass = 'boolean'
       else if (/null/.test(match)) spanClass = 'null'
 
-      return '<span class="' + spanClass + '">' + match + '</span>'
+      return `<span class="${spanClass}">${match}</span>`
     },
   )
 }

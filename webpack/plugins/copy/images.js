@@ -37,7 +37,7 @@ const targets = {
 const images = async (buffer, filePath) => {
   const image = sharp(filePath)
 
-  const meta = await image.metadata().catch((eror) => {
+  const meta = await image.metadata().catch((error) => {
     logging.error({
       message: `Error reading metadata from image: ${filePath}`,
       error,
