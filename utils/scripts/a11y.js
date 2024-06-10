@@ -22,9 +22,10 @@ const a11yConfig = require(resolveApp('.a11yconfig.js'))
 const app = express()
 const port = process.env.PORT || 8000
 const serverUrl = `http://localhost:${port}`
+const buildPath = resolveApp(config.dist)
 const htmlBuildPath = resolveApp(path.join(config.dist, config.htmlOutputPath))
 
-app.use(serveStatic(htmlBuildPath, { index: ['index.html'] }))
+app.use(serveStatic(buildPath, { index: [`${config.htmlOutputPath}/index.html`] }))
 app.listen(port)
 
 const accessibilityScanner = async () => {
@@ -40,11 +41,11 @@ const accessibilityScanner = async () => {
     })
 
     const files = getFileList(
-      generateFileGlobs(htmlBuildPath, ['{*.html, !(_dev|generic|layouts)**/*.html}']),
+      generateFileGlobs(htmlBuildPath, ['*.html', '!(_dev|generic|layouts)**/*.html']),
       undefined,
       undefined,
       a11yConfig.fileIgnore || [],
-    ).map(file => file.replace(`${htmlBuildPath}/`, ''))
+    ).map(file => file.replace(`${buildPath}/`, ''))
 
     logging.success({
       message: `Found ${files.length} files`,
@@ -101,7 +102,7 @@ const accessibilityScanner = async () => {
     await Promise.all(
       results.map(async result => {
         console.log(cliReporter.results(result))
-        const reportHtmlPath = `${resultsPath}${result.pageUrl.replace(serverUrl, '')}`
+        const reportHtmlPath = `${resultsPath}${result.pageUrl.replace(`${serverUrl}${config.htmlOutputPath !== '' ? `/${config.htmlOutputPath}` : ''}`, '')}`
         return safeWriteFileSync(reportHtmlPath, await htmlReporter.results(result))
       }),
     )
