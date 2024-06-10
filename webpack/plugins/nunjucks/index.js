@@ -6,6 +6,7 @@ const nunjucks = require('nunjucks')
 const walkFileListSync = require('../../../utils/file/walk-file-list-sync')
 
 const assignFilter = require('./filters/assign')
+const cloneFilter = require('./filters/clone')
 const mergeFilter = require('./filters/merge')
 const defaultsFilter = require('./filters/defaults')
 
@@ -39,6 +40,7 @@ const configureNunjucksPlugin = () => {
   environment.addExtension('DebugExtension', DebugExtension)
 
   environment.addFilter('assign', assignFilter)
+  environment.addFilter('clone', cloneFilter)
   environment.addFilter('merge', mergeFilter)
   environment.addFilter('defaults', defaultsFilter)
 

@@ -9,14 +9,13 @@ module.exports = api => {
 
   let options = {
     plugins: [
-      '@babel/syntax-dynamic-import',
-      '@babel/plugin-proposal-class-properties',
-      '@babel/plugin-proposal-object-rest-spread',
-      '@babel/plugin-proposal-optional-chaining',
-      '@babel/plugin-proposal-nullish-coalescing-operator',
-      '@babel/plugin-proposal-numeric-separator',
-      '@babel/plugin-proposal-private-methods',
-      '@babel/plugin-proposal-private-property-in-object',
+      '@babel/plugin-transform-class-properties',
+      '@babel/plugin-transform-object-rest-spread',
+      '@babel/plugin-transform-optional-chaining',
+      '@babel/plugin-transform-nullish-coalescing-operator',
+      '@babel/plugin-transform-numeric-separator',
+      '@babel/plugin-transform-private-methods',
+      '@babel/plugin-transform-private-property-in-object'
     ],
     presets: [
       '@babel/preset-typescript',
