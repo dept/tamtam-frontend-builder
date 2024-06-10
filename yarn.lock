@@ -2503,6 +2503,11 @@
   resolved "https://registry.yarnpkg.com/@types/trusted-types/-/trusted-types-2.0.6.tgz#d12451beaeb9c3838f12024580dc500b7e88b0ad"
   integrity sha512-HYtNooPvUY9WAVRBr4u+4Qa9fYD1ze2IUlAD3HoA6oehn1taGwBx3Oa52U4mTslTS+GAExKpaFu39Y5xUEwfjg==
 
+"@types/webpack-env@^1.18.5":
+  version "1.18.5"
+  resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.18.5.tgz#eccda0b04fe024bed505881e2e532f9c119169bf"
+  integrity sha512-wz7kjjRRj8/Lty4B+Kr0LN6Ypc/3SymeCCGSbaXp2leH0ZVg/PriNiOwNj4bD4uphI7A8NXS4b6Gl373sfO5mA==
+
 "@types/ws@^8.5.10":
   version "8.5.10"
   resolved "https://registry.yarnpkg.com/@types/ws/-/ws-8.5.10.tgz#4acfb517970853fa6574a3a6886791d04a396787"
