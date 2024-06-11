@@ -9,7 +9,7 @@ const config = require('./get-config')
 function generateHTML(name) {
   return `{% macro ${camelCase(name)}(data) %}
   <div class="c-${kebabCase(name)}">
-  
+
   </div>
 {% endmacro %}
 `
@@ -32,6 +32,7 @@ function generateTS(name, type) {
   if (type === 'component')
     return `class ${upperFirst(camelCase(name))} {
   element: HTMLElement
+
   constructor(element: HTMLElement) {
     this.element = element
   }
@@ -161,12 +162,12 @@ const question = [
     initial: false,
     choices: [
       {
-        message: 'js',
-        value: 'js',
-      },
-      {
         message: 'ts',
         value: 'ts',
+      },
+      {
+        message: 'js',
+        value: 'js',
       },
       {
         message: 'none',
