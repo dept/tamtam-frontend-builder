@@ -8,6 +8,10 @@
     {
       "name": "Adrian Klingen",
       "email": "adrian.klingen@deptagency.com"
+    },
+    {
+      "name": "Mark Smits",
+      "email": "mark.smits@deptagency.com"
     }
   ],
   "private": false,
@@ -19,7 +23,7 @@
     "url": "https://bitbucket.org/tamtam-nl/tamtam-frontend-builder"
   },
   "engines": {
-    "node": ">=20",
+    "node": ">=22",
     "npm": "Please use Yarn"
   },
   "scripts": {
@@ -80,7 +84,6 @@
     "mini-css-extract-plugin": "2.9.0",
     "minimist": "1.2.8",
     "mkdirp": "3.0.1",
-    "node-sass": "9.0.0",
     "nunjucks": "3.2.4",
     "pa11y": "^8.0.0",
     "postcss": "8.4.38",
@@ -92,6 +95,7 @@
     "puppeteer": "22.10.0",
     "puppeteer-cluster": "0.24.0",
     "replace-in-files": "3.0.0",
+    "sass": "^1.90.0",
     "sass-loader": "14.2.1",
     "serve-static": "^1.15.0",
     "sharp": "^0.32.1",

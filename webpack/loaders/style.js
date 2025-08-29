@@ -34,7 +34,7 @@ const configureCSSLoader = ({ extract = true } = {}) => {
         loader: require.resolve('sass-loader'),
         options: {
           sourceMap: config.isDevelopment,
-          implementation: require('node-sass'),
+          implementation: require('sass'),
         },
       },
     ],
