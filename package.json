@@ -96,7 +96,7 @@
     "puppeteer-cluster": "0.24.0",
     "replace-in-files": "3.0.0",
     "sass": "^1.90.0",
-    "sass-loader": "14.2.1",
+    "sass-loader": "^16.0.5",
     "serve-static": "^1.15.0",
     "sharp": "^0.32.1",
     "style-loader": "4.0.0",
