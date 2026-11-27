@@ -1,5 +1,6 @@
 const images = require('../webpack/plugins/copy/images')
 const svgs = require('../webpack/plugins/copy/svgs')
+const addSvgClass = require('../webpack/plugins/copy/add-svg-class')
 
 const defaultOptions = {
   noErrorOnMissing: true,
@@ -12,7 +13,8 @@ function fileCopyConfig(config) {
       from: config.images,
       to: `${config.imagesOutputPath}`,
       transform: async (image, filePath) => {
-        if (config.isDevelopment || filePath.includes('tmp') || filePath.includes('.DS_Store')) return image
+        if (config.isDevelopment || filePath.includes('tmp') || filePath.includes('.DS_Store'))
+          return image
         return await images(image, filePath)
       },
     },
@@ -21,7 +23,8 @@ function fileCopyConfig(config) {
       from: config.svg,
       to: `${config.svgOutputPath}`,
       transform: {
-        transformer: async svg => await svgs(svg),
+        transformer: async (svg, absoluteFrom) =>
+          addSvgClass(await svgs(svg), config.svg, absoluteFrom),
         cache: true,
       },
     },

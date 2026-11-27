@@ -18,6 +18,8 @@ const runYarn = task => {
       time: new Date(),
       message: `yarn ${task} failed with errors`,
     })
+    // Exit non-zero so CI pipelines see the failure instead of a green build.
+    process.exit(error.status || 1)
   }
 }
 
