@@ -36,7 +36,7 @@ const configureCSSLoader = ({ extract = true } = {}) => {
           sourceMap: config.isDevelopment,
           implementation: require('sass'),
           sassOptions: {
-            silenceDeprecations: ['mixed-decls', 'import'],
+            silenceDeprecations: ['import'],
           },
         },
       },
